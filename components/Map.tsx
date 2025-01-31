@@ -1,8 +1,7 @@
 import Mapbox, { Camera, LocationPuck, MapView } from '@rnmapbox/maps';
 import { StyleSheet, useColorScheme } from 'react-native';
 
-const token = process.env.EXPO_PUBLIC_MAPBOX_TOKEN || null;
-Mapbox.setAccessToken(token);
+Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
 
 enum MapTheme {
   Light = 'mapbox://styles/mapbox/light-v11',
