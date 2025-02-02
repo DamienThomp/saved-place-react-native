@@ -68,7 +68,7 @@ export default function SignInScreen() {
           />
         </FormInputContainer>
         <View>
-          <Button title="Sign In" onPress={onSignIn} />
+          <Button title="Sign In" onPress={onSignIn} disabled={loading} />
           <Text onPress={redirectToSignUp} style={styles.secondaryAction}>
             Create Account
           </Text>
