@@ -1,121 +1,100 @@
-import Button from '@/src/components/Button';
-import Colors from '@/src/constants/Colors';
 import { Stack, useRouter } from 'expo-router';
 import { useState } from 'react';
-import {
-	Alert,
-	StyleSheet,
-	Text,
-	TextInput,
-	View,
-	ActivityIndicator,
-} from 'react-native';
-import { dbClient } from '@/src/lib/db';
+import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 
-const SignUpScreen = () => {
-	const router = useRouter();
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [loading, setIsLoading] = useState(false);
+import { Button } from '~/components/Button';
+import FormInputContainer from '~/components/FormInputContainer';
+import Loading from '~/components/Loading';
+import Colors from '~/constants/Colors';
+import { dbClient } from '~/lib/db';
 
-	const onEmailUpdate = (text: string) => {
-		setEmail(text);
-	};
+export default function SignUpScreen() {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setIsLoading] = useState(false);
 
-	const onPasswordUpdate = (text: string) => {
-		setPassword(text);
-	};
+  const onEmailUpdate = (text: string) => {
+    setEmail(text);
+  };
 
-	const onSignUp = async () => {
-		setIsLoading(true);
+  const onPasswordUpdate = (text: string) => {
+    setPassword(text);
+  };
 
-		const { error } = await dbClient.auth.signUp({
-			email,
-			password,
-		});
+  const onSignUp = async () => {
+    setIsLoading(true);
 
-		if (error) {
-			Alert.alert('Error in Sign Up', `${error.message}`);
-		}
+    const { error } = await dbClient.auth.signUp({
+      email,
+      password,
+    });
 
-		setIsLoading(false);
-	};
+    if (error) {
+      Alert.alert('Error in Sign Up', `${error.message}`);
+    }
 
-	const redirectToSignIn = () => {
-		router.back();
-	};
+    setIsLoading(false);
+  };
 
-	if (loading) {
-		return (
-			<View style={{ flex: 1, justifyContent: 'center' }}>
-				<ActivityIndicator />
-			</View>
-		);
-	}
+  const redirectToSignIn = () => {
+    router.back();
+  };
 
-	return (
-		<View style={styles.container}>
-			<Stack.Screen options={{ title: 'Sign Up' }} />
-			<View style={styles.inputContainer}>
-				<Text style={styles.label}>Email</Text>
-				<TextInput
-					value={email}
-					style={styles.textInput}
-					onChangeText={onEmailUpdate}
-					keyboardType="email-address"
-					placeholder="email@something.com"
-					autoCapitalize="none"
-				/>
-			</View>
-			<View style={styles.inputContainer}>
-				<Text style={styles.label}>Password</Text>
-				<TextInput
-					value={password}
-					style={styles.textInput}
-					onChangeText={onPasswordUpdate}
-					secureTextEntry={true}
-				/>
-			</View>
-			<View>
-				<Button text="Sign Up" onPress={onSignUp} disabled={loading} />
-				<Text onPress={redirectToSignIn} style={styles.secondaryAction}>
-					Sign In
-				</Text>
-			</View>
-		</View>
-	);
-};
+  if (loading) {
+    return <Loading />;
+  }
 
-export default SignUpScreen;
+  return (
+    <View style={styles.container}>
+      <Stack.Screen options={{ title: 'Sign Up' }} />
+      <FormInputContainer title="Email">
+        <TextInput
+          value={email}
+          style={styles.textInput}
+          onChangeText={onEmailUpdate}
+          placeholder="email@something.com"
+          keyboardType="email-address"
+        />
+      </FormInputContainer>
+      <FormInputContainer title="Password">
+        <TextInput
+          value={password}
+          style={styles.textInput}
+          onChangeText={onPasswordUpdate}
+          secureTextEntry
+        />
+      </FormInputContainer>
+      <View>
+        <Button title="Sign Up" onPress={onSignUp} disabled={loading} />
+        <Text onPress={redirectToSignIn} style={styles.secondaryAction}>
+          Sign In
+        </Text>
+      </View>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-		padding: 18,
-		gap: 18,
-	},
-	inputContainer: {
-		gap: 8,
-	},
-	label: {
-		color: '#4a4a4a',
-		fontWeight: '500',
-		fontSize: 18,
-	},
-	textInput: {
-		backgroundColor: '#fff',
-		borderColor: '#d3d3d3',
-		borderWidth: 1,
-		borderRadius: 8,
-		padding: 16,
-		fontSize: 20,
-	},
-	secondaryAction: {
-		alignSelf: 'center',
-		fontWeight: 'bold',
-		fontSize: 18,
-		color: Colors.light.tint,
-		padding: 8,
-	},
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 18,
+    gap: 18,
+  },
+  textInput: {
+    backgroundColor: '#fff',
+    borderColor: '#d3d3d3',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 16,
+    fontSize: 20,
+  },
+  secondaryAction: {
+    alignSelf: 'center',
+    fontWeight: 'bold',
+    fontSize: 18,
+    color: Colors.light.tint,
+    padding: 8,
+  },
 });

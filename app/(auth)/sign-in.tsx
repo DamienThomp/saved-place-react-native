@@ -1,12 +1,14 @@
 import { Stack, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Button } from '~/components/Button';
+import FormInputContainer from '~/components/FormInputContainer';
+import Loading from '~/components/Loading';
 import Colors from '~/constants/Colors';
 import { dbClient } from '~/lib/db';
 
-const SignInScreen = () => {
+export default function SignInScreen() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,18 +42,13 @@ const SignInScreen = () => {
   };
 
   if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <ActivityIndicator />
-      </View>
-    );
+    return <Loading />;
   }
 
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: 'Sign In' }} />
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email</Text>
+      <FormInputContainer title="Email">
         <TextInput
           value={email}
           style={styles.textInput}
@@ -59,16 +56,15 @@ const SignInScreen = () => {
           placeholder="email@something.com"
           keyboardType="email-address"
         />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Password</Text>
+      </FormInputContainer>
+      <FormInputContainer title="Password">
         <TextInput
           value={password}
           style={styles.textInput}
           onChangeText={onPasswordUpdate}
-          secureTextEntry={true}
+          secureTextEntry
         />
-      </View>
+      </FormInputContainer>
       <View>
         <Button title="Sign In" onPress={onSignIn} />
         <Text onPress={redirectToSignUp} style={styles.secondaryAction}>
@@ -77,9 +73,7 @@ const SignInScreen = () => {
       </View>
     </View>
   );
-};
-
-export default SignInScreen;
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -87,14 +81,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 18,
     gap: 18,
-  },
-  inputContainer: {
-    gap: 8,
-  },
-  label: {
-    color: '#4a4a4a',
-    fontWeight: '500',
-    fontSize: 18,
   },
   textInput: {
     backgroundColor: '#fff',
