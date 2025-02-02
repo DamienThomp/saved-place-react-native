@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Button } from '~/components/Button';
+import { Container } from '~/components/Container';
 import FormInputContainer from '~/components/FormInputContainer';
 import Loading from '~/components/Loading';
 import Colors from '~/constants/Colors';
@@ -46,7 +47,7 @@ export default function SignUpScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <Container>
       <Stack.Screen options={{ title: 'Sign Up' }} />
       <FormInputContainer title="Email">
         <TextInput
@@ -71,17 +72,11 @@ export default function SignUpScreen() {
           Sign In
         </Text>
       </View>
-    </View>
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 18,
-    gap: 18,
-  },
   textInput: {
     backgroundColor: '#fff',
     borderColor: '#d3d3d3',
