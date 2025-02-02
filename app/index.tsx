@@ -11,8 +11,8 @@ export default function Home() {
   }
 
   if (!session) {
-    return <Redirect href="./(auth)/sign-in" />;
+    return <Redirect href="/(auth)/sign-in" />;
   }
 
-  return <Redirect href="./(main)" />;
+  return <Redirect href="/(main)/Index" />;
 }

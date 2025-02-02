@@ -48,35 +48,41 @@ export default function SignUpScreen() {
 
   return (
     <Container>
-      <Stack.Screen options={{ title: 'Sign Up' }} />
-      <FormInputContainer title="Email">
-        <TextInput
-          value={email}
-          style={styles.textInput}
-          onChangeText={onEmailUpdate}
-          placeholder="email@something.com"
-          keyboardType="email-address"
-        />
-      </FormInputContainer>
-      <FormInputContainer title="Password">
-        <TextInput
-          value={password}
-          style={styles.textInput}
-          onChangeText={onPasswordUpdate}
-          secureTextEntry
-        />
-      </FormInputContainer>
-      <View>
-        <Button title="Sign Up" onPress={onSignUp} disabled={loading} />
-        <Text onPress={redirectToSignIn} style={styles.secondaryAction}>
-          Sign In
-        </Text>
+      <View style={styles.content}>
+        <Stack.Screen options={{ title: 'Sign Up' }} />
+        <FormInputContainer title="Email">
+          <TextInput
+            value={email}
+            style={styles.textInput}
+            onChangeText={onEmailUpdate}
+            placeholder="email@something.com"
+            keyboardType="email-address"
+          />
+        </FormInputContainer>
+        <FormInputContainer title="Password">
+          <TextInput
+            value={password}
+            style={styles.textInput}
+            onChangeText={onPasswordUpdate}
+            secureTextEntry
+          />
+        </FormInputContainer>
+        <View>
+          <Button title="Sign Up" onPress={onSignUp} disabled={loading} />
+          <Text onPress={redirectToSignIn} style={styles.secondaryAction}>
+            Sign In
+          </Text>
+        </View>
       </View>
     </Container>
   );
 }
 
 const styles = StyleSheet.create({
+  content: {
+    padding: 18,
+    gap: 18,
+  },
   textInput: {
     backgroundColor: '#fff',
     borderColor: '#d3d3d3',
