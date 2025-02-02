@@ -7,22 +7,18 @@ type AuthData = {
   session: Session | null;
   loading: boolean;
   profile: Profile | null;
-  isAdmin: boolean;
 };
 
 const AuthContext = createContext<AuthData>({
   session: null,
   loading: true,
   profile: null,
-  isAdmin: false,
 });
 
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const isAdmin = profile?.group === 'ADMIN';
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -38,10 +34,10 @@ export default function AuthProvider({ children }: PropsWithChildren) {
 
       setSession(session);
 
-      if (session) {
-        const data = await getProfile(session.user.id);
-        setProfile(data || null);
-      }
+      // if (session) {
+      //   const data = await getProfile(session.user.id);
+      //   setProfile(data || null);
+      // }
 
       setLoading(false);
     };
@@ -54,9 +50,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ session, loading, profile, isAdmin }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ session, loading, profile }}>{children}</AuthContext.Provider>
   );
 }
 

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Button } from '~/components/Button';
+import { Container } from '~/components/Container';
 import FormInputContainer from '~/components/FormInputContainer';
 import Loading from '~/components/Loading';
 import Colors from '~/constants/Colors';
@@ -38,7 +39,7 @@ export default function SignInScreen() {
   };
 
   const redirectToSignUp = () => {
-    // router.push('/(auth)/sign-up');
+    router.push('./sign-up');
   };
 
   if (loading) {
@@ -46,39 +47,39 @@ export default function SignInScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Stack.Screen options={{ title: 'Sign In' }} />
-      <FormInputContainer title="Email">
-        <TextInput
-          value={email}
-          style={styles.textInput}
-          onChangeText={onEmailUpdate}
-          placeholder="email@something.com"
-          keyboardType="email-address"
-        />
-      </FormInputContainer>
-      <FormInputContainer title="Password">
-        <TextInput
-          value={password}
-          style={styles.textInput}
-          onChangeText={onPasswordUpdate}
-          secureTextEntry
-        />
-      </FormInputContainer>
-      <View>
-        <Button title="Sign In" onPress={onSignIn} />
-        <Text onPress={redirectToSignUp} style={styles.secondaryAction}>
-          Create Account
-        </Text>
+    <Container>
+      <View style={styles.content}>
+        <Stack.Screen options={{ title: 'Sign In' }} />
+        <FormInputContainer title="Email">
+          <TextInput
+            value={email}
+            style={styles.textInput}
+            onChangeText={onEmailUpdate}
+            placeholder="email@something.com"
+            keyboardType="email-address"
+          />
+        </FormInputContainer>
+        <FormInputContainer title="Password">
+          <TextInput
+            value={password}
+            style={styles.textInput}
+            onChangeText={onPasswordUpdate}
+            secureTextEntry
+          />
+        </FormInputContainer>
+        <View>
+          <Button title="Sign In" onPress={onSignIn} />
+          <Text onPress={redirectToSignUp} style={styles.secondaryAction}>
+            Create Account
+          </Text>
+        </View>
       </View>
-    </View>
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
+  content: {
     padding: 18,
     gap: 18,
   },

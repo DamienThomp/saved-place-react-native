@@ -1,4 +1,4 @@
 export type Profile = {
-	id: string;
-	group: string;
+  id: string;
+  group: string;
 };

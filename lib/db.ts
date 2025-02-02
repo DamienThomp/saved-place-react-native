@@ -19,7 +19,7 @@ const ExpoSecureStoreAdapter = {
 const dbUrl = process.env.EXPO_PUBLIC_DB_URL ?? '';
 const dbAnonKey = process.env.EXPO_PUBLIC_DB_API_KEY ?? '';
 
-export const dbClient = createClient<Database>(dbUrl, dbAnonKey, {
+export const dbClient = createClient(dbUrl, dbAnonKey, {
   auth: {
     storage: ExpoSecureStoreAdapter as any,
     autoRefreshToken: true,

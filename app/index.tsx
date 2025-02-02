@@ -1,12 +1,18 @@
-import { Stack } from 'expo-router';
+import { Redirect } from 'expo-router';
 
-import Map from '~/components/Map';
+import Loading from '~/components/Loading';
+import { useAuthentication } from '~/providers/AuthProvider';
 
 export default function Home() {
-  return (
-    <>
-      <Stack.Screen options={{ title: 'Home' }} />
-      <Map />
-    </>
-  );
+  const { session, loading } = useAuthentication();
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (!session) {
+    return <Redirect href="./(auth)/sign-in" />;
+  }
+
+  return <Redirect href="./(main)" />;
 }
