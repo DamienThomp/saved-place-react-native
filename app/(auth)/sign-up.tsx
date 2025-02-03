@@ -1,11 +1,12 @@
 import { Stack, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
 
-import { Button } from '~/components/Button';
-import { Container } from '~/components/Container';
-import FormInputContainer from '~/components/FormInputContainer';
-import Loading from '~/components/Loading';
+import { Button } from '~/components/ui/Button';
+import { Container } from '~/components/common/Container';
+import Loading from '~/components/common/Loading';
+import FormInputContainer from '~/components/form/FormInputContainer';
+import TextInputField from '~/components/form/TextInputField';
 import Colors from '~/constants/Colors';
 import { dbClient } from '~/lib/db';
 
@@ -48,24 +49,18 @@ export default function SignUpScreen() {
 
   return (
     <Container>
-      <View style={styles.content}>
+      <KeyboardAvoidingView style={styles.content} behavior="padding" enabled>
         <Stack.Screen options={{ title: 'Sign Up' }} />
         <FormInputContainer title="Email">
-          <TextInput
+          <TextInputField
             value={email}
-            style={styles.textInput}
             onChangeText={onEmailUpdate}
             placeholder="email@something.com"
             keyboardType="email-address"
           />
         </FormInputContainer>
         <FormInputContainer title="Password">
-          <TextInput
-            value={password}
-            style={styles.textInput}
-            onChangeText={onPasswordUpdate}
-            secureTextEntry
-          />
+          <TextInputField value={password} onChangeText={onPasswordUpdate} secureTextEntry />
         </FormInputContainer>
         <View>
           <Button title="Sign Up" onPress={onSignUp} disabled={loading} />
@@ -73,7 +68,7 @@ export default function SignUpScreen() {
             Sign In
           </Text>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Container>
   );
 }
@@ -82,14 +77,6 @@ const styles = StyleSheet.create({
   content: {
     padding: 18,
     gap: 18,
-  },
-  textInput: {
-    backgroundColor: '#fff',
-    borderColor: '#d3d3d3',
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 16,
-    fontSize: 20,
   },
   secondaryAction: {
     alignSelf: 'center',
