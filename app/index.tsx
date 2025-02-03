@@ -1,6 +1,6 @@
 import { Redirect } from 'expo-router';
 
-import Loading from '~/components/Loading';
+import Loading from '~/components/common/Loading';
 import { useAuthentication } from '~/providers/AuthProvider';
 
 export default function Home() {
