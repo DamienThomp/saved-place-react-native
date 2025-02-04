@@ -1,12 +1,13 @@
-import { Stack } from 'expo-router';
-
-import Map from '~/components/Map';
 import { Container } from '~/components/common/Container';
+import PlacesList from '~/components/place/PlacesList';
+import Place from '~/model/Place';
 
 export default function MainView() {
+  const items: Place[] = [];
+
   return (
     <Container>
-      <Stack.Screen options={{ title: 'Saved Places' }} />
+      <PlacesList items={items} />
     </Container>
   );
 }

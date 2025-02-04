@@ -1,12 +1,12 @@
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
 
-import { Button } from '~/components/ui/Button';
 import { Container } from '~/components/common/Container';
 import Loading from '~/components/common/Loading';
 import FormInputContainer from '~/components/form/FormInputContainer';
 import TextInputField from '~/components/form/TextInputField';
+import { Button } from '~/components/ui/Button';
 import Colors from '~/constants/Colors';
 import { dbClient } from '~/lib/db';
 
@@ -50,7 +50,6 @@ export default function SignUpScreen() {
   return (
     <Container>
       <KeyboardAvoidingView style={styles.content} behavior="padding" enabled>
-        <Stack.Screen options={{ title: 'Sign Up' }} />
         <FormInputContainer title="Email">
           <TextInputField
             value={email}
