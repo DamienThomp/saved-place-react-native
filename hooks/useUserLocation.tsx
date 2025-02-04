@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import verifyPermission from '~/utils/verifyPermission';
 
 export default function useUserLocation() {
-  const [location, setLocation] = useState<LocationObjectCoords | null>();
+  const [location, setLocation] = useState<LocationObjectCoords | null>(null);
   const [locationPermission, requestPermission] = useForegroundPermissions();
 
   useEffect(() => {
