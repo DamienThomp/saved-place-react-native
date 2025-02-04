@@ -1,3 +1,4 @@
+import { useTheme } from '@react-navigation/native';
 import { TextInput, StyleSheet } from 'react-native';
 
 type TextInputFieldProps = {
@@ -15,10 +16,14 @@ export default function TextInputField({
   keyboardType,
   onChangeText,
 }: TextInputFieldProps) {
+  const theme = useTheme();
   return (
     <TextInput
       value={value}
-      style={styles.textInput}
+      style={[
+        styles.textInput,
+        { backgroundColor: theme.colors.card, borderColor: theme.colors.border },
+      ]}
       onChangeText={onChangeText}
       placeholder={placeholder}
       keyboardType={keyboardType}
@@ -29,8 +34,6 @@ export default function TextInputField({
 
 const styles = StyleSheet.create({
   textInput: {
-    backgroundColor: '#fff',
-    borderColor: '#d3d3d3',
     borderWidth: 1,
     borderRadius: 8,
     padding: 16,
