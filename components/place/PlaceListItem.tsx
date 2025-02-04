@@ -1,3 +1,4 @@
+import { useTheme } from '@react-navigation/native';
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 
 import Place from '~/model/Place';
@@ -8,10 +9,16 @@ interface PlaceItemProps {
 }
 
 export default function PlaceListItem({ item, onSelect }: PlaceItemProps) {
+  const theme = useTheme();
+
   return (
     <Pressable
       onPress={() => onSelect(item.id)}
-      style={({ pressed }) => [styles.item, pressed && styles.pressed]}>
+      style={({ pressed }) => [
+        styles.item,
+        pressed && styles.pressed,
+        { backgroundColor: theme.colors.card },
+      ]}>
       <Image style={styles.image} />
       <View style={styles.info}>
         <Text style={styles.title}>{item.title}</Text>
@@ -27,7 +34,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     borderRadius: 6,
     marginVertical: 12,
-    backgroundColor: 'white',
     elevation: 2,
   },
   pressed: {

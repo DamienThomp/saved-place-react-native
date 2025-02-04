@@ -3,6 +3,7 @@ import { KeyboardAvoidingView, StyleSheet } from 'react-native';
 
 import { Container } from '~/components/common/Container';
 import FormInputContainer from '~/components/form/FormInputContainer';
+import ImagePicker from '~/components/form/ImagePicker';
 import TextInputField from '~/components/form/TextInputField';
 import { Button } from '~/components/ui/Button';
 
@@ -11,6 +12,7 @@ type PlaceForm = {
   latitude?: number;
   longitude?: number;
   address?: string;
+  imageUri?: string;
 };
 
 export default function AddPlace() {
@@ -19,6 +21,13 @@ export default function AddPlace() {
   const onUpdateTitle = (text: string) => {
     setForm((currentState: PlaceForm) => {
       return { ...currentState, title: text };
+    });
+  };
+
+  const onSelectImage = (image: string | null) => {
+    if (!image) return;
+    setForm((currentState: PlaceForm) => {
+      return { ...currentState, imageUri: image };
     });
   };
 
@@ -34,6 +43,7 @@ export default function AddPlace() {
             keyboardType="default"
           />
         </FormInputContainer>
+        <ImagePicker onSelectImage={onSelectImage} />
         <Button title="Add Place" onPress={onSubmit} />
       </KeyboardAvoidingView>
     </Container>
@@ -44,6 +54,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 18,
-    gap: 18,
+    gap: 8,
   },
 });

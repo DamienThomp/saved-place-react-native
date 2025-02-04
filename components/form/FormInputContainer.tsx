@@ -1,3 +1,4 @@
+import { useTheme } from '@react-navigation/native';
 import { PropsWithChildren } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
@@ -9,9 +10,10 @@ export default function FormInputContainer({
   children,
   title,
 }: PropsWithChildren<FormInputContainerProps>) {
+  const theme = useTheme();
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{title}</Text>
+      <Text style={[styles.label, { color: theme.colors.text }]}>{title}</Text>
       {children}
     </View>
   );
