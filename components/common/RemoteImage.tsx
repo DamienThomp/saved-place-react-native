@@ -1,5 +1,5 @@
 import { ComponentProps, useEffect, useState } from 'react';
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
 
 import ContentUnavailable from './ContentUnavailable';
 
@@ -34,7 +34,11 @@ const RemoteImage = ({ path, fallback, ...imageProps }: RemoteImageProps) => {
   }, [path]);
 
   if (!image) {
-    return <ContentUnavailable icon="image-outline">No Image</ContentUnavailable>;
+    return (
+      <View style={{ flex: 1, height: imageProps.height, width: imageProps.width }}>
+        <ContentUnavailable icon="image-outline">No Image</ContentUnavailable>
+      </View>
+    );
   }
 
   return <Image source={{ uri: image || fallback }} {...imageProps} />;

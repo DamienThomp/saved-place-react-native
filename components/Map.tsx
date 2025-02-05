@@ -49,7 +49,7 @@ export default function Map({ coordinates, readOnly, onPress }: MapProps) {
       coordinate: coordinates,
       properties: properties as Properties,
     };
-    console.log(`selectedPoint: ${JSON.stringify(point, null, '\t')}`);
+
     setSelectedPoint(point);
     onPress?.(point);
   };
@@ -77,7 +77,7 @@ export default function Map({ coordinates, readOnly, onPress }: MapProps) {
       onPress={onMapSelection}>
       <Camera
         centerCoordinate={mapCenter}
-        animationDuration={500}
+        animationDuration={readOnly ? 0 : 500}
         defaultSettings={{
           zoomLevel: 16,
         }}
