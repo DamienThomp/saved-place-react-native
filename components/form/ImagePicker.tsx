@@ -1,7 +1,7 @@
 import { useTheme } from '@react-navigation/native';
 import { ImagePickerOptions, launchImageLibraryAsync } from 'expo-image-picker';
 import { useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet } from 'react-native';
 
 import ContentUnavailable from '~/components/common/ContentUnavailable';
 
@@ -30,7 +30,7 @@ export default function ImagePicker({ onSelectImage }: ImagePickerProps) {
   };
 
   let imagePreview = (
-    <ContentUnavailable color={'grey'} icon="image-outline">
+    <ContentUnavailable color="grey" icon="image-outline">
       Select a photo.
     </ContentUnavailable>
   );
@@ -40,25 +40,17 @@ export default function ImagePicker({ onSelectImage }: ImagePickerProps) {
   }
 
   return (
-    <View>
-      <Text>Image Picker</Text>
-      <View
-        style={[
-          styles.preview,
-          { backgroundColor: theme.colors.card, borderColor: theme.colors.border },
-        ]}>
-        {imagePreview}
-      </View>
-      {/* <CustomButton
-				icon="camera"
-				size={20}
-				iconColor={"grey"}
-				style={{ backgroundColor: "white" }}
-				onPress={onImageUpdate}
-			>
-				Take Image
-			</CustomButton> */}
-    </View>
+    <Pressable
+      onPress={onImageUpdate}
+      style={({ pressed }) => [
+        styles.preview,
+        {
+          backgroundColor: pressed ? theme.colors.background : theme.colors.card,
+          borderColor: theme.colors.border,
+        },
+      ]}>
+      {imagePreview}
+    </Pressable>
   );
 }
 
@@ -66,14 +58,14 @@ const styles = StyleSheet.create({
   preview: {
     width: '100%',
     height: 200,
-    marginVertical: 12,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: 4,
+    borderRadius: 8,
   },
   image: {
     width: '100%',
     height: '100%',
+    borderRadius: 8,
   },
 });
