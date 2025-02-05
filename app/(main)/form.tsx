@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { KeyboardAvoidingView, StyleSheet } from 'react-native';
 
 import { Container } from '~/components/common/Container';
 import FormInputContainer from '~/components/form/FormInputContainer';
 import ImagePicker from '~/components/form/ImagePicker';
+import LocationPicker from '~/components/form/LocationPicker';
 import TextInputField from '~/components/form/TextInputField';
 import { Button } from '~/components/ui/Button';
 
@@ -24,12 +25,20 @@ export default function AddPlace() {
     });
   };
 
-  const onSelectImage = (image: string | null) => {
+  const onSelectImage = useCallback((image: string | null) => {
     if (!image) return;
     setForm((currentState: PlaceForm) => {
       return { ...currentState, imageUri: image };
     });
-  };
+  }, []);
+
+  const onSelectLocation = useCallback((coordinates: number[] | null, address: string) => {
+    if (!coordinates) return;
+    setForm((currentState: PlaceForm) => {
+      const [longitude, latitude] = coordinates;
+      return { ...currentState, longitude, latitude, address };
+    });
+  }, []);
 
   const onSubmit = () => {};
 
@@ -45,6 +54,9 @@ export default function AddPlace() {
         </FormInputContainer>
         <FormInputContainer title="Image">
           <ImagePicker onSelectImage={onSelectImage} />
+        </FormInputContainer>
+        <FormInputContainer title="Location">
+          <LocationPicker onSelectLocation={onSelectLocation} />
         </FormInputContainer>
         <Button title="Add Place" onPress={onSubmit} />
       </KeyboardAvoidingView>

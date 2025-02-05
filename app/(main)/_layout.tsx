@@ -28,7 +28,21 @@ export default function MainLayout() {
         }}
       />
       <Stack.Screen name="form" options={{ title: 'Add A Place', headerLargeTitle: true }} />
-      <Stack.Screen name="map-modal" options={{ headerShown: false, presentation: 'modal' }} />
+      <Stack.Screen
+        name="map-modal"
+        options={{
+          title: 'Select a Location',
+          presentation: 'modal',
+          headerLeft: ({ tintColor }) => (
+            <IconButton
+              icon="close-circle-outline"
+              color={tintColor}
+              size={24}
+              onPress={() => router.back()}
+            />
+          ),
+        }}
+      />
     </Stack>
   );
 }

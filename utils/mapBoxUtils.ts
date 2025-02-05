@@ -19,8 +19,8 @@ const DEFAULT_OPTIONS: MapSnapShotProps = {
   centerCoordinate: [-74.12641, 40.797968],
   width: 375,
   height: 200,
-  zoomLevel: 15,
-  styleURL: MapboxGL.StyleURL.Dark,
+  zoomLevel: 16,
+  styleURL: MapboxGL.StyleURL.Street,
   writeToDisk: true,
 };
 
@@ -30,32 +30,27 @@ export async function takeSnapshot(args: MapSnapShotProps): Promise<string> {
   return result;
 }
 
-export function useAddress({ centerCoordinate }: MapSnapShotProps) {
+export async function getAddress({ centerCoordinate }: MapSnapShotProps) {
   const [long, lat] = centerCoordinate;
 
-  return useQuery({
-    queryKey: ['address', centerCoordinate],
-    queryFn: async () => {
-      const response = await axios({
-        method: 'get',
-        url: `https://api.mapbox.com/search/geocode/v6/reverse`,
-        withCredentials: false,
-        params: {
-          longitude: long,
-          latitude: lat,
-          types: 'address',
-          limit: 1,
-          access_token: token,
-        },
-      });
-
-      if (!response.data) {
-        throw new Error('Invalid response fetching address');
-      }
-
-      const { data } = response;
-
-      return data?.features[0]?.properties?.full_address ?? 'n/a';
+  const response = await axios({
+    method: 'get',
+    url: `https://api.mapbox.com/search/geocode/v6/reverse`,
+    withCredentials: false,
+    params: {
+      longitude: long,
+      latitude: lat,
+      types: 'address',
+      limit: 1,
+      access_token: token,
     },
   });
+
+  if (!response.data) {
+    throw new Error('Invalid response fetching address');
+  }
+
+  const { data } = response;
+
+  return data?.features[0]?.properties?.full_address ?? 'n/a';
 }
