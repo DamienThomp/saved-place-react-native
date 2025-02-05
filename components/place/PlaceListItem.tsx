@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     borderRadius: 8,
     borderWidth: 1,
-    marginVertical: 12,
+    marginVertical: 6,
     padding: 8,
     elevation: 2,
   },

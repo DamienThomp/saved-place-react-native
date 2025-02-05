@@ -1,4 +1,5 @@
 import { useTheme } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import { FlatList, StyleSheet } from 'react-native';
 
 import ContentUnavailable from '~/components/common/ContentUnavailable';
@@ -12,6 +13,7 @@ interface PlacesListProps {
 }
 
 export default function PlacesList({ items }: PlacesListProps) {
+  const router = useRouter();
   const theme = useTheme();
 
   if (!items || isEmpty(items)) {
@@ -22,7 +24,9 @@ export default function PlacesList({ items }: PlacesListProps) {
     );
   }
 
-  const handleOnSelectPlace = (id: number) => {};
+  const handleOnSelectPlace = (id: number) => {
+    router.push(`/(main)/${id}`);
+  };
 
   return (
     <FlatList
