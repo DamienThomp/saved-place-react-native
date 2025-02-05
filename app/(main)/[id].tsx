@@ -5,7 +5,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePlaceDetails } from '~/api/places';
 import Map from '~/components/Map';
-import ContentUnavailable from '~/components/common/ContentUnavailable';
 import LoadingState from '~/components/common/LoadingState';
 import RemoteImage from '~/components/common/RemoteImage';
 import IconButton from '~/components/ui/IconButton';
