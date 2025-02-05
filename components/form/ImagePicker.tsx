@@ -25,12 +25,12 @@ export default function ImagePicker({ onSelectImage }: ImagePickerProps) {
 
     if (!imageResult.canceled) {
       setImage(imageResult.assets[0].uri);
-      onSelectImage(image);
+      onSelectImage(imageResult.assets[0].uri);
     }
   };
 
   let imagePreview = (
-    <ContentUnavailable color="grey" icon="image-outline">
+    <ContentUnavailable color={theme.colors.primary} icon="image-outline">
       Select a photo.
     </ContentUnavailable>
   );

@@ -15,13 +15,8 @@ export default function MapModal() {
   };
 
   const onSubmit = () => {
-    console.log(`save selection ${selectedPlace} and close modal`);
-    router.push({
-      pathname: '/form',
-      params: {
-        coordinate: JSON.stringify(selectedPlace),
-      },
-    });
+    router.back();
+    router.setParams({ coordinate: JSON.stringify(selectedPlace) });
   };
 
   return (

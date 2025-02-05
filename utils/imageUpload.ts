@@ -15,12 +15,16 @@ const uploadImage = async (image: string) => {
 
   const filePath = `${uuid()}.png`;
   const contentType = 'image/png';
-  const { data } = await dbClient.storage
+  const { data, error } = await dbClient.storage
     .from('place-images')
     .upload(filePath, decode(base64), { contentType });
 
   if (data) {
     return data.path;
+  }
+
+  if (error) {
+    console.log(`image upload error: ${JSON.stringify(error)}`);
   }
 
   return null;

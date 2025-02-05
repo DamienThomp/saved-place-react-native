@@ -13,7 +13,6 @@ enum LocationOptions {
   User = 'My Location',
   Map = 'Locate on Map',
 }
-
 interface LocationPickerProps {
   onSelectLocation: (coordinates: number[], address: string) => void;
 }
@@ -77,7 +76,7 @@ export default function LocationPicker({ onSelectLocation }: LocationPickerProps
       const coordinate = JSON.parse(params.coordinate);
       const uri = await takeSnapshot({ centerCoordinate: coordinate });
       const address = await getAddress({ centerCoordinate: coordinate });
-
+      console.log(`address: ${address}`);
       onSelectLocation(coordinate, address);
       setPickedLocation(uri);
     }
@@ -88,7 +87,7 @@ export default function LocationPicker({ onSelectLocation }: LocationPickerProps
   }, [params.coordinate]);
 
   let mapPreview = (
-    <ContentUnavailable color="grey" icon="map-outline">
+    <ContentUnavailable color={theme.colors.primary} icon="map-outline">
       Select a location.
     </ContentUnavailable>
   );
@@ -118,6 +117,7 @@ const styles = StyleSheet.create({
     height: 200,
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
     borderRadius: 8,
   },
   image: {
