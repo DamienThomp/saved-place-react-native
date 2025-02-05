@@ -8,6 +8,12 @@ import ContentUnavailable from '../common/ContentUnavailable';
 import useUserLocation from '~/hooks/useUserLocation';
 import { getAddress, takeSnapshot } from '~/utils/mapBoxUtils';
 
+enum LocationOptions {
+  Cancel = 'Cancel',
+  User = 'My Location',
+  Map = 'Locate on Map',
+}
+
 interface LocationPickerProps {
   onSelectLocation: (coordinates: number[], address: string) => void;
 }
@@ -39,7 +45,7 @@ export default function LocationPicker({ onSelectLocation }: LocationPickerProps
     if (Platform.OS === 'ios') {
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          options: ['My Location', 'Locate on Map', 'Cancel'],
+          options: [LocationOptions.User, LocationOptions.Map, LocationOptions.Cancel],
           destructiveButtonIndex: 2,
           cancelButtonIndex: 2,
         },
@@ -57,11 +63,11 @@ export default function LocationPicker({ onSelectLocation }: LocationPickerProps
     if (Platform.OS === 'android') {
       Alert.alert('Pick a Place', '', [
         {
-          text: 'Cancel',
+          text: LocationOptions.Cancel,
           style: 'cancel',
         },
-        { text: 'My Location', onPress: () => handleLocateUser() },
-        { text: 'Locate on Map', onPress: () => handleLocateOnMap() },
+        { text: LocationOptions.User, onPress: () => handleLocateUser() },
+        { text: LocationOptions.Map, onPress: () => handleLocateOnMap() },
       ]);
     }
   };
