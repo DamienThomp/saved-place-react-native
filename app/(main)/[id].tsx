@@ -20,13 +20,6 @@ export default function PlaceDetails() {
 
   const { data: place, isLoading, error } = usePlaceDetails(locationId);
 
-  if (!place) {
-    return (
-      <ContentUnavailable color={theme.colors.primary} icon="map-outline">
-        No Place Info.
-      </ContentUnavailable>
-    );
-  }
   return (
     <LoadingState isLoading={isLoading} error={error}>
       <Stack.Screen
@@ -35,7 +28,9 @@ export default function PlaceDetails() {
         }}
       />
       <View style={styles.container}>
-        <Map coordinates={{ longitude: place.longitude, latitude: place.latitude }} readOnly />
+        {place && (
+          <Map coordinates={{ longitude: place.longitude, latitude: place.latitude }} readOnly />
+        )}
         <View style={[styles.backButton, { top: insets.top, left: insets.left }]}>
           <IconButton
             icon="chevron-back-circle-sharp"
@@ -47,10 +42,10 @@ export default function PlaceDetails() {
         <View style={[styles.overlay]}>
           <View style={styles.overlayContent}>
             <View style={styles.info}>
-              <Text style={[styles.title]}>{place.title}</Text>
-              <Text style={[styles.address]}>{place.address}</Text>
+              <Text style={[styles.title]}>{place?.title}</Text>
+              <Text style={[styles.address]}>{place?.address}</Text>
             </View>
-            <RemoteImage fallback="" style={styles.image} path={place.image} />
+            <RemoteImage fallback="" style={styles.image} path={place?.image} />
           </View>
         </View>
       </View>
