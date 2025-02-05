@@ -1,8 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, KeyboardAvoidingView, StyleSheet } from 'react-native';
-import { useInsertPlace } from '~/api/places';
 
+import { useInsertPlace } from '~/api/places';
 import { Container } from '~/components/common/Container';
 import Loading from '~/components/common/Loading';
 import FormInputContainer from '~/components/form/FormInputContainer';

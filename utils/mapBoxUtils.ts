@@ -1,5 +1,4 @@
 import MapboxGL from '@rnmapbox/maps';
-import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const token = process.env.EXPO_PUBLIC_MAPBOX_TOKEN || null;
