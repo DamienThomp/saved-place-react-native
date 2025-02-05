@@ -1,13 +1,16 @@
+import { usePlacesList } from '~/api/places';
 import { Container } from '~/components/common/Container';
+import LoadingState from '~/components/common/LoadingState';
 import PlacesList from '~/components/place/PlacesList';
-import Place from '~/model/Place';
 
 export default function MainView() {
-  const items: Place[] = [];
+  const { data, error, isLoading } = usePlacesList();
 
   return (
-    <Container>
-      <PlacesList items={items} />
-    </Container>
+    <LoadingState isLoading={isLoading} error={error}>
+      <Container>
+        <PlacesList items={data} />
+      </Container>
+    </LoadingState>
   );
 }

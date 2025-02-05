@@ -1,11 +1,14 @@
 import { useTheme } from '@react-navigation/native';
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 
-import Place from '~/model/Place';
+import RemoteImage from '../common/RemoteImage';
 
+import { Tables } from '~/types/database.types';
+
+type Place = Tables<'places'>;
 interface PlaceItemProps {
   item: Place;
-  onSelect: (id: string) => void;
+  onSelect: (id: number) => void;
 }
 
 export default function PlaceListItem({ item, onSelect }: PlaceItemProps) {
@@ -17,12 +20,16 @@ export default function PlaceListItem({ item, onSelect }: PlaceItemProps) {
       style={({ pressed }) => [
         styles.item,
         pressed && styles.pressed,
-        { backgroundColor: theme.colors.card },
+        { backgroundColor: theme.colors.card, borderColor: theme.colors.border },
       ]}>
-      <Image style={styles.image} />
+      <RemoteImage fallback="" style={styles.image} path={item.image} />
       <View style={styles.info}>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.address}>{item.address}</Text>
+        <Text numberOfLines={1} style={[styles.title, { color: theme.colors.text }]}>
+          {item.title}
+        </Text>
+        <Text numberOfLines={2} style={[styles.address, { color: theme.colors.text }]}>
+          {item.address}
+        </Text>
       </View>
     </Pressable>
   );
@@ -31,9 +38,12 @@ export default function PlaceListItem({ item, onSelect }: PlaceItemProps) {
 const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'flex-start',
-    borderRadius: 6,
+    borderRadius: 8,
+    borderWidth: 1,
     marginVertical: 12,
+    padding: 8,
     elevation: 2,
   },
   pressed: {
@@ -41,9 +51,9 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    borderBottomLeftRadius: 4,
-    borderTopLeftRadius: 4,
-    height: 100,
+    borderRadius: 8,
+    height: 80,
+    resizeMode: 'contain',
   },
   info: {
     flex: 2,
@@ -52,10 +62,8 @@ const styles = StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 18,
-    color: 'grey',
   },
   address: {
     fontSize: 12,
-    color: 'grey',
   },
 });

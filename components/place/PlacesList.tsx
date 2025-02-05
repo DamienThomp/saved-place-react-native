@@ -1,30 +1,34 @@
+import { useTheme } from '@react-navigation/native';
 import { FlatList, StyleSheet } from 'react-native';
 
 import ContentUnavailable from '~/components/common/ContentUnavailable';
 import PlaceListItem from '~/components/place/PlaceListItem';
-import type Place from '~/model/Place';
+import { Tables } from '~/types/database.types';
 import isEmpty from '~/utils/isEmpty';
 
+type Places = Tables<'places'>;
 interface PlacesListProps {
-  items: Place[];
+  items: Places[] | null | undefined;
 }
 
 export default function PlacesList({ items }: PlacesListProps) {
-  if (isEmpty(items)) {
+  const theme = useTheme();
+
+  if (!items || isEmpty(items)) {
     return (
-      <ContentUnavailable color="grey" icon="map-outline">
+      <ContentUnavailable color={theme.colors.primary} icon="map-outline">
         No Places Added.
       </ContentUnavailable>
     );
   }
 
-  const handleOnSelectPlace = (id: string) => {};
+  const handleOnSelectPlace = (id: number) => {};
 
   return (
     <FlatList
       style={styles.list}
       data={items}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => <PlaceListItem item={item} onSelect={handleOnSelectPlace} />}
     />
   );
@@ -32,6 +36,6 @@ export default function PlacesList({ items }: PlacesListProps) {
 
 const styles = StyleSheet.create({
   list: {
-    margin: 24,
+    margin: 12,
   },
 });

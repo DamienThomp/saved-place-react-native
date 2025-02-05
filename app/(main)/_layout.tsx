@@ -33,14 +33,6 @@ export default function MainLayout() {
         options={{
           title: 'Select a Location',
           presentation: 'modal',
-          headerLeft: ({ tintColor }) => (
-            <IconButton
-              icon="close-circle-outline"
-              color={tintColor}
-              size={24}
-              onPress={() => router.back()}
-            />
-          ),
         }}
       />
     </Stack>
