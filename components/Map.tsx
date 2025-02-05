@@ -19,20 +19,47 @@ type Coordinates = {
   longitude: number;
   latitude: number;
 };
-type MapProps = {
-  coordinates?: Coordinates;
-  onPress?: () => void;
+
+export type SelectedPoint = {
+  coordinate: number[];
+  properties?: Properties | null;
 };
 
-export default function Map({ coordinates, onPress }: MapProps) {
+type Properties = {
+  screenPointX: number;
+  screenPointY: number;
+};
+
+type MapProps = {
+  coordinates?: Coordinates;
+  readOnly?: boolean;
+  onPress?: (selected: SelectedPoint | null) => void;
+};
+
+export default function Map({ coordinates, readOnly, onPress }: MapProps) {
   const [mapCenter, setMapCenter] = useState<Position | undefined>();
-  const [selectedPoint, setSelectedPoint] = useState<Position | undefined>();
+  const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
   const userLocation = useUserLocation();
+
+  const onMapSelection = (feature: GeoJSON.Feature) => {
+    if (readOnly) return;
+    const properties = feature.properties as GeoJSON.GeoJsonProperties;
+    const { coordinates } = feature.geometry as GeoJSON.Point;
+    const point = {
+      coordinate: coordinates,
+      properties: properties as Properties,
+    };
+    console.log(`selectedPoint: ${JSON.stringify(point, null, '\t')}`);
+    setSelectedPoint(point);
+    onPress?.(point);
+  };
 
   useEffect(() => {
     if (coordinates) {
       setMapCenter([coordinates.longitude, coordinates.latitude]);
-      setSelectedPoint([coordinates.longitude, coordinates.latitude]);
+      setSelectedPoint({
+        coordinate: [coordinates.longitude, coordinates.latitude],
+      });
       return;
     }
 
@@ -47,7 +74,7 @@ export default function Map({ coordinates, onPress }: MapProps) {
       styleURL={StyleURL.Street}
       logoEnabled={false}
       scaleBarEnabled={false}
-      onPress={onPress}>
+      onPress={onMapSelection}>
       <Camera
         centerCoordinate={mapCenter}
         animationDuration={500}
@@ -57,7 +84,7 @@ export default function Map({ coordinates, onPress }: MapProps) {
       />
 
       {selectedPoint && (
-        <MarkerView coordinate={selectedPoint} anchor={{ x: 0.5, y: 1 }}>
+        <MarkerView coordinate={selectedPoint.coordinate} anchor={{ x: 0.5, y: 1 }}>
           <AnnotationContent title="marker" />
         </MarkerView>
       )}
