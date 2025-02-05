@@ -1,12 +1,12 @@
 import { useTheme } from '@react-navigation/native';
-import { TextInput, StyleSheet } from 'react-native';
+import { TextInput, StyleSheet, KeyboardTypeOptions } from 'react-native';
 
 type TextInputFieldProps = {
   value?: string;
   onChangeText: (text: string) => void;
   placeholder?: string;
   secureTextEntry?: boolean;
-  keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad' | 'visible-password';
+  keyboardType?: KeyboardTypeOptions;
 };
 
 export default function TextInputField({
@@ -22,7 +22,11 @@ export default function TextInputField({
       value={value}
       style={[
         styles.textInput,
-        { backgroundColor: theme.colors.card, borderColor: theme.colors.border },
+        {
+          backgroundColor: theme.colors.card,
+          borderColor: theme.colors.border,
+          color: theme.colors.text,
+        },
       ]}
       onChangeText={onChangeText}
       placeholder={placeholder}

@@ -43,7 +43,9 @@ export default function AddPlace() {
             keyboardType="default"
           />
         </FormInputContainer>
-        <ImagePicker onSelectImage={onSelectImage} />
+        <FormInputContainer title="Image">
+          <ImagePicker onSelectImage={onSelectImage} />
+        </FormInputContainer>
         <Button title="Add Place" onPress={onSubmit} />
       </KeyboardAvoidingView>
     </Container>
@@ -54,6 +56,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 18,
-    gap: 8,
+    gap: 18,
   },
 });
