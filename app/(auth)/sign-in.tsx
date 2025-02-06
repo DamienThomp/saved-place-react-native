@@ -1,3 +1,4 @@
+import { useTheme } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
@@ -7,10 +8,10 @@ import Loading from '~/components/common/Loading';
 import FormInputContainer from '~/components/form/FormInputContainer';
 import TextInputField from '~/components/form/TextInputField';
 import { Button } from '~/components/ui/Button';
-import Colors from '~/constants/Colors';
 import { dbClient } from '~/lib/db';
 
 export default function SignInScreen() {
+  const theme = useTheme();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -63,7 +64,9 @@ export default function SignInScreen() {
         </FormInputContainer>
         <View>
           <Button title="Sign In" onPress={onSignIn} disabled={loading} />
-          <Text onPress={redirectToSignUp} style={styles.secondaryAction}>
+          <Text
+            onPress={redirectToSignUp}
+            style={[styles.secondaryAction, { color: theme.colors.primary }]}>
             Create Account
           </Text>
         </View>
@@ -81,7 +84,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontWeight: 'bold',
     fontSize: 18,
-    color: Colors.light.tint,
     padding: 8,
   },
 });
