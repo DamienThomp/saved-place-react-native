@@ -24,7 +24,7 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 ## Future Improvements
 - [ ] add directions to details screen
 - [ ] add map controls to details screen (change theme, pitch, toggle to user location)
-- [ ] add transition animations
+- [x] add transition animations
 - [ ] add swipe to update/delete
 - [ ] add search to mapview for selecting a place. (currently defaults to user location)
 
