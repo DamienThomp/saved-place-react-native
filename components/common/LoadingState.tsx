@@ -1,5 +1,8 @@
 import { PropsWithChildren } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { Text } from 'react-native';
+
+import FadeIn from './FadeIn';
+import Loading from './Loading';
 
 type LoadingStateProps = {
   isLoading: boolean;
@@ -12,16 +15,12 @@ export default function LoadingState({
   error,
 }: PropsWithChildren<LoadingStateProps>) {
   if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <ActivityIndicator />
-      </View>
-    );
+    return <Loading />;
   }
 
   if (error) {
     return <Text>{error.message}</Text>;
   }
 
-  return <>{children}</>;
+  return <FadeIn>{children}</FadeIn>;
 }
