@@ -1,6 +1,6 @@
 import { useTheme } from '@react-navigation/native';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { View, Text, StyleSheet } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePlaceDetails } from '~/api/places';
@@ -21,11 +21,6 @@ export default function PlaceDetails() {
 
   return (
     <LoadingState isLoading={isLoading} error={error}>
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-      />
       <View style={styles.container}>
         {place && (
           <Map coordinates={{ longitude: place.longitude, latitude: place.latitude }} readOnly />

@@ -15,7 +15,7 @@ export default function Layout() {
         <AuthProvider>
           <QueryProvider>
             <Stack>
-              <Stack.Screen name="/" options={{ headerShown: false }} />
+              <Stack.Screen name="index" options={{ headerShown: false }} />
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
               <Stack.Screen name="(main)" options={{ headerShown: false }} />
             </Stack>
