@@ -35,6 +35,7 @@ export default function MainLayout() {
           presentation: 'modal',
         }}
       />
+      <Stack.Screen name="[id]" options={{ headerShown: false }} />
     </Stack>
   );
 }

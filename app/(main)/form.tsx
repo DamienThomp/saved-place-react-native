@@ -4,6 +4,7 @@ import { Alert, KeyboardAvoidingView, StyleSheet } from 'react-native';
 
 import { useInsertPlace } from '~/api/places';
 import { Container } from '~/components/common/Container';
+import FadeIn from '~/components/common/FadeIn';
 import Loading from '~/components/common/Loading';
 import FormInputContainer from '~/components/form/FormInputContainer';
 import ImagePicker from '~/components/form/ImagePicker';
@@ -103,7 +104,11 @@ export default function AddPlace() {
   }, [errors]);
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <FadeIn>
+        <Loading />
+      </FadeIn>
+    );
   }
 
   return (
