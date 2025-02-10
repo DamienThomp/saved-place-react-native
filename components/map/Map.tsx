@@ -1,19 +1,13 @@
 import Mapbox, { Camera, LocationPuck, MapView, MarkerView, StyleURL } from '@rnmapbox/maps';
 import { Position } from '@rnmapbox/maps/lib/typescript/src/types/Position';
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import IconButton from './ui/IconButton';
+import AnnotationContent from './AnnotationContent';
 
 import useUserLocation from '~/hooks/useUserLocation';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
-
-const AnnotationContent = ({ title }: { title: string }) => (
-  <View style={styles.touchableContainer}>
-    <IconButton icon="pin" size={36} color="white" onPress={() => {}} />
-  </View>
-);
 
 type Coordinates = {
   longitude: number;
@@ -97,12 +91,6 @@ export default function Map({ coordinates, readOnly, onPress }: MapProps) {
 const styles = StyleSheet.create({
   map: {
     flex: 1,
-  },
-  touchableContainer: {
-    backgroundColor: 'red',
-    borderRadius: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   touchableText: {
     color: 'white',

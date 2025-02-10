@@ -1,7 +1,7 @@
 import { Stack, useRouter } from 'expo-router';
 import { useState } from 'react';
 
-import Map, { SelectedPoint } from '~/components/Map';
+import Map, { SelectedPoint } from '~/components/map/Map';
 import IconButton from '~/components/ui/IconButton';
 
 export default function MapModal() {
