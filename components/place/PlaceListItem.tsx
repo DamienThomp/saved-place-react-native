@@ -9,9 +9,10 @@ type Place = Tables<'places'>;
 interface PlaceItemProps {
   item: Place;
   onSelect: (id: number) => void;
+  onDelete: (id: number) => void;
 }
 
-export default function PlaceListItem({ item, onSelect }: PlaceItemProps) {
+export default function PlaceListItem({ item, onSelect, onDelete }: PlaceItemProps) {
   const theme = useTheme();
 
   return (

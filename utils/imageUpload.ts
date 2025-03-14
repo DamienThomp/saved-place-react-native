@@ -6,7 +6,7 @@ import uuid from '~/utils/UUID';
 
 const uploadImage = async (image: string) => {
   if (!image?.startsWith('file://')) {
-    return null;
+    throw new Error("Can't save image with invalid file path");
   }
 
   const base64 = await FileSystem.readAsStringAsync(image, {
@@ -19,15 +19,11 @@ const uploadImage = async (image: string) => {
     .from('place-images')
     .upload(filePath, decode(base64), { contentType });
 
-  if (data) {
-    return data.path;
-  }
-
   if (error) {
-    console.log(`image upload error: ${JSON.stringify(error)}`);
+    throw new Error(`image upload error: ${JSON.stringify(error)}`);
   }
 
-  return null;
+  return data?.path;
 };
 
 export default uploadImage;

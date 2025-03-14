@@ -74,27 +74,33 @@ export default function AddPlace() {
   };
 
   const onSubmit = async () => {
-    if (!validateForm()) return;
+    try {
+      if (!validateForm()) return;
 
-    setIsLoading(true);
+      setIsLoading(true);
 
-    const imagePath = await uploadImage(placeForm?.imageUri ?? '');
+      const imagePath = await uploadImage(placeForm?.imageUri ?? '');
 
-    const { title, longitude, latitude, address } = placeForm;
+      const { title, longitude, latitude, address } = placeForm;
 
-    insertPlace(
-      { title, longitude, latitude, address, image: imagePath },
-      {
-        onSuccess: () => {
-          router.back();
-          setIsLoading(false);
-        },
-        onError: () => {
-          Alert.alert('Error', 'There was a problem saving your place');
-          setIsLoading(false);
-        },
-      }
-    );
+      insertPlace(
+        { title, longitude, latitude, address, image: imagePath },
+        {
+          onSuccess: () => {
+            router.back();
+            setIsLoading(false);
+          },
+          onError: () => {
+            Alert.alert('Error', 'There was a problem saving your place');
+            setIsLoading(false);
+          },
+        }
+      );
+    } catch (error) {
+      Alert.alert('Error', `There was a problem saving your place: ${error}`);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {

@@ -17,6 +17,7 @@ export default function MainLayout() {
         name="Index"
         options={{
           title: 'All Places',
+          headerLargeTitle: true,
           headerRight: ({ tintColor }) => (
             <IconButton
               icon="add-circle-outline"
