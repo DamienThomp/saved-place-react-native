@@ -1,12 +1,13 @@
 import { useTheme } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { StyleSheet, Text, View } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePlaceDetails } from '~/api/places';
-import Map from '~/components/map/Map';
 import LoadingState from '~/components/common/LoadingState';
 import RemoteImage from '~/components/common/RemoteImage';
+import Map from '~/components/map/Map';
 import IconButton from '~/components/ui/IconButton';
 
 export default function PlaceDetails() {
@@ -33,15 +34,15 @@ export default function PlaceDetails() {
             onPress={() => router.back()}
           />
         </View>
-        <View style={[styles.overlay]}>
+        <Animated.View style={[styles.overlay]} entering={FadeInDown.duration(500).delay(250)}>
           <View style={styles.overlayContent}>
             <View style={styles.info}>
               <Text style={[styles.title]}>{place?.title}</Text>
               <Text style={[styles.address]}>{place?.address}</Text>
             </View>
-            <RemoteImage fallback="" style={styles.image} path={place?.image} />
+            <RemoteImage fallback="" style={styles.image} path={place?.image} height={250} />
           </View>
-        </View>
+        </Animated.View>
       </View>
     </LoadingState>
   );

@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     marginVertical: 6,
-    padding: 8,
+    padding: 24,
     elevation: 2,
   },
   pressed: {
@@ -51,19 +51,23 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    borderRadius: 8,
-    height: 80,
-    resizeMode: 'contain',
+    borderRadius: 6,
+    backgroundColor: 'red',
+    marginRight: 12,
+    height: '100%',
+    resizeMode: 'cover',
   },
   info: {
     flex: 2,
     padding: 12,
+    gap: 6,
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 24,
   },
   address: {
     fontSize: 12,
+    opacity: 0.7,
   },
 });
