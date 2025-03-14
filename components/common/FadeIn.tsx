@@ -13,10 +13,10 @@ export default function FadeIn({ children }: PropsWithChildren) {
   }, [fadeAnim]);
 
   return (
-    <Animated.View // Special animatable View
+    <Animated.View
       style={{
         flex: 1,
-        opacity: fadeAnim, // Bind opacity to animated value
+        opacity: fadeAnim,
       }}>
       {children}
     </Animated.View>

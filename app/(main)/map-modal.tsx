@@ -10,7 +10,9 @@ export default function MapModal() {
 
   const onMapSelection = (selection: SelectedPoint | null) => {
     if (!selection) return;
+
     const [longitude, latitude] = selection.coordinate;
+
     setSelectedPlace([longitude, latitude]);
   };
 
