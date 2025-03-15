@@ -87,5 +87,8 @@ export const useDeletePlace = () => {
     async onSuccess() {
       await queryClient.invalidateQueries({ queryKey: ['places'] });
     },
+    async onError() {
+      await queryClient.invalidateQueries({ queryKey: ['places'] });
+    },
   });
 };
