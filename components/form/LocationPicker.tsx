@@ -1,9 +1,10 @@
 import { useTheme } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Platform, ActionSheetIOS, Image, Pressable, StyleSheet, Alert } from 'react-native';
+import { ActionSheetIOS, Alert, Image, Platform, Pressable, StyleSheet } from 'react-native';
 
 import ContentUnavailable from '../common/ContentUnavailable';
+import Loading from '../common/Loading';
 
 import useUserLocation from '~/hooks/useUserLocation';
 import { getAddress, takeSnapshot } from '~/utils/mapBoxUtils';
@@ -19,6 +20,7 @@ interface LocationPickerProps {
 
 export default function LocationPicker({ onSelectLocation }: LocationPickerProps) {
   const [pickedLocation, setPickedLocation] = useState<string | null>(null);
+  const [isLoading, setIsloading] = useState(false);
   const router = useRouter();
   const theme = useTheme();
   const location = useUserLocation();
@@ -73,12 +75,13 @@ export default function LocationPicker({ onSelectLocation }: LocationPickerProps
 
   const getSnapshot = async () => {
     if (params?.coordinate) {
+      setIsloading(true);
       const coordinate = JSON.parse(params.coordinate);
       const uri = await takeSnapshot({ centerCoordinate: coordinate });
       const address = await getAddress({ centerCoordinate: coordinate });
-      console.log(`address: ${address}`);
       onSelectLocation(coordinate, address);
       setPickedLocation(uri);
+      setIsloading(false);
     }
   };
 
@@ -91,6 +94,10 @@ export default function LocationPicker({ onSelectLocation }: LocationPickerProps
       Select a location.
     </ContentUnavailable>
   );
+
+  if (isLoading) {
+    mapPreview = <Loading />;
+  }
 
   if (pickedLocation) {
     mapPreview = <Image source={{ uri: pickedLocation }} style={styles.image} />;
