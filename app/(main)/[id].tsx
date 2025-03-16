@@ -25,9 +25,10 @@ export default function PlaceDetails() {
   const { data: place, isLoading, error } = usePlaceDetails(locationId);
 
   useEffect(() => {
-    if (setDirections) {
-      setDirections(null);
-    }
+    setDirections?.(null);
+    return () => {
+      setDirections?.(null);
+    };
   }, []);
 
   return (
