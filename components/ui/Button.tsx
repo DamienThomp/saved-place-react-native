@@ -1,17 +1,28 @@
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { useTheme } from '@react-navigation/native';
 import { forwardRef } from 'react';
 import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 
 type ButtonProps = {
   title?: string;
+  icon?: keyof typeof FontAwesome5.glyphMap;
+  color?: string;
+  size?: number;
 } & TouchableOpacityProps;
 
-export const Button = forwardRef<View, ButtonProps>(({ title, ...touchableProps }, ref) => {
-  return (
-    <TouchableOpacity ref={ref} {...touchableProps} style={[styles.button, touchableProps.style]}>
-      <Text style={styles.buttonText}>{title}</Text>
-    </TouchableOpacity>
-  );
-});
+export const Button = forwardRef<View, ButtonProps>(
+  ({ title, icon, color, size, ...props }, ref) => {
+    const theme = useTheme();
+    return (
+      <TouchableOpacity ref={ref} {...props} style={[styles.button, props.style]}>
+        <Text style={styles.buttonText}>{title}</Text>
+        {icon && (
+          <FontAwesome5 name={icon} color={color ?? theme.colors.primary} size={size ?? 16} />
+        )}
+      </TouchableOpacity>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   button: {
@@ -22,6 +33,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     padding: 16,
+    gap: 8,
     shadowColor: '#000',
     shadowOffset: {
       height: 2,

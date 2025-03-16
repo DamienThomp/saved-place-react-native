@@ -6,9 +6,7 @@ import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated
 
 import RemoteImage from '../common/RemoteImage';
 
-import { Tables } from '~/types/database.types';
-
-type Place = Tables<'places'>;
+import { Place } from '~/types/types';
 interface PlaceItemProps {
   item: Place;
   onSelect: (id: number) => void;
@@ -92,7 +90,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     marginRight: 12,
     height: '100%',
-    minWidth: 10,
     resizeMode: 'cover',
   },
   info: {
