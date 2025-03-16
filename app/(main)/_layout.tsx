@@ -2,6 +2,7 @@ import { Redirect, Stack, useRouter } from 'expo-router';
 
 import IconButton from '~/components/ui/IconButton';
 import { useAuthentication } from '~/providers/AuthProvider';
+import LocationProvider from '~/providers/LocationProvider';
 
 export default function MainLayout() {
   const { session } = useAuthentication();
@@ -12,31 +13,33 @@ export default function MainLayout() {
   }
 
   return (
-    <Stack>
-      <Stack.Screen
-        name="Index"
-        options={{
-          title: 'All Places',
-          headerLargeTitle: true,
-          headerRight: ({ tintColor }) => (
-            <IconButton
-              icon="add-circle-outline"
-              color={tintColor}
-              size={24}
-              onPress={() => router.push('/form')}
-            />
-          ),
-        }}
-      />
-      <Stack.Screen name="form" options={{ title: 'Add A Place', headerLargeTitle: true }} />
-      <Stack.Screen
-        name="map-modal"
-        options={{
-          title: 'Select a Location',
-          presentation: 'modal',
-        }}
-      />
-      <Stack.Screen name="[id]" options={{ headerShown: false }} />
-    </Stack>
+    <LocationProvider>
+      <Stack>
+        <Stack.Screen
+          name="Index"
+          options={{
+            title: 'All Places',
+            headerLargeTitle: true,
+            headerRight: ({ tintColor }) => (
+              <IconButton
+                icon="add-circle-outline"
+                color={tintColor}
+                size={24}
+                onPress={() => router.push('/form')}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen name="form" options={{ title: 'Add A Place', headerLargeTitle: true }} />
+        <Stack.Screen
+          name="map-modal"
+          options={{
+            title: 'Select a Location',
+            presentation: 'modal',
+          }}
+        />
+        <Stack.Screen name="[id]" options={{ headerShown: false }} />
+      </Stack>
+    </LocationProvider>
   );
 }

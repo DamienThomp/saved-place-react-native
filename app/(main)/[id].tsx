@@ -1,5 +1,6 @@
 import { useTheme } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -7,10 +8,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePlaceDetails } from '~/api/places';
 import LoadingState from '~/components/common/LoadingState';
 import RemoteImage from '~/components/common/RemoteImage';
+import DirectionButton from '~/components/map/DirectionButton';
 import Map from '~/components/map/Map';
 import IconButton from '~/components/ui/IconButton';
+import { useLocation } from '~/providers/LocationProvider';
 
 export default function PlaceDetails() {
+  const { setDirections } = useLocation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const theme = useTheme();
@@ -19,6 +23,12 @@ export default function PlaceDetails() {
   const locationId = parseFloat(Array.isArray(id) ? id[0] : id);
 
   const { data: place, isLoading, error } = usePlaceDetails(locationId);
+
+  useEffect(() => {
+    if (setDirections) {
+      setDirections(null);
+    }
+  }, []);
 
   return (
     <LoadingState isLoading={isLoading} error={error}>
@@ -39,6 +49,12 @@ export default function PlaceDetails() {
             <View style={styles.info}>
               <Text style={[styles.title]}>{place?.title}</Text>
               <Text style={[styles.address]}>{place?.address}</Text>
+              {place && (
+                <DirectionButton
+                  coordinates={{ longitude: place.longitude, latitude: place.latitude }}
+                  color="white"
+                />
+              )}
             </View>
             <RemoteImage fallback="" style={styles.image} path={place?.image} height={250} />
           </View>
@@ -73,11 +89,11 @@ const styles = StyleSheet.create({
   info: {
     padding: 18,
     marginTop: 12,
+    gap: 12,
   },
   title: {
     fontWeight: 'bold',
     fontSize: 24,
-    marginBottom: 12,
     color: 'white',
   },
   address: {
