@@ -22,7 +22,7 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 - **Expo:** This app uses Expo and Expo-Router.
 
 ## Future Improvements
-- [ ] add directions to details screen
+- [x] ~~add directions to details screen~~
 - [ ] add map controls to details screen (change theme, pitch, toggle to user location)
 - [x] ~~add transition animations~~
 - [x] ~~add swipe to delete~~
