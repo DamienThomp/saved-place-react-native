@@ -98,7 +98,6 @@ export default function AddPlace() {
       );
     } catch (error) {
       Alert.alert('Error', `There was a problem saving your place: ${error}`);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -112,7 +111,7 @@ export default function AddPlace() {
   if (isLoading) {
     return (
       <FadeIn>
-        <Loading />
+        <Loading title="Saving Place" />
       </FadeIn>
     );
   }

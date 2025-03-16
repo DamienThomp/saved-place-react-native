@@ -1,16 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
-import { Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, {
-  Easing,
-  ReduceMotion,
-  runOnJS,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
+import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import Swipeable, { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable';
+import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 
 import RemoteImage from '../common/RemoteImage';
 
@@ -24,82 +16,59 @@ interface PlaceItemProps {
 }
 
 export default function PlaceListItem({ item, onSelect, onDelete }: PlaceItemProps) {
-  const { width: screenWidth } = useWindowDimensions();
-  const iconThreshold = -screenWidth * 0.3;
-  const deleteItemThreshold = -screenWidth * 0.6;
   const theme = useTheme();
-  const position = useSharedValue(0);
 
-  const tapGesture = Gesture.Tap()
-    .onTouchesUp(() => {
-      onSelect(item.id);
-    })
-    .runOnJS(true);
+  const handleDelete = (swipeable?: SwipeableMethods) => {
+    Alert.alert('Delete', 'Are you sure you want to delete this Place?', [
+      { text: 'Cancel', onPress: () => swipeable?.close(), style: 'cancel' },
+      {
+        text: 'Continue',
+        onPress: () => {
+          onDelete(item.id);
+        },
+      },
+    ]);
+  };
 
-  const panGesture = Gesture.Pan()
-    .onUpdate((event) => {
-      position.value = event.translationX;
-    })
-    .onEnd((event) => {
-      if (event.translationX < deleteItemThreshold) {
-        position.value = withTiming(
-          -screenWidth,
-          {
-            duration: 100,
-            easing: Easing.ease,
-            reduceMotion: ReduceMotion.System,
-          },
-          (isFinished) => {
-            if (isFinished) {
-              runOnJS(onDelete)(item.id);
-            }
-          }
-        );
-      } else {
-        position.value = withSpring(0);
-      }
-    })
-    .onTouchesUp(() => true);
-
-  const containerGestures = Gesture.Exclusive(panGesture, tapGesture);
-
-  const animatedContainerStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: position.value }],
-  }));
-
-  const animatedIconStyle = useAnimatedStyle(() => {
-    const opacity = withTiming(position.value < iconThreshold ? 1 : 0);
-    return { opacity };
-  });
+  const RightAction = (
+    _: SharedValue<number>,
+    drag: SharedValue<number>,
+    swipeable: SwipeableMethods
+  ) => {
+    const styleAnimation = useAnimatedStyle(() => {
+      return {
+        transform: [{ translateX: drag.value + 112 }],
+      };
+    });
+    return (
+      <Animated.View style={[{ padding: 8 }, styleAnimation]}>
+        <Pressable onPress={() => handleDelete(swipeable)} style={styles.iconContainer}>
+          <Ionicons name="trash-bin" size={40} color="white" />
+        </Pressable>
+      </Animated.View>
+    );
+  };
 
   return (
-    <GestureDetector gesture={containerGestures}>
-      <View>
-        <Animated.View style={[styles.iconContainer, animatedIconStyle]}>
-          <Ionicons name="trash-bin" size={40} color="red" />
-        </Animated.View>
-
-        <Animated.View style={animatedContainerStyle}>
-          {/*TODO: Refactor and remove Pressable component */}
-          <Pressable
-            style={({ pressed }) => [
-              styles.item,
-              pressed && styles.pressed,
-              { backgroundColor: theme.colors.card, borderColor: theme.colors.border },
-            ]}>
-            <RemoteImage fallback="" style={styles.image} path={item.image} />
-            <View style={styles.info}>
-              <Text numberOfLines={1} style={[styles.title, { color: theme.colors.text }]}>
-                {item.title}
-              </Text>
-              <Text numberOfLines={2} style={[styles.address, { color: theme.colors.text }]}>
-                {item.address}
-              </Text>
-            </View>
-          </Pressable>
-        </Animated.View>
-      </View>
-    </GestureDetector>
+    <Swipeable rightThreshold={40} renderRightActions={RightAction}>
+      <Pressable
+        onPress={() => onSelect(item.id)}
+        style={({ pressed }) => [
+          styles.item,
+          pressed && styles.pressed,
+          { backgroundColor: theme.colors.card, borderColor: theme.colors.border },
+        ]}>
+        <RemoteImage fallback="" style={styles.image} path={item.image} />
+        <View style={styles.info}>
+          <Text numberOfLines={1} style={[styles.title, { color: theme.colors.text }]}>
+            {item.title}
+          </Text>
+          <Text numberOfLines={2} style={[styles.address, { color: theme.colors.text }]}>
+            {item.address}
+          </Text>
+        </View>
+      </Pressable>
+    </Swipeable>
   );
 }
 
@@ -123,6 +92,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     marginRight: 12,
     height: '100%',
+    minWidth: 10,
     resizeMode: 'cover',
   },
   info: {
@@ -140,10 +110,11 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flex: 1,
-    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
-    right: '10%',
+    width: 90,
+    height: '100%',
+    backgroundColor: 'red',
+    borderRadius: 8,
   },
 });
