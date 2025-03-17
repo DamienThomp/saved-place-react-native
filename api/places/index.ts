@@ -2,9 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { dbClient } from '~/lib/db';
 import { useAuthentication } from '~/providers/AuthProvider';
-import { InsertTables } from '~/types/types';
-
-type InsertPlace = InsertTables<'places'>;
+import { InsertPlace } from '~/types/types';
 
 export const usePlacesList = () => {
   const { session } = useAuthentication();

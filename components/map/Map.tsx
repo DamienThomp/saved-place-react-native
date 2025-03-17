@@ -27,7 +27,7 @@ type Properties = {
 };
 
 type MapProps = {
-  coordinates?: Coordinates;
+  coordinates?: Coordinates | null;
   readOnly?: boolean;
   onPress?: (selected: SelectedPoint | null) => void;
 };

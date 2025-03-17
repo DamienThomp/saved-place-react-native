@@ -23,10 +23,14 @@ const DEFAULT_OPTIONS: MapSnapShotProps = {
   writeToDisk: true,
 };
 
-export async function takeSnapshot(args: MapSnapShotProps): Promise<string> {
-  const options = { ...DEFAULT_OPTIONS, ...args };
-  const result = await MapboxGL.snapshotManager.takeSnap(options);
-  return result;
+export async function takeSnapshot(args: MapSnapShotProps): Promise<string | undefined> {
+  try {
+    const options = { ...DEFAULT_OPTIONS, ...args };
+    const result = await MapboxGL.snapshotManager.takeSnap(options);
+    return result;
+  } catch (error) {
+    console.log(`snapshot error: ${error}`);
+  }
 }
 
 export async function getAddress({ centerCoordinate }: MapSnapShotProps) {

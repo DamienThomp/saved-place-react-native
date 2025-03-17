@@ -35,7 +35,9 @@ export default function LocationPicker({ onSelectLocation }: LocationPickerProps
     const address = await getAddress({ centerCoordinate });
 
     onSelectLocation(centerCoordinate, address);
-    setPickedLocation(uri);
+    if (uri) {
+      setPickedLocation(uri);
+    }
   };
 
   const handleLocateOnMap = () => {
@@ -74,13 +76,16 @@ export default function LocationPicker({ onSelectLocation }: LocationPickerProps
   };
 
   const getSnapshot = async () => {
+    console.log(`params.coordinate: ${params.coordinate}`);
     if (params?.coordinate) {
       setIsloading(true);
       const coordinate = JSON.parse(params.coordinate);
       const uri = await takeSnapshot({ centerCoordinate: coordinate });
       const address = await getAddress({ centerCoordinate: coordinate });
       onSelectLocation(coordinate, address);
-      setPickedLocation(uri);
+      if (uri) {
+        setPickedLocation(uri);
+      }
       setIsloading(false);
     }
   };
