@@ -27,7 +27,7 @@ type Properties = {
 };
 
 type MapProps = {
-  coordinates?: Coordinates;
+  coordinates?: Coordinates | null;
   readOnly?: boolean;
   onPress?: (selected: SelectedPoint | null) => void;
 };
@@ -57,6 +57,7 @@ export default function Map({ coordinates, readOnly, onPress }: MapProps) {
       setSelectedPoint({
         coordinate: [coordinates.longitude, coordinates.latitude],
       });
+      onPress?.(selectedPoint);
       return;
     }
 
