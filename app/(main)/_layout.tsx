@@ -2,7 +2,7 @@ import { Redirect, Stack, useRouter } from 'expo-router';
 
 import IconButton from '~/components/ui/IconButton';
 import { useAuthentication } from '~/providers/AuthProvider';
-import LocationProvider from '~/providers/LocationProvider';
+import DirectionsProvider from '~/providers/DirectionsProvider';
 
 export default function MainLayout() {
   const { session } = useAuthentication();
@@ -13,7 +13,7 @@ export default function MainLayout() {
   }
 
   return (
-    <LocationProvider>
+    <DirectionsProvider>
       <Stack>
         <Stack.Screen
           name="Index"
@@ -40,6 +40,6 @@ export default function MainLayout() {
         />
         <Stack.Screen name="[id]" options={{ headerShown: false }} />
       </Stack>
-    </LocationProvider>
+    </DirectionsProvider>
   );
 }

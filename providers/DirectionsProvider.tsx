@@ -17,7 +17,7 @@ type SelectedPoint = {
   latitude: number;
 };
 
-type LocationContextState = {
+type DirectionsContextState = {
   selectedPoint?: SelectedPoint;
   directions?: MapboxDirections | null;
   directionCoordinates?: [number, number][] | undefined;
@@ -27,9 +27,9 @@ type LocationContextState = {
   setDirections?: Dispatch<SetStateAction<MapboxDirections | null | undefined>>;
 };
 
-const LocationContext = createContext<LocationContextState>({});
+const DirectionsContext = createContext<DirectionsContextState>({});
 
-export default function LocationProvider({ children }: PropsWithChildren) {
+export default function DirectionsProvider({ children }: PropsWithChildren) {
   const [directions, setDirections] = useState<MapboxDirections | null>();
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint>();
 
@@ -49,7 +49,7 @@ export default function LocationProvider({ children }: PropsWithChildren) {
   }, [selectedPoint]);
 
   return (
-    <LocationContext.Provider
+    <DirectionsContext.Provider
       value={{
         selectedPoint,
         setSelectedPoint,
@@ -60,8 +60,8 @@ export default function LocationProvider({ children }: PropsWithChildren) {
         routeDistance: directions?.routes?.[0]?.distance,
       }}>
       {children}
-    </LocationContext.Provider>
+    </DirectionsContext.Provider>
   );
 }
 
-export const useLocation = () => useContext(LocationContext);
+export const useDirections = () => useContext(DirectionsContext);

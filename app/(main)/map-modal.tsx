@@ -1,5 +1,6 @@
 import { Stack, useRouter } from 'expo-router';
 import { useState } from 'react';
+import { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
 
 import Map, { SelectedPoint } from '~/components/map/Map';
 import IconButton from '~/components/ui/IconButton';
@@ -19,6 +20,10 @@ export default function MapModal() {
   const onSubmit = () => {
     router.back();
     router.setParams({ coordinate: JSON.stringify(selectedPlace) });
+  };
+
+  const onSearchTextChanged = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    console.log(event.nativeEvent.text);
   };
 
   return (
@@ -44,6 +49,10 @@ export default function MapModal() {
               onPress={() => router.back()}
             />
           ),
+          headerSearchBarOptions: {
+            placeholder: 'Search for a Place',
+            onChangeText: onSearchTextChanged,
+          },
         }}
       />
       <Map onPress={onMapSelection} />

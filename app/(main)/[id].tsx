@@ -11,10 +11,10 @@ import RemoteImage from '~/components/common/RemoteImage';
 import DirectionButton from '~/components/map/DirectionButton';
 import Map from '~/components/map/Map';
 import IconButton from '~/components/ui/IconButton';
-import { useLocation } from '~/providers/LocationProvider';
+import { useDirections } from '~/providers/DirectionsProvider';
 
 export default function PlaceDetails() {
-  const { setDirections } = useLocation();
+  const { setDirections } = useDirections();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const theme = useTheme();
