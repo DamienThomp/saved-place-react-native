@@ -1,22 +1,23 @@
-import { SearchBoxSuggestion } from '@mapbox/search-js-core';
 import { useTheme } from '@react-navigation/native';
 import { Stack, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SearchBarCommands } from 'react-native-screens';
 
 import Map, { SelectedPoint } from '~/components/map/Map';
+import MapSearchListItem from '~/components/map/MapSearchListItem';
 import IconButton from '~/components/ui/IconButton';
 import { useMapSearch } from '~/providers/MapSearchProvider';
 
 export default function MapModal() {
-  const { setSelectedResult, setSearchQuery, searchResults, coordinates, resetAll } =
-    useMapSearch();
+  const { setSearchQuery, searchResults, coordinates, resetAll } = useMapSearch();
   const insets = useSafeAreaInsets();
   const theme = useTheme();
   const [selectedPlace, setSelectedPlace] = useState<number[] | null>(null);
   const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
   const router = useRouter();
+  const searchBarRef = useRef<SearchBarCommands | null>(null);
 
   const onMapSelection = (selection: SelectedPoint | null) => {
     if (!selection) return;
@@ -29,11 +30,6 @@ export default function MapModal() {
   const onSubmit = () => {
     router.back();
     router.setParams({ coordinate: JSON.stringify(selectedPlace) });
-    setShowSearchResults(false);
-  };
-
-  const onSelectSearchResult = (item: SearchBoxSuggestion) => {
-    setSelectedResult?.(item);
     setShowSearchResults(false);
   };
 
@@ -50,6 +46,7 @@ export default function MapModal() {
   useEffect(() => {
     if (coordinates) {
       setSelectedPlace([coordinates.longitude, coordinates.latitude]);
+      searchBarRef?.current?.cancelSearch();
     }
   }, [coordinates]);
 
@@ -81,6 +78,10 @@ export default function MapModal() {
             onSearchButtonPress: (event) => {
               setSearchQuery?.(event.nativeEvent.text);
             },
+            onCancelButtonPress: () => {
+              setShowSearchResults(false);
+            },
+            ref: searchBarRef,
           },
         }}
       />
@@ -99,16 +100,12 @@ export default function MapModal() {
             data={searchResults?.suggestions}
             keyExtractor={(item) => item.mapbox_id}
             renderItem={({ item }) => (
-              <Pressable
-                onPress={() => {
-                  onSelectSearchResult(item);
+              <MapSearchListItem
+                item={item}
+                onSelected={() => {
+                  setShowSearchResults(false);
                 }}
-                style={[styles.listItem, { borderBlockColor: theme.colors.border }]}>
-                <Text style={[styles.listItemInfo, { color: theme.colors.text }]}>{item.name}</Text>
-                <Text style={{ color: theme.colors.text, opacity: 0.8 }}>
-                  {item.place_formatted}
-                </Text>
-              </Pressable>
+              />
             )}
           />
         )}
@@ -128,14 +125,5 @@ const styles = StyleSheet.create({
     marginRight: 8,
     borderRadius: 12,
     borderWidth: 1,
-  },
-  listItem: {
-    flex: 1,
-    padding: 22,
-    borderBottomWidth: 1,
-  },
-  listItemInfo: {
-    fontWeight: 'bold',
-    fontSize: 22,
   },
 });

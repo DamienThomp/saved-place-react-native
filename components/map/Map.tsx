@@ -57,7 +57,6 @@ export default function Map({ coordinates, readOnly, onPress }: MapProps) {
       setSelectedPoint({
         coordinate: [coordinates.longitude, coordinates.latitude],
       });
-      onPress?.(selectedPoint);
       return;
     }
 

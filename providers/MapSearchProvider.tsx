@@ -66,9 +66,9 @@ export default function MapSearchProvider({ children }: PropsWithChildren) {
         setSearchResults,
         setSelectedResult,
         setSearchQuery,
+        resetAll,
         searchResults,
         coordinates,
-        resetAll,
       }}>
       {children}
     </MapSearchContext.Provider>
