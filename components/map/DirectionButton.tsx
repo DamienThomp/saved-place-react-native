@@ -1,5 +1,5 @@
 import { Button } from '~/components/ui/Button';
-import { useLocation } from '~/providers/LocationProvider';
+import { useDirections } from '~/providers/DirectionsProvider';
 import { Coordinates } from '~/types/types';
 
 type DirectionButtonProps = {
@@ -8,7 +8,7 @@ type DirectionButtonProps = {
 };
 
 export default function DirectionButton({ coordinates, color }: DirectionButtonProps) {
-  const { setSelectedPoint } = useLocation();
+  const { setSelectedPoint } = useDirections();
 
   const onGetDirections = () => {
     if (setSelectedPoint) {

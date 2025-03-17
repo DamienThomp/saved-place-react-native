@@ -7,7 +7,7 @@ import AnnotationContent from './AnnotationContent';
 import LineRoute from './LineRoute';
 
 import useUserLocation from '~/hooks/useUserLocation';
-import { useLocation } from '~/providers/LocationProvider';
+import { useDirections } from '~/providers/DirectionsProvider';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
 
@@ -36,7 +36,7 @@ export default function Map({ coordinates, readOnly, onPress }: MapProps) {
   const [mapCenter, setMapCenter] = useState<Position | undefined>();
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
   const userLocation = useUserLocation();
-  const { directionCoordinates } = useLocation();
+  const { directionCoordinates } = useDirections();
 
   const onMapSelection = (feature: GeoJSON.Feature) => {
     if (readOnly) return;
@@ -63,7 +63,7 @@ export default function Map({ coordinates, readOnly, onPress }: MapProps) {
     if (userLocation) {
       setMapCenter([userLocation.longitude, userLocation.latitude]);
     }
-  }, [userLocation]);
+  }, [userLocation, coordinates]);
 
   return (
     <MapView
