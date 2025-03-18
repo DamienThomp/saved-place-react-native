@@ -7,13 +7,15 @@ const search = new SearchBoxCore({ accessToken: ACCESS_TOKEN });
 let sessionToken: SessionToken;
 
 export const useSearchSuggestion = (query?: string) => {
-  console.log(`useSearchSuggestion: ${query}`);
   return useQuery({
     queryKey: ['suggestions', query ?? null],
     queryFn: async () => {
       if (!query) return null;
       sessionToken = new SessionToken();
-      const result = await search.suggest(query, { sessionToken });
+      const result = await search.suggest(query, {
+        sessionToken,
+        types: 'place, neighborhood, country',
+      });
       return result;
     },
   });

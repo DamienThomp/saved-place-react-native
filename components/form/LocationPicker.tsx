@@ -76,7 +76,6 @@ export default function LocationPicker({ onSelectLocation }: LocationPickerProps
   };
 
   const getSnapshot = async () => {
-    console.log(`params.coordinate: ${params.coordinate}`);
     if (params?.coordinate) {
       setIsloading(true);
       const coordinate = JSON.parse(params.coordinate);
