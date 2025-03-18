@@ -18,7 +18,7 @@ type PlaceForm = {
   latitude: number;
   longitude: number;
   address: string;
-  imageUri?: string;
+  imageUri: string;
 };
 
 const initialState: PlaceForm = {
@@ -26,6 +26,7 @@ const initialState: PlaceForm = {
   latitude: 0,
   longitude: 0,
   address: '',
+  imageUri: '',
 };
 
 export default function AddPlace() {
@@ -62,6 +63,11 @@ export default function AddPlace() {
 
     if (placeForm.title.length === 0) {
       setErrors('Title is Required');
+      return false;
+    }
+
+    if (!placeForm.imageUri) {
+      setErrors('An image is Required.');
       return false;
     }
 

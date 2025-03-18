@@ -32,6 +32,7 @@ export default function TextInputField({
       placeholder={placeholder}
       keyboardType={keyboardType}
       secureTextEntry={secureTextEntry}
+      autoFocus={false}
     />
   );
 }
