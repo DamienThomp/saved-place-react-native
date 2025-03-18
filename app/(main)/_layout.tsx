@@ -23,12 +23,20 @@ export default function MainLayout() {
               title: 'All Places',
               headerLargeTitle: true,
               headerRight: ({ tintColor }) => (
-                <IconButton
-                  icon="add-circle-outline"
-                  color={tintColor}
-                  size={24}
-                  onPress={() => router.push('/form')}
-                />
+                <>
+                  <IconButton
+                    icon="person-circle"
+                    color={tintColor}
+                    size={26}
+                    onPress={() => router.push('/profile')}
+                  />
+                  <IconButton
+                    icon="add-circle-outline"
+                    color={tintColor}
+                    size={26}
+                    onPress={() => router.push('/form')}
+                  />
+                </>
               ),
             }}
           />
