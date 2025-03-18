@@ -1,6 +1,7 @@
 import { useTheme } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import { Alert, FlatList, StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
+import Animated, { LinearTransition } from 'react-native-reanimated';
 
 import { useDeletePlace } from '~/api/places';
 import ContentUnavailable from '~/components/common/ContentUnavailable';
@@ -40,13 +41,14 @@ export default function PlacesList({ items }: PlacesListProps) {
   };
 
   return (
-    <FlatList
+    <Animated.FlatList
       style={styles.list}
       data={items}
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => (
         <PlaceListItem item={item} onSelect={handleOnSelectPlace} onDelete={handleOnDelete} />
       )}
+      itemLayoutAnimation={LinearTransition.duration(250)}
     />
   );
 }

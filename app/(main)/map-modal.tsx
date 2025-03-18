@@ -2,6 +2,7 @@ import { useTheme } from '@react-navigation/native';
 import { Stack, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
+import Animated, { SlideInUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SearchBarCommands } from 'react-native-screens';
 
@@ -88,7 +89,8 @@ export default function MapModal() {
       <View style={{ flex: 1 }}>
         <Map onPress={onMapSelection} coordinates={coordinates} />
         {showSearchResults && (
-          <FlatList
+          <Animated.View
+            entering={SlideInUp}
             style={[
               styles.listContainer,
               {
@@ -96,18 +98,20 @@ export default function MapModal() {
                 backgroundColor: theme.colors.card,
                 borderColor: theme.colors.border,
               },
-            ]}
-            data={searchResults?.suggestions}
-            keyExtractor={(item) => item.mapbox_id}
-            renderItem={({ item }) => (
-              <MapSearchListItem
-                item={item}
-                onSelected={() => {
-                  setShowSearchResults(false);
-                }}
-              />
-            )}
-          />
+            ]}>
+            <FlatList
+              data={searchResults?.suggestions}
+              keyExtractor={(item) => item.mapbox_id}
+              renderItem={({ item }) => (
+                <MapSearchListItem
+                  item={item}
+                  onSelected={() => {
+                    setShowSearchResults(false);
+                  }}
+                />
+              )}
+            />
+          </Animated.View>
         )}
       </View>
     </>
