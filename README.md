@@ -36,11 +36,11 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 <img width="180" src="https://github.com/user-attachments/assets/c47ef763-fccb-438a-a7b4-8c0e6e605102">
 <img width="180" src="https://github.com/user-attachments/assets/fa3aa320-3040-489e-a6f8-f0bd30b6bb01">
 
-## Place Form
+### Place Form
 <img width="200" src="https://github.com/user-attachments/assets/1c671c23-872d-41ff-990f-c290dda93aa9">
 <img width="200" src="https://github.com/user-attachments/assets/19c7718a-e43f-43e8-9fd5-d36bfaa41434">
 <img width="200" src="https://github.com/user-attachments/assets/c2b513dd-b912-41c0-9f5a-16acbb3a9064">
 
-## Details
+### Details
 <img width="200" src="https://github.com/user-attachments/assets/a52776cc-06e7-4d02-9af3-1e7c8e1c503d">
 
