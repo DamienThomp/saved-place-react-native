@@ -6,12 +6,11 @@ import Animated, { LinearTransition } from 'react-native-reanimated';
 import { useDeletePlace } from '~/api/places';
 import ContentUnavailable from '~/components/common/ContentUnavailable';
 import PlaceListItem from '~/components/place/PlaceListItem';
-import { Tables } from '~/types/database.types';
+import { Place } from '~/types/types';
 import isEmpty from '~/utils/isEmpty';
 
-type Places = Tables<'places'>;
 interface PlacesListProps {
-  items: Places[] | null | undefined;
+  items: Place[] | null | undefined;
 }
 
 export default function PlacesList({ items }: PlacesListProps) {
