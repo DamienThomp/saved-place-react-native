@@ -35,7 +35,11 @@ export default function PlaceDetails() {
     <LoadingState isLoading={isLoading} error={error}>
       <View style={styles.container}>
         {place && (
-          <Map coordinates={{ longitude: place.longitude, latitude: place.latitude }} readOnly />
+          <Map
+            coordinates={{ longitude: place.longitude, latitude: place.latitude }}
+            readOnly
+            showControls
+          />
         )}
         <View style={[styles.backButton, { top: insets.top, left: insets.left }]}>
           <IconButton

@@ -14,11 +14,12 @@ export const Button = forwardRef<View, ButtonProps>(
   ({ title, icon, color, size, ...props }, ref) => {
     const theme = useTheme();
     return (
-      <TouchableOpacity ref={ref} {...props} style={[styles.button, props.style]}>
+      <TouchableOpacity
+        ref={ref}
+        {...props}
+        style={[styles.button, { backgroundColor: theme.colors.primary }, props.style]}>
         <Text style={styles.buttonText}>{title}</Text>
-        {icon && (
-          <FontAwesome5 name={icon} color={color ?? theme.colors.primary} size={size ?? 16} />
-        )}
+        {icon && <FontAwesome5 name={icon} color={color ?? 'white'} size={size ?? 16} />}
       </TouchableOpacity>
     );
   }
@@ -27,7 +28,6 @@ export const Button = forwardRef<View, ButtonProps>(
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    backgroundColor: '#6366F1',
     borderRadius: 8,
     elevation: 5,
     flexDirection: 'row',

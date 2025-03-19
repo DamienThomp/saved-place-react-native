@@ -1,13 +1,16 @@
+import { useTheme } from '@react-navigation/native';
 import Mapbox, { Camera, LocationPuck, MapView, MarkerView, StyleURL } from '@rnmapbox/maps';
 import { Position } from '@rnmapbox/maps/lib/typescript/src/types/Position';
 import { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import AnnotationContent from './AnnotationContent';
 import LineRoute from './LineRoute';
+import IconButton from '../ui/IconButton';
 
 import useUserLocation from '~/hooks/useUserLocation';
 import { useDirections } from '~/providers/DirectionsProvider';
+import debounce from '~/utils/debounce';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
 
@@ -29,14 +32,16 @@ type Properties = {
 type MapProps = {
   coordinates?: Coordinates | null;
   readOnly?: boolean;
+  showControls?: boolean;
   onPress?: (selected: SelectedPoint | null) => void;
 };
 
-export default function Map({ coordinates, readOnly, onPress }: MapProps) {
+export default function Map({ coordinates, readOnly, showControls, onPress }: MapProps) {
   const [mapCenter, setMapCenter] = useState<Position | undefined>();
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
   const userLocation = useUserLocation();
   const { directionCoordinates } = useDirections();
+  const theme = useTheme();
 
   const onMapSelection = (feature: GeoJSON.Feature) => {
     if (readOnly) return;
@@ -50,6 +55,17 @@ export default function Map({ coordinates, readOnly, onPress }: MapProps) {
     setSelectedPoint(point);
     onPress?.(point);
   };
+
+  const onToggleToUserLocation = () => {
+    if (userLocation) {
+      setMapCenter([userLocation.longitude, userLocation.latitude]);
+    }
+  };
+
+  const onCameraChange = debounce(
+    (event: Mapbox.MapState) => setMapCenter(event.properties.center),
+    250
+  );
 
   useEffect(() => {
     if (coordinates) {
@@ -71,6 +87,7 @@ export default function Map({ coordinates, readOnly, onPress }: MapProps) {
       styleURL={StyleURL.Street}
       logoEnabled={false}
       scaleBarEnabled={false}
+      onCameraChanged={onCameraChange}
       onPress={onMapSelection}>
       <Camera
         centerCoordinate={mapCenter}
@@ -89,6 +106,17 @@ export default function Map({ coordinates, readOnly, onPress }: MapProps) {
       )}
 
       <LocationPuck pulsing={{ isEnabled: true }} puckBearing="course" puckBearingEnabled />
+
+      {showControls && (
+        <View style={styles.controlsContainer}>
+          <IconButton
+            icon="navigate-circle-sharp"
+            color={theme.colors.primary}
+            size={36}
+            onPress={onToggleToUserLocation}
+          />
+        </View>
+      )}
     </MapView>
   );
 }
@@ -101,4 +129,5 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
+  controlsContainer: { alignItems: 'flex-end', top: 18, paddingHorizontal: 8 },
 });
