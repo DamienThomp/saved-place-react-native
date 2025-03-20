@@ -14,6 +14,11 @@ import debounce from '~/utils/debounce';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
 
+const DEFAULTS = {
+  zoomLevel: 14,
+  animationDuration: 500,
+};
+
 type Coordinates = {
   longitude: number;
   latitude: number;
@@ -91,9 +96,9 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
       onPress={onMapSelection}>
       <Camera
         centerCoordinate={mapCenter}
-        animationDuration={readOnly ? 0 : 500}
+        animationDuration={readOnly ? 0 : DEFAULTS.animationDuration}
         defaultSettings={{
-          zoomLevel: 16,
+          zoomLevel: DEFAULTS.zoomLevel,
         }}
       />
 

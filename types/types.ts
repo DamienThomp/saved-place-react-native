@@ -22,6 +22,7 @@ export interface Coordinates {
 export interface MapboxDirections {
   code: string;
   uuid: string;
+  message?: string;
   waypoints: {
     distance: number;
     name: string;
