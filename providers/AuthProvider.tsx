@@ -1,4 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 
 import { dbClient, getSession, Session } from '~/lib/db';
 
@@ -24,7 +25,8 @@ export default function AuthProvider({ children }: PropsWithChildren) {
       } = await getSession();
 
       if (error) {
-        // do something with error
+        setLoading(false);
+        Alert.alert('Authentication Error', error.message);
         return;
       }
 
