@@ -1,8 +1,8 @@
 import { useTheme } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { usePlaceDetails } from '~/api/places';
@@ -35,11 +35,13 @@ export default function PlaceDetails() {
     <LoadingState isLoading={isLoading} error={error}>
       <View style={styles.container}>
         {place && (
-          <Map
-            coordinates={{ longitude: place.longitude, latitude: place.latitude }}
-            readOnly
-            showControls
-          />
+          <Animated.View style={{ height: '75%' }} entering={FadeIn.duration(500)}>
+            <Map
+              coordinates={{ longitude: place.longitude, latitude: place.latitude }}
+              readOnly
+              showControls
+            />
+          </Animated.View>
         )}
         <View style={[styles.backButton, { top: insets.top, left: insets.left }]}>
           <IconButton

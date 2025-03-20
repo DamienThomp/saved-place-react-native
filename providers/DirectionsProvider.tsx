@@ -23,15 +23,23 @@ type DirectionsContextState = {
   directionCoordinates?: [number, number][] | undefined;
   routeTime?: number | undefined;
   routeDistance?: number | undefined;
+  error?: string | undefined;
   setSelectedPoint?: Dispatch<SetStateAction<SelectedPoint | undefined>>;
   setDirections?: Dispatch<SetStateAction<MapboxDirections | null | undefined>>;
+  setError?: Dispatch<SetStateAction<string | undefined>>;
 };
 
 const DirectionsContext = createContext<DirectionsContextState>({});
 
+const isError = (response: MapboxDirections | undefined): boolean => {
+  if (!response) return true;
+  return response.code === 'InvalidInput';
+};
+
 export default function DirectionsProvider({ children }: PropsWithChildren) {
   const [directions, setDirections] = useState<MapboxDirections | null>();
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint>();
+  const [error, setError] = useState<string>();
 
   useEffect(() => {
     const fetchDirections = async ({ longitude, latitude }: SelectedPoint) => {
@@ -41,9 +49,16 @@ export default function DirectionsProvider({ children }: PropsWithChildren) {
 
       const response = await getDirections(start, end);
 
+      if (isError(response)) {
+        setError(response?.message);
+        return;
+      }
+
       setDirections(response);
     };
+
     if (selectedPoint) {
+      setError(undefined);
       fetchDirections({ ...selectedPoint });
     }
   }, [selectedPoint]);
@@ -54,10 +69,12 @@ export default function DirectionsProvider({ children }: PropsWithChildren) {
         selectedPoint,
         setSelectedPoint,
         setDirections,
+        setError,
         directions,
         directionCoordinates: directions?.routes?.[0]?.geometry?.coordinates,
         routeTime: directions?.routes?.[0]?.duration,
         routeDistance: directions?.routes?.[0]?.distance,
+        error,
       }}>
       {children}
     </DirectionsContext.Provider>
