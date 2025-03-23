@@ -90,7 +90,6 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
     <MapView
       style={styles.map}
       styleURL={StyleURL.Street}
-      logoEnabled={false}
       scaleBarEnabled={false}
       onCameraChanged={onCameraChange}
       onPress={onMapSelection}>
@@ -135,8 +134,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   controlsContainer: {
+    justifyContent: 'center',
     alignItems: 'flex-end',
     top: 0,
-    paddingTop: 8,
   },
 });

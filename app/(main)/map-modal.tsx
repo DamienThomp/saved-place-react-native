@@ -1,9 +1,9 @@
 import { useTheme } from '@react-navigation/native';
 import { Stack, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import Animated, { SlideInUp } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SearchBarCommands } from 'react-native-screens';
 
 import Map, { SelectedPoint } from '~/components/map/Map';
@@ -76,6 +76,7 @@ export default function MapModal() {
           ),
           headerSearchBarOptions: {
             placeholder: 'Search for a Place',
+            inputType: 'text',
             onSearchButtonPress: (event) => {
               setSearchQuery?.(event.nativeEvent.text);
             },

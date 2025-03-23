@@ -1,4 +1,5 @@
 import { useTheme } from '@react-navigation/native';
+import Haptics from 'expo-haptics';
 import { ImagePickerOptions, launchImageLibraryAsync } from 'expo-image-picker';
 import { useState } from 'react';
 import { Image, Pressable, StyleSheet } from 'react-native';
@@ -26,6 +27,11 @@ export default function ImagePicker({ onSelectImage }: ImagePickerProps) {
     if (!imageResult.canceled) {
       setImage(imageResult.assets[0].uri);
       onSelectImage(imageResult.assets[0].uri);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    }
+
+    if (imageResult.canceled) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
     }
   };
 
