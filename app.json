@@ -14,7 +14,7 @@
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsDownloadToken": "key..."
+          "RNMapboxMapsDownloadToken": "sk...."
         }
       ],
       [
@@ -39,7 +39,7 @@
     "icon": "./assets/appIcon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/appIcon.png",
+      "image": "./assets/appBranding.png",
       "resizeMode": "contain",
       "backgroundColor": "#000"
     },
@@ -47,15 +47,31 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.savedplace"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.anonymous.savedplace",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/appIcon.png",
         "backgroundColor": "#000"
       },
-      "package": "com.anonymous.savedplace"
+      "package": "com.anonymous.savedplace",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "0d391893-66d8-41b8-b2e6-5265f67481e8"
+      }
     }
   }
 }
