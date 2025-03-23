@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     marginVertical: 6,
-    padding: 24,
+    padding: 18,
     elevation: 2,
   },
   pressed: {
@@ -89,8 +89,9 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: 'red',
     marginRight: 12,
-    height: '100%',
+    aspectRatio: 3 / 2,
     resizeMode: 'cover',
+    alignSelf: 'center',
   },
   info: {
     flex: 2,
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 24,
+    fontSize: 22,
   },
   address: {
     fontSize: 12,
