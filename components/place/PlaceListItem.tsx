@@ -56,7 +56,7 @@ export default function PlaceListItem({ item, onSelect, onDelete }: PlaceItemPro
           pressed && styles.pressed,
           { backgroundColor: theme.colors.card, borderColor: theme.colors.border },
         ]}>
-        <RemoteImage fallback="" style={styles.image} path={item.image} />
+        <RemoteImage fallback="" style={styles.image} path={item.image} aspectRatio={3 / 2} />
         <View style={styles.info}>
           <Text numberOfLines={1} style={[styles.title, { color: theme.colors.text }]}>
             {item.title}
@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     borderRadius: 6,
-    backgroundColor: 'red',
     marginRight: 12,
     aspectRatio: 3 / 2,
     resizeMode: 'cover',

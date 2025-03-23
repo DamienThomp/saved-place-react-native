@@ -1,6 +1,7 @@
+import Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
-import { Alert, KeyboardAvoidingView, StyleSheet } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 
 import { useInsertPlace } from '~/api/places';
 import { Container } from '~/components/common/Container';
@@ -37,11 +38,11 @@ export default function AddPlace() {
   const router = useRouter();
   const { mutate: insertPlace } = useInsertPlace();
 
-  const onUpdateTitle = (text: string) => {
+  const onUpdateTitle = useCallback((text: string) => {
     setForm((currentState: PlaceForm) => {
       return { ...currentState, title: text };
     });
-  };
+  }, []);
 
   const onSelectImage = useCallback((image: string | null) => {
     if (!image) return;
@@ -58,8 +59,9 @@ export default function AddPlace() {
     });
   }, []);
 
+  // TODO: - Improve the sloppy error handling for this form, currently only shows one error at a time
   const validateForm = (): boolean => {
-    setErrors('');
+    setErrors(null);
 
     if (placeForm.title.length === 0) {
       setErrors('Title is Required');
@@ -95,22 +97,26 @@ export default function AddPlace() {
           onSuccess: () => {
             router.back();
             setIsLoading(false);
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
           },
           onError: () => {
             Alert.alert('Error', 'There was a problem saving your place');
             setIsLoading(false);
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
           },
         }
       );
     } catch (error) {
       Alert.alert('Error', `There was a problem saving your place: ${error}`);
       setIsLoading(false);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     }
   };
 
   useEffect(() => {
     if (errors) {
       Alert.alert('Error', errors);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     }
   }, [errors]);
 
@@ -124,22 +130,24 @@ export default function AddPlace() {
 
   return (
     <Container>
-      <KeyboardAvoidingView style={styles.content} behavior="padding" enabled>
-        <FormInputContainer title="Title">
-          <TextInputField
-            value={placeForm?.title}
-            onChangeText={onUpdateTitle}
-            keyboardType="default"
-          />
-        </FormInputContainer>
-        <FormInputContainer title="Image">
-          <ImagePicker onSelectImage={onSelectImage} />
-        </FormInputContainer>
-        <FormInputContainer title="Location">
-          <LocationPicker onSelectLocation={onSelectLocation} />
-        </FormInputContainer>
-        <Button title="Add Place" onPress={onSubmit} />
-      </KeyboardAvoidingView>
+      <ScrollView>
+        <View style={styles.content}>
+          <FormInputContainer title="Title">
+            <TextInputField
+              value={placeForm.title}
+              onChangeText={onUpdateTitle}
+              placeholder="Place Name"
+            />
+          </FormInputContainer>
+          <FormInputContainer title="Image">
+            <ImagePicker onSelectImage={onSelectImage} />
+          </FormInputContainer>
+          <FormInputContainer title="Location">
+            <LocationPicker onSelectLocation={onSelectLocation} />
+          </FormInputContainer>
+          <Button title="Add Place" onPress={onSubmit} />
+        </View>
+      </ScrollView>
     </Container>
   );
 }
@@ -149,5 +157,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 18,
     gap: 18,
+    justifyContent: 'center',
   },
 });

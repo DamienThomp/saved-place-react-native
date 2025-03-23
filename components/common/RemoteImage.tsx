@@ -10,6 +10,7 @@ import { dbClient } from '~/lib/db';
 type RemoteImageProps = {
   path?: string | null;
   fallback: string;
+  aspectRatio?: number;
 } & Omit<ComponentProps<typeof Image>, 'source'>;
 
 const RemoteImage = ({ path, fallback, ...imageProps }: RemoteImageProps) => {
@@ -41,7 +42,13 @@ const RemoteImage = ({ path, fallback, ...imageProps }: RemoteImageProps) => {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, height: imageProps.height, width: imageProps.width }}>
+      <View
+        style={{
+          flex: 1,
+          height: imageProps.height,
+          width: imageProps.width,
+          aspectRatio: imageProps.aspectRatio,
+        }}>
         <Loading />
       </View>
     );
@@ -50,7 +57,12 @@ const RemoteImage = ({ path, fallback, ...imageProps }: RemoteImageProps) => {
   if (!image) {
     return (
       <Animated.View
-        style={{ flex: 1, height: imageProps.height, width: imageProps.width }}
+        style={{
+          flex: 1,
+          height: imageProps.height,
+          width: imageProps.width,
+          aspectRatio: imageProps.aspectRatio,
+        }}
         exiting={FadeOut}>
         <ContentUnavailable icon="image-outline" color="white">
           No Image

@@ -32,7 +32,9 @@ export default function ProfileScreen() {
     <Container>
       <View style={styles.innerContainer}>
         <Ionicons name="person-circle" size={80} color={theme.colors.primary} />
-        {session?.user.email && <Text style={styles.email}>{session.user.email}</Text>}
+        {session?.user.email && (
+          <Text style={[styles.email, { color: theme.colors.text }]}>{session.user.email}</Text>
+        )}
         <Button
           style={[{ backgroundColor: theme.colors.primary }]}
           title="Sign Out"

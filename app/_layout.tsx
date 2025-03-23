@@ -7,24 +7,29 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AuthProvider from '~/providers/AuthProvider';
 import QueryProvider from '~/providers/QueryProvider';
 
+const defaultScreenOptions = {
+  headerShown: false,
+};
+
 export default function Layout() {
   const colorScheme = useColorScheme();
+  const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
 
   return (
-    <GestureHandlerRootView>
-      <SafeAreaProvider>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <AuthProvider>
-            <QueryProvider>
+    <SafeAreaProvider>
+      <ThemeProvider value={theme}>
+        <AuthProvider>
+          <QueryProvider>
+            <GestureHandlerRootView>
               <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                <Stack.Screen name="(main)" options={{ headerShown: false }} />
+                <Stack.Screen name="index" options={defaultScreenOptions} />
+                <Stack.Screen name="(auth)" options={defaultScreenOptions} />
+                <Stack.Screen name="(main)" options={defaultScreenOptions} />
               </Stack>
-            </QueryProvider>
-          </AuthProvider>
-        </ThemeProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+            </GestureHandlerRootView>
+          </QueryProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }
