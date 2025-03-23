@@ -1,7 +1,7 @@
 import { useTheme } from '@react-navigation/native';
 import Mapbox, { Camera, LocationPuck, MapView, MarkerView, StyleURL } from '@rnmapbox/maps';
 import { Position } from '@rnmapbox/maps/lib/typescript/src/types/Position';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import AnnotationContent from './AnnotationContent';
@@ -61,15 +61,15 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
     onPress?.(point);
   };
 
-  const onToggleToUserLocation = () => {
+  const onToggleToUserLocation = useCallback(() => {
     if (userLocation) {
       setMapCenter([userLocation.longitude, userLocation.latitude]);
     }
-  };
+  }, [userLocation]);
 
-  const onCameraChange = debounce(
-    (event: Mapbox.MapState) => setMapCenter(event.properties.center),
-    250
+  const onCameraChange = useCallback(
+    debounce((event: Mapbox.MapState) => setMapCenter(event.properties.center), 1000),
+    []
   );
 
   useEffect(() => {
@@ -134,5 +134,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-  controlsContainer: { alignItems: 'flex-end', top: 18, paddingHorizontal: 8 },
+  controlsContainer: {
+    alignItems: 'flex-end',
+    top: 0,
+    paddingTop: 8,
+  },
 });
