@@ -48,7 +48,7 @@ export default function PlaceListItem({ item, onSelect, onDelete }: PlaceItemPro
   };
 
   return (
-    <Swipeable rightThreshold={40} renderRightActions={RightAction}>
+    <Swipeable friction={2} rightThreshold={40} renderRightActions={RightAction}>
       <Pressable
         onPress={() => onSelect(item.id)}
         style={({ pressed }) => [

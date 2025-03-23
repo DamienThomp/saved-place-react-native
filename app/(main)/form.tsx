@@ -95,28 +95,28 @@ export default function AddPlace() {
         { title, longitude, latitude, address, image: imagePath },
         {
           onSuccess: () => {
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
             router.back();
             setIsLoading(false);
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
           },
           onError: () => {
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
             Alert.alert('Error', 'There was a problem saving your place');
             setIsLoading(false);
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
           },
         }
       );
     } catch (error) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       Alert.alert('Error', `There was a problem saving your place: ${error}`);
       setIsLoading(false);
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     }
   };
 
   useEffect(() => {
     if (errors) {
-      Alert.alert('Error', errors);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      Alert.alert('Error', errors);
     }
   }, [errors]);
 
