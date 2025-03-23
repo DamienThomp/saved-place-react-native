@@ -43,6 +43,7 @@ export default function PlacesList({ items }: PlacesListProps) {
     <Animated.FlatList
       style={styles.list}
       data={items}
+      showsVerticalScrollIndicator={false}
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => (
         <PlaceListItem item={item} onSelect={handleOnSelectPlace} onDelete={handleOnDelete} />
