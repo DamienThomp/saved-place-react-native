@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { dbClient } from '~/lib/db';
 import { useAuthentication } from '~/providers/AuthProvider';
 import { InsertPlace } from '~/types/types';
+import imageLoader from '~/utils/imageLoader';
 
 export const usePlacesList = () => {
   const { session } = useAuthentication();
@@ -87,6 +88,28 @@ export const useDeletePlace = () => {
     },
     async onError() {
       await queryClient.invalidateQueries({ queryKey: ['places'] });
+    },
+  });
+};
+
+export const useImage = (path?: string | null) => {
+  return useQuery({
+    queryKey: ['image', path || null],
+    queryFn: async (): Promise<string | null> => {
+      if (!path) return null;
+      const { data, error } = await dbClient.storage.from('place-images').download(path);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data) {
+        const result = await imageLoader(data);
+
+        return result;
+      }
+
+      return null;
     },
   });
 };
