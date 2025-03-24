@@ -1,5 +1,4 @@
 import { useTheme } from '@react-navigation/native';
-import Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActionSheetIOS, Alert, Image, Platform, Pressable, StyleSheet } from 'react-native';
@@ -39,7 +38,6 @@ export default function LocationPicker({ onSelectLocation }: LocationPickerProps
 
     if (uri) {
       setPickedLocation(uri);
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     }
     setIsloading(false);
   };
@@ -88,7 +86,6 @@ export default function LocationPicker({ onSelectLocation }: LocationPickerProps
       onSelectLocation(coordinate, address);
       if (uri) {
         setPickedLocation(uri);
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       }
       setIsloading(false);
     }

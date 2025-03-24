@@ -1,4 +1,3 @@
-import Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
@@ -95,19 +94,16 @@ export default function AddPlace() {
         { title, longitude, latitude, address, image: imagePath },
         {
           onSuccess: () => {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
             router.back();
             setIsLoading(false);
           },
           onError: () => {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
             Alert.alert('Error', 'There was a problem saving your place');
             setIsLoading(false);
           },
         }
       );
     } catch (error) {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       Alert.alert('Error', `There was a problem saving your place: ${error}`);
       setIsLoading(false);
     }
@@ -115,7 +111,6 @@ export default function AddPlace() {
 
   useEffect(() => {
     if (errors) {
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       Alert.alert('Error', errors);
     }
   }, [errors]);
