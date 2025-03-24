@@ -1,44 +1,19 @@
-import { ComponentProps, useEffect, useState } from 'react';
+import { ComponentProps } from 'react';
 import { Image, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 import ContentUnavailable from './ContentUnavailable';
 import Loading from './Loading';
 
-import { dbClient } from '~/lib/db';
+import { useImage } from '~/api/places';
 
 type RemoteImageProps = {
   path?: string | null;
-  fallback: string;
   aspectRatio?: number;
 } & Omit<ComponentProps<typeof Image>, 'source'>;
 
-const RemoteImage = ({ path, fallback, ...imageProps }: RemoteImageProps) => {
-  const [image, setImage] = useState<string | null>();
-  const [isLoading, setIsloading] = useState(true);
-
-  useEffect(() => {
-    if (!path) return;
-    (async () => {
-      setImage(null);
-      setIsloading(true);
-      const { data, error } = await dbClient.storage.from('place-images').download(path);
-
-      if (error) {
-        console.log(error);
-        setIsloading(false);
-      }
-
-      if (data) {
-        const fr = new FileReader();
-        fr.readAsDataURL(data);
-        fr.onload = () => {
-          setIsloading(false);
-          setImage(fr.result as string);
-        };
-      }
-    })();
-  }, [path]);
+export default function RemoteImage({ path, ...imageProps }: RemoteImageProps) {
+  const { data: image, isLoading, error } = useImage(path);
 
   if (isLoading) {
     return (
@@ -54,7 +29,7 @@ const RemoteImage = ({ path, fallback, ...imageProps }: RemoteImageProps) => {
     );
   }
 
-  if (!image) {
+  if (!image || error) {
     return (
       <Animated.View
         style={{
@@ -71,13 +46,5 @@ const RemoteImage = ({ path, fallback, ...imageProps }: RemoteImageProps) => {
     );
   }
 
-  return (
-    <Animated.Image
-      source={{ uri: image || fallback }}
-      {...imageProps}
-      entering={FadeIn.duration(500)}
-    />
-  );
-};
-
-export default RemoteImage;
+  return <Animated.Image source={{ uri: image }} {...imageProps} entering={FadeIn.duration(500)} />;
+}

@@ -63,7 +63,7 @@ export default function PlaceDetails() {
                 />
               )}
             </View>
-            <RemoteImage fallback="" style={styles.image} path={place?.image} height={250} />
+            <RemoteImage style={styles.image} path={place?.image} height={250} />
           </View>
         </Animated.View>
       </View>
