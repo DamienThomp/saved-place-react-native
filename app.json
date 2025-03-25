@@ -14,7 +14,7 @@
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsDownloadToken": "sk...."
+          "RNMapboxMapsDownloadToken": "sk..."
         }
       ],
       [
@@ -39,7 +39,7 @@
     "icon": "./assets/appIcon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/appBranding.png",
+      "image": "./assets/splashIcon.png",
       "resizeMode": "contain",
       "backgroundColor": "#000"
     },

@@ -44,6 +44,7 @@ type MapProps = {
 export default function Map({ coordinates, readOnly, showControls, onPress }: MapProps) {
   const [mapCenter, setMapCenter] = useState<Position | undefined>();
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
+  const [angledView, setToAngledView] = useState<boolean>(false);
   const userLocation = useUserLocation();
   const { directionCoordinates } = useDirections();
   const theme = useTheme();
@@ -59,6 +60,10 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
 
     setSelectedPoint(point);
     onPress?.(point);
+  };
+
+  const onTogglePitch = () => {
+    setToAngledView((currentState) => !currentState);
   };
 
   const onToggleToUserLocation = useCallback(() => {
@@ -86,6 +91,12 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
     }
   }, [userLocation, coordinates]);
 
+  useEffect(() => {
+    if (directionCoordinates) {
+      setToAngledView(true);
+    }
+  }, [directionCoordinates]);
+
   return (
     <MapView
       style={styles.map}
@@ -95,10 +106,12 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
       onPress={onMapSelection}>
       <Camera
         centerCoordinate={mapCenter}
-        animationDuration={readOnly ? 0 : DEFAULTS.animationDuration}
+        animationDuration={DEFAULTS.animationDuration}
         defaultSettings={{
           zoomLevel: DEFAULTS.zoomLevel,
+          pitch: 0,
         }}
+        pitch={angledView ? 60 : 0}
       />
 
       {directionCoordinates && <LineRoute coordinates={directionCoordinates} />}
@@ -119,6 +132,7 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
             size={36}
             onPress={onToggleToUserLocation}
           />
+          <IconButton icon="map" color={theme.colors.primary} size={36} onPress={onTogglePitch} />
         </View>
       )}
     </MapView>
