@@ -1,7 +1,7 @@
 import { NativeStackHeaderRightProps } from '@react-navigation/native-stack';
 import { useNavigation } from 'expo-router';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native';
+import { NativeSyntheticEvent, Pressable, TextInputFocusEventData, Text, View } from 'react-native';
 
 import { usePlacesList } from '~/api/places';
 import { Container } from '~/components/common/Container';
@@ -43,9 +43,21 @@ export default function MainView() {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: ({ tintColor }: NativeStackHeaderRightProps) => (
-        <IconButton icon="create" color={tintColor} size={26} onPress={toggleEdit} />
-      ),
+      headerLeft: ({ tintColor }: NativeStackHeaderRightProps) => {
+        return edit ? (
+          <Pressable onPress={toggleEdit}>
+            <Text style={{ color: tintColor, fontSize: 18 }}>Done</Text>
+          </Pressable>
+        ) : (
+          <IconButton
+            icon="create"
+            color={tintColor}
+            size={26}
+            onPress={toggleEdit}
+            style={{ paddingLeft: 0 }}
+          />
+        );
+      },
       headerSearchBarOptions: {
         placeholder: 'Search',
         inputType: 'text',
@@ -54,7 +66,7 @@ export default function MainView() {
         onChangeText: onTextChanged,
       },
     });
-  }, [navigation, filteredList]);
+  }, [navigation, filteredList, edit]);
 
   useEffect(() => {
     if (data) {
