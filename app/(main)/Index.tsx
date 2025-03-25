@@ -1,7 +1,7 @@
 import { NativeStackHeaderRightProps } from '@react-navigation/native-stack';
 import { useNavigation } from 'expo-router';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { NativeSyntheticEvent, Pressable, TextInputFocusEventData, Text, View } from 'react-native';
+import { NativeSyntheticEvent, Pressable, TextInputFocusEventData, Text } from 'react-native';
 
 import { usePlacesList } from '~/api/places';
 import { Container } from '~/components/common/Container';

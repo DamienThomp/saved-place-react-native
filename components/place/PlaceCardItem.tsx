@@ -1,4 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
+import { memo } from 'react';
 import { Alert, Pressable, StyleSheet, Text } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
@@ -14,7 +15,7 @@ type PlaceCardItemProps = {
   onDelete: (id: number) => void;
 };
 
-export default function PlaceCardItem({ place, edit, onSelect, onDelete }: PlaceCardItemProps) {
+const PlaceCardItem = memo(({ place, edit, onSelect, onDelete }: PlaceCardItemProps) => {
   const handleDelete = () => {
     Alert.alert('Delete', 'Are you sure you want to delete this Place?', [
       { text: 'Cancel', style: 'cancel' },
@@ -46,7 +47,9 @@ export default function PlaceCardItem({ place, edit, onSelect, onDelete }: Place
       <Text style={styles.title}>{place.title}</Text>
     </Pressable>
   );
-}
+});
+
+export default PlaceCardItem;
 
 const styles = StyleSheet.create({
   cardContainer: {
