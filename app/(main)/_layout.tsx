@@ -35,6 +35,7 @@ export default function MainLayout() {
                     color={tintColor}
                     size={26}
                     onPress={() => router.push('/form')}
+                    style={{ paddingRight: 0 }}
                   />
                 </>
               ),
