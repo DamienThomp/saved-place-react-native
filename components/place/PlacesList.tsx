@@ -57,6 +57,7 @@ export default function PlacesList({ items, edit }: PlacesListProps) {
         />
       )}
       itemLayoutAnimation={LinearTransition.duration(250)}
+      windowSize={4}
     />
   );
 }
