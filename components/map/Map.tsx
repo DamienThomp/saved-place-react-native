@@ -110,11 +110,10 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
         defaultSettings={{
           zoomLevel: DEFAULTS.zoomLevel,
           pitch: 0,
+          animationDuration: 0,
         }}
         pitch={angledView ? 60 : 0}
       />
-
-      {directionCoordinates && <LineRoute coordinates={directionCoordinates} />}
 
       {selectedPoint && (
         <MarkerView coordinate={selectedPoint.coordinate} anchor={{ x: 0.5, y: 1 }}>
@@ -123,6 +122,8 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
       )}
 
       <LocationPuck pulsing={{ isEnabled: true }} puckBearing="course" puckBearingEnabled />
+
+      {directionCoordinates && <LineRoute coordinates={directionCoordinates} />}
 
       {showControls && (
         <View style={styles.controlsContainer}>

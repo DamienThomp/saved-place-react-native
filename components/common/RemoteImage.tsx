@@ -46,5 +46,11 @@ export default function RemoteImage({ path, ...imageProps }: RemoteImageProps) {
     );
   }
 
-  return <Animated.Image source={{ uri: image }} {...imageProps} entering={FadeIn.duration(500)} />;
+  return (
+    <Animated.Image
+      source={{ uri: image, cache: 'force-cache' }}
+      {...imageProps}
+      entering={FadeIn.duration(500)}
+    />
+  );
 }
