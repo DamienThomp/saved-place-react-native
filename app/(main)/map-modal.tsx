@@ -98,6 +98,7 @@ export default function MapModal() {
                 top: insets.top,
                 backgroundColor: theme.colors.card,
                 borderColor: theme.colors.border,
+                marginTop: 8,
               },
             ]}>
             <FlatList

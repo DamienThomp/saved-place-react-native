@@ -1,6 +1,5 @@
 import { LineLayer, ShapeSource } from '@rnmapbox/maps';
 import { Position } from '@rnmapbox/maps/lib/typescript/src/types/Position';
-import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
 
 type LineRouteProps = { coordinates: Position[] };
 

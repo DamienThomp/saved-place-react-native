@@ -14,7 +14,6 @@ export const useSearchSuggestion = (query?: string) => {
       sessionToken = new SessionToken();
       const result = await search.suggest(query, {
         sessionToken,
-        types: 'place, neighborhood, country',
       });
       return result;
     },
