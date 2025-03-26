@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect } from 'react';
@@ -54,7 +55,10 @@ export default function PlaceDetails() {
         <Animated.View style={[styles.overlay]} entering={FadeInDown.duration(500).delay(250)}>
           <View style={styles.overlayContent}>
             <View style={styles.info}>
-              <Text style={[styles.title]}>{place?.title}</Text>
+              <View style={styles.titeContainer}>
+                <Text style={[styles.title]}>{place?.title}</Text>
+                <Ionicons name="location-sharp" color="red" size={22} />
+              </View>
               <Text style={[styles.address]}>{place?.address}</Text>
               {place && (
                 <DirectionButton
@@ -97,6 +101,12 @@ const styles = StyleSheet.create({
     padding: 18,
     marginTop: 12,
     gap: 12,
+  },
+  titeContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   title: {
     fontWeight: 'bold',
