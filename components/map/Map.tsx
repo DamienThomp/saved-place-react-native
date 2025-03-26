@@ -132,6 +132,7 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
             color={theme.colors.primary}
             size={36}
             onPress={onToggleToUserLocation}
+            style={{ paddingTop: 4 }}
           />
           <IconButton icon="map" color={theme.colors.primary} size={36} onPress={onTogglePitch} />
         </View>
@@ -149,6 +150,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   controlsContainer: {
+    alignSelf: 'flex-end',
     justifyContent: 'center',
     alignItems: 'flex-end',
     top: 0,
