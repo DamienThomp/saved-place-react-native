@@ -1,7 +1,7 @@
 import { Coordinates, MapboxDirections } from '~/types/types';
 
-// TODO: - Add enum for selecting direction type and remove hardcoded walking value
-const BASE_URL = 'https://api.mapbox.com/directions/v5/mapbox/walking/';
+// TODO: - Add enum for selecting direction type and remove hardcoded driving value
+const BASE_URL = 'https://api.mapbox.com/directions/v5/mapbox/driving/';
 const ACCESS_TOKEN = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '';
 
 const buildDefaultParams = (): URLSearchParams => {
