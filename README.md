@@ -43,5 +43,6 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 <img width="200" src="https://github.com/user-attachments/assets/c2b513dd-b912-41c0-9f5a-16acbb3a9064">
 
 ### Details
-<img width="200" src="https://github.com/user-attachments/assets/a52776cc-06e7-4d02-9af3-1e7c8e1c503d">
+<img width="200" src="https://github.com/user-attachments/assets/158edd6b-debf-40a6-9fa4-be005e265b60">
+<img width="200" src="https://github.com/user-attachments/assets/3f8e4e92-4eed-4e2f-8c25-66b6214eec5a">
 
