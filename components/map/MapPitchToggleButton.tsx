@@ -13,5 +13,12 @@ export default function MapPitchToggleButton() {
     toggleMapPitch(!isPitchToggled);
   };
 
-  return <IconButton icon="map" color={theme.colors.primary} size={36} onPress={onTogglePitch} />;
+  return (
+    <IconButton
+      icon={isPitchToggled ? 'layers-outline' : 'layers'}
+      color={theme.colors.primary}
+      size={36}
+      onPress={onTogglePitch}
+    />
+  );
 }
