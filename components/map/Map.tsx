@@ -52,7 +52,7 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
   const mapPitch = useMapPitch();
   const userLocation = useUserLocation();
   const { directionCoordinates } = useDirections();
-  const { setMapCenter, setMapPitch, toggleMapPitch } = useMapActions();
+  const { setMapCenter, setMapPitch, toggleMapPitch, resetAll } = useMapActions();
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
 
   const onMapSelection = (feature: GeoJSON.Feature) => {
@@ -98,7 +98,9 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
   }, [pitchIsToggled]);
 
   useEffect(() => {
-    toggleMapPitch(false);
+    return () => {
+      resetAll();
+    };
   }, []);
 
   return (
