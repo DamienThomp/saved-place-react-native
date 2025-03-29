@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
-import { Text } from 'react-native';
 
+import ContentUnavailable from './ContentUnavailable';
 import FadeIn from './FadeIn';
 import Loading from './Loading';
 
@@ -19,7 +19,11 @@ export default function LoadingState({
   }
 
   if (error) {
-    return <Text>{error.message}</Text>;
+    return (
+      <ContentUnavailable icon="warning" color="grey">
+        {error.message}
+      </ContentUnavailable>
+    );
   }
 
   return <FadeIn>{children}</FadeIn>;

@@ -1,15 +1,20 @@
-import { useTheme } from '@react-navigation/native';
 import Mapbox, { Camera, LocationPuck, MapView, MarkerView, StyleURL } from '@rnmapbox/maps';
-import { Position } from '@rnmapbox/maps/lib/typescript/src/types/Position';
 import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import AnnotationContent from './AnnotationContent';
 import LineRoute from './LineRoute';
-import IconButton from '../ui/IconButton';
+import MapPitchToggleButton from './MapPitchToggleButton';
+import MapUserLocationButton from './MapUserLocationButton';
 
 import useUserLocation from '~/hooks/useUserLocation';
 import { useDirections } from '~/providers/DirectionsProvider';
+import {
+  useIsPitchToggled,
+  useMapActions,
+  useMapCenter,
+  useMapPitch,
+} from '~/stores/mapControlsStore';
 import debounce from '~/utils/debounce';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
@@ -42,12 +47,13 @@ type MapProps = {
 };
 
 export default function Map({ coordinates, readOnly, showControls, onPress }: MapProps) {
-  const [mapCenter, setMapCenter] = useState<Position | undefined>();
-  const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
-  const [angledView, setToAngledView] = useState<boolean>(false);
+  const pitchIsToggled = useIsPitchToggled();
+  const mapCenter = useMapCenter();
+  const mapPitch = useMapPitch();
   const userLocation = useUserLocation();
   const { directionCoordinates } = useDirections();
-  const theme = useTheme();
+  const { setMapCenter, setMapPitch, toggleMapPitch } = useMapActions();
+  const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
 
   const onMapSelection = (feature: GeoJSON.Feature) => {
     if (readOnly) return;
@@ -61,16 +67,6 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
     setSelectedPoint(point);
     onPress?.(point);
   };
-
-  const onTogglePitch = () => {
-    setToAngledView((currentState) => !currentState);
-  };
-
-  const onToggleToUserLocation = useCallback(() => {
-    if (userLocation) {
-      setMapCenter([userLocation.longitude, userLocation.latitude]);
-    }
-  }, [userLocation]);
 
   const onCameraChange = useCallback(
     debounce((event: Mapbox.MapState) => setMapCenter(event.properties.center), 1000),
@@ -93,9 +89,17 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
 
   useEffect(() => {
     if (directionCoordinates) {
-      setToAngledView(true);
+      toggleMapPitch(true);
     }
   }, [directionCoordinates]);
+
+  useEffect(() => {
+    setMapPitch(pitchIsToggled ? 60 : 0);
+  }, [pitchIsToggled]);
+
+  useEffect(() => {
+    toggleMapPitch(false);
+  }, []);
 
   return (
     <MapView
@@ -112,7 +116,7 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
           pitch: 0,
           animationDuration: 0,
         }}
-        pitch={angledView ? 60 : 0}
+        pitch={mapPitch}
       />
 
       {selectedPoint && (
@@ -127,14 +131,8 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
 
       {showControls && (
         <View style={styles.controlsContainer}>
-          <IconButton
-            icon="navigate-circle-sharp"
-            color={theme.colors.primary}
-            size={36}
-            onPress={onToggleToUserLocation}
-            style={{ paddingTop: 4 }}
-          />
-          <IconButton icon="map" color={theme.colors.primary} size={36} onPress={onTogglePitch} />
+          <MapUserLocationButton />
+          <MapPitchToggleButton />
         </View>
       )}
     </MapView>
