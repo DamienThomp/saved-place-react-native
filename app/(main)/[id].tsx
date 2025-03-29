@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -13,6 +13,7 @@ import DirectionButton from '~/components/map/DirectionButton';
 import Map from '~/components/map/Map';
 import IconButton from '~/components/ui/IconButton';
 import { useDirections } from '~/providers/DirectionsProvider';
+import { useMapActions } from '~/stores/mapControlsStore';
 
 export default function PlaceDetails() {
   const { setDirections } = useDirections();
@@ -20,10 +21,17 @@ export default function PlaceDetails() {
   const insets = useSafeAreaInsets();
   const theme = useTheme();
   const { id } = useLocalSearchParams();
+  const { setMapCenter } = useMapActions();
 
   const locationId = parseFloat(Array.isArray(id) ? id[0] : id);
 
   const { data: place, isLoading, error } = usePlaceDetails(locationId);
+
+  const toggleToPlace = () => {
+    if (place) {
+      setMapCenter([place.longitude, place.latitude]);
+    }
+  };
 
   useEffect(() => {
     setDirections?.(null);
@@ -55,10 +63,10 @@ export default function PlaceDetails() {
         <Animated.View style={[styles.overlay]} entering={FadeInDown.duration(500).delay(250)}>
           <View style={styles.overlayContent}>
             <View style={styles.info}>
-              <View style={styles.titeContainer}>
+              <Pressable style={styles.titeContainer} onPress={toggleToPlace}>
                 <Text style={[styles.title]}>{place?.title}</Text>
                 <Ionicons name="location-sharp" color="red" size={22} />
-              </View>
+              </Pressable>
               <Text style={[styles.address]}>{place?.address}</Text>
               {place && (
                 <DirectionButton
