@@ -9,12 +9,7 @@ import MapUserLocationButton from './MapUserLocationButton';
 
 import useUserLocation from '~/hooks/useUserLocation';
 import { useDirections } from '~/providers/DirectionsProvider';
-import {
-  useIsPitchToggled,
-  useMapActions,
-  useMapCenter,
-  useMapPitch,
-} from '~/stores/mapControlsStore';
+import { useMapActions, useMapCenter, useMapPitch } from '~/stores/mapControlsStore';
 import debounce from '~/utils/debounce';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
@@ -47,12 +42,11 @@ type MapProps = {
 };
 
 export default function Map({ coordinates, readOnly, showControls, onPress }: MapProps) {
-  const pitchIsToggled = useIsPitchToggled();
   const mapCenter = useMapCenter();
   const mapPitch = useMapPitch();
   const userLocation = useUserLocation();
   const { directionCoordinates } = useDirections();
-  const { setMapCenter, setMapPitch, toggleMapPitch, resetAll } = useMapActions();
+  const { setMapCenter, toggleMapPitch, resetAll } = useMapActions();
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
 
   const onMapSelection = (feature: GeoJSON.Feature) => {
