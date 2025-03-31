@@ -28,7 +28,7 @@ const useMapControlStore = create<MapControlsStore>()((set) => ({
     setMapPitch: (value) => {
       set({ mapPitch: value });
     },
-    toggleMapPitch: (value) => set({ pitchIsToggled: value }),
+    toggleMapPitch: (value) => set({ pitchIsToggled: value, mapPitch: value ? 60 : 0 }),
     resetAll: () => set({ ...initialState }),
   },
 }));
