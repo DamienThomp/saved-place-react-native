@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 
 import IconButton from '../ui/IconButton';
 
@@ -9,15 +9,18 @@ type AnnotationContentProps = {
 
 export default function AnnotationContent({ title, onPressed }: AnnotationContentProps) {
   return (
-    <View style={styles.touchableContainer}>
-      <IconButton
-        icon="pin"
-        size={36}
-        color="white"
-        onPress={() => {
-          onPressed?.();
-        }}
-      />
+    <View>
+      <View style={styles.touchableContainer}>
+        <IconButton
+          icon="pin"
+          size={36}
+          color="white"
+          onPress={() => {
+            onPressed?.();
+          }}
+        />
+      </View>
+      {title && <Text style={{ alignSelf: 'center' }}>{title}</Text>}
     </View>
   );
 }

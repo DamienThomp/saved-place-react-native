@@ -113,7 +113,7 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
 
       {selectedPoint && (
         <MarkerView coordinate={selectedPoint.coordinate} anchor={{ x: 0.5, y: 1 }}>
-          <AnnotationContent title="marker" />
+          <AnnotationContent />
         </MarkerView>
       )}
 
