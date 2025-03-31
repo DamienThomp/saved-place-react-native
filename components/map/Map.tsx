@@ -94,10 +94,6 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
   }, [directionCoordinates]);
 
   useEffect(() => {
-    setMapPitch(pitchIsToggled ? 60 : 0);
-  }, [pitchIsToggled]);
-
-  useEffect(() => {
     return () => {
       resetAll();
     };
