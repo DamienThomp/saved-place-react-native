@@ -1,9 +1,15 @@
 import { NativeStackHeaderRightProps } from '@react-navigation/native-stack';
 import { useNavigation } from 'expo-router';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { NativeSyntheticEvent, Pressable, TextInputFocusEventData, Text } from 'react-native';
+import {
+  NativeSyntheticEvent,
+  Pressable,
+  TextInputFocusEventData,
+  Text,
+  Alert,
+} from 'react-native';
 
-import { usePlacesList } from '~/api/places';
+import { usePlacesList, useSearchPlace } from '~/api/places';
 import { Container } from '~/components/common/Container';
 import LoadingState from '~/components/common/LoadingState';
 import PlacesList from '~/components/place/PlacesList';
@@ -13,25 +19,24 @@ import { Place } from '~/types/types';
 export default function MainView() {
   const [filteredList, setFilteredList] = useState<Place[] | null>(null);
   const [edit, setEditMode] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const { data, error, isLoading } = usePlacesList();
   const navigation = useNavigation();
 
+  const { data: searchResults, error: searchError } = useSearchPlace(searchQuery);
+
   const onSearch = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-    if (!filteredList) return;
-    const filtered = filteredList.filter((place) => place.title.includes(event.nativeEvent.text));
-    setFilteredList(filtered);
+    setSearchQuery(event.nativeEvent.text);
   };
 
   const onCancelSearch = () => {
-    if (data) {
-      setFilteredList(data);
-    }
+    setSearchQuery('');
   };
 
   const onTextChanged = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
     const text = event.nativeEvent.text;
     if (text.length < 1 && data) {
-      setFilteredList(data);
+      setSearchQuery('');
     }
   };
 
@@ -69,10 +74,21 @@ export default function MainView() {
   }, [navigation, filteredList, edit]);
 
   useEffect(() => {
+    if (searchResults) {
+      setFilteredList(searchResults);
+      return;
+    }
+
     if (data) {
       setFilteredList(data);
     }
-  }, [data]);
+  }, [data, searchResults]);
+
+  useEffect(() => {
+    if (searchError) {
+      Alert.alert('Something Went Wrong!', searchError.message);
+    }
+  }, [searchError]);
 
   return (
     <LoadingState isLoading={isLoading} error={error}>

@@ -1,7 +1,7 @@
 import { useTheme } from '@react-navigation/native';
 import { ImagePickerOptions, launchImageLibraryAsync } from 'expo-image-picker';
-import { useState } from 'react';
-import { Image, Pressable, StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Image, Pressable, StyleSheet, Alert } from 'react-native';
 
 import ContentUnavailable from '~/components/common/ContentUnavailable';
 
@@ -12,7 +12,7 @@ interface ImagePickerProps {
 const options: ImagePickerOptions = {
   mediaTypes: ['images'],
   allowsEditing: true,
-  aspect: [16, 9],
+  aspect: [3, 2],
   quality: 1,
 };
 
@@ -21,13 +21,22 @@ export default function ImagePicker({ onSelectImage }: ImagePickerProps) {
   const theme = useTheme();
 
   const onImageUpdate = async () => {
-    const imageResult = await launchImageLibraryAsync(options);
+    try {
+      const imageResult = await launchImageLibraryAsync(options);
 
-    if (!imageResult.canceled) {
-      setImage(imageResult.assets[0].uri);
-      onSelectImage(imageResult.assets[0].uri);
+      if (!imageResult.canceled) {
+        setImage(imageResult.assets[0].uri);
+      }
+    } catch (error) {
+      Alert.alert('Something Went Wrong', `${error}`);
     }
   };
+
+  useEffect(() => {
+    if (image) {
+      onSelectImage(image);
+    }
+  }, [image]);
 
   let imagePreview = (
     <ContentUnavailable color={theme.colors.primary} icon="image-outline">
@@ -57,7 +66,7 @@ export default function ImagePicker({ onSelectImage }: ImagePickerProps) {
 const styles = StyleSheet.create({
   preview: {
     width: '100%',
-    height: 200,
+    aspectRatio: 3 / 2,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
