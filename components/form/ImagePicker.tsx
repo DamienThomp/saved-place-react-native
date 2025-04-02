@@ -1,7 +1,8 @@
 import { useTheme } from '@react-navigation/native';
+import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import { ImagePickerOptions, launchImageLibraryAsync } from 'expo-image-picker';
 import { memo, useEffect, useState } from 'react';
-import { Image, Pressable, StyleSheet, Alert } from 'react-native';
+import { Alert, Image, Pressable, StyleSheet } from 'react-native';
 
 import ContentUnavailable from '~/components/common/ContentUnavailable';
 
@@ -11,9 +12,8 @@ interface ImagePickerProps {
 
 const options: ImagePickerOptions = {
   mediaTypes: ['images'],
-  allowsEditing: true,
   aspect: [3, 2],
-  quality: 1,
+  quality: 0.7,
 };
 
 const ImagePicker = memo(function ImagePicker({ onSelectImage }: ImagePickerProps) {
@@ -25,7 +25,14 @@ const ImagePicker = memo(function ImagePicker({ onSelectImage }: ImagePickerProp
       const imageResult = await launchImageLibraryAsync(options);
 
       if (!imageResult.canceled) {
-        setImage(imageResult.assets[0].uri);
+        const context = ImageManipulator.manipulate(imageResult.assets[0].uri);
+        context.resize({ width: 600, height: 400 });
+        const image = await context.renderAsync();
+        const result = await image.saveAsync({
+          format: SaveFormat.PNG,
+        });
+
+        setImage(result.uri);
       }
     } catch (error) {
       Alert.alert('Something Went Wrong', `${error}`);
