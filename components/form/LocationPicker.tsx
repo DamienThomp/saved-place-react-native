@@ -1,6 +1,6 @@
 import { useTheme } from '@react-navigation/native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { ActionSheetIOS, Alert, Image, Platform, Pressable, StyleSheet } from 'react-native';
 
 import ContentUnavailable from '../common/ContentUnavailable';
@@ -18,7 +18,7 @@ interface LocationPickerProps {
   onSelectLocation: (coordinates: number[], address: string) => void;
 }
 
-export default function LocationPicker({ onSelectLocation }: LocationPickerProps) {
+const LocationPicker = memo(function LocationPicker({ onSelectLocation }: LocationPickerProps) {
   const [pickedLocation, setPickedLocation] = useState<string | null>(null);
   const [isLoading, setIsloading] = useState(false);
   const router = useRouter();
@@ -122,7 +122,7 @@ export default function LocationPicker({ onSelectLocation }: LocationPickerProps
       {mapPreview}
     </Pressable>
   );
-}
+});
 
 const styles = StyleSheet.create({
   preview: {
@@ -140,3 +140,5 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
 });
+
+export default LocationPicker;

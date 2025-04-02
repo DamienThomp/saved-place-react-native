@@ -1,6 +1,6 @@
 import { useTheme } from '@react-navigation/native';
 import { ImagePickerOptions, launchImageLibraryAsync } from 'expo-image-picker';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, Alert } from 'react-native';
 
 import ContentUnavailable from '~/components/common/ContentUnavailable';
@@ -16,7 +16,7 @@ const options: ImagePickerOptions = {
   quality: 1,
 };
 
-export default function ImagePicker({ onSelectImage }: ImagePickerProps) {
+const ImagePicker = memo(function ImagePicker({ onSelectImage }: ImagePickerProps) {
   const [image, setImage] = useState<string | null>(null);
   const theme = useTheme();
 
@@ -61,7 +61,7 @@ export default function ImagePicker({ onSelectImage }: ImagePickerProps) {
       {imagePreview}
     </Pressable>
   );
-}
+});
 
 const styles = StyleSheet.create({
   preview: {
@@ -79,3 +79,5 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
 });
+
+export default ImagePicker;
