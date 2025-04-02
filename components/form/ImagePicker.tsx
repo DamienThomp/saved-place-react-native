@@ -13,7 +13,7 @@ interface ImagePickerProps {
 const options: ImagePickerOptions = {
   mediaTypes: ['images'],
   aspect: [3, 2],
-  quality: 0.7,
+  quality: 0.9,
 };
 
 const ImagePicker = memo(function ImagePicker({ onSelectImage }: ImagePickerProps) {
