@@ -19,8 +19,31 @@ export const usePlacesList = () => {
       const { data, error } = await dbClient
         .from('places')
         .select('*')
-        .eq('user_id', session.user.id)
+        .eq('user_id', id)
         .order('created_at', { ascending: false });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      return data;
+    },
+  });
+};
+
+export const useSearchPlace = (query: string) => {
+  const { session } = useAuthentication();
+  const id = session?.user.id;
+
+  return useQuery({
+    queryKey: ['places', query],
+    queryFn: async () => {
+      if (!query || !id) return null;
+      const { data, error } = await dbClient
+        .from('places')
+        .select('*')
+        .eq('user_id', id)
+        .ilike('title', `%${query}%`);
 
       if (error) {
         throw new Error(error.message);
