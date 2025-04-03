@@ -26,10 +26,11 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 - [x] ~~add transition animations~~
 - [x] ~~add swipe to delete~~
 - [x] ~~add search to mapview for selecting a place. (currently defaults to user location)~~
-- [ ] improve search, refactor provider and map components
-- [ ] add map controls to details screen (change theme, ~~pitch~~, ~~toggle to user location~~)
 - [x] ~~improve async image loader (refactor and add cache)~~
 - [x] ~~add profile screen with user info and sign out button~~
+- [ ] improve search, refactor provider and map components
+- [ ] add map controls to details screen (change theme, ~~pitch~~, ~~toggle to user location~~)
+- [ ] add pagination for list view
 
 ## Screen Shots
 
