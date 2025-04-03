@@ -5,7 +5,7 @@ import Animated, { LinearTransition } from 'react-native-reanimated';
 
 import PlaceCardItem from './PlaceCardItem';
 
-import { useDeletePlace } from '~/api/places';
+import { useDeletePlace, useDeletImage } from '~/api/places';
 import ContentUnavailable from '~/components/common/ContentUnavailable';
 import { Place } from '~/types/types';
 import isEmpty from '~/utils/isEmpty';
@@ -20,6 +20,7 @@ export default function PlacesList({ items, edit }: PlacesListProps) {
   const theme = useTheme();
 
   const { mutate: deleteItem } = useDeletePlace();
+  const { mutate: deleteImage } = useDeletImage();
 
   if (!items || isEmpty(items)) {
     return (
@@ -33,11 +34,16 @@ export default function PlacesList({ items, edit }: PlacesListProps) {
     router.push(`/(main)/${id}`);
   };
 
-  // TODO: add delete UI to card version of places list item
   const handleOnDelete = (id: number) => {
+    const item = items.filter((item) => item.id === id)[0];
     deleteItem(id, {
       onError: () => {
         Alert.alert('Error', 'There was a problem deleting your place');
+      },
+      onSuccess: () => {
+        if (item?.image) {
+          deleteImage(item.image);
+        }
       },
     });
   };
