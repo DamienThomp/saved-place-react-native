@@ -136,3 +136,15 @@ export const useImage = (path?: string | null) => {
     },
   });
 };
+
+export const useDeletImage = () => {
+  return useMutation({
+    async mutationFn(path: string) {
+      const { error } = await dbClient.storage.from('place-images').remove([path]);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+    },
+  });
+};
