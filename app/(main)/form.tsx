@@ -1,6 +1,7 @@
-import { useRouter } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { NativeStackHeaderRightProps } from '@react-navigation/native-stack';
+import { useNavigation, useRouter } from 'expo-router';
+import { useCallback, useEffect, useLayoutEffect, useReducer } from 'react';
+import { Alert, Pressable, ScrollView, StyleSheet, View, Text } from 'react-native';
 
 import { useInsertPlace } from '~/api/places';
 import { Container } from '~/components/common/Container';
@@ -10,112 +11,149 @@ import FormInputContainer from '~/components/form/FormInputContainer';
 import ImagePicker from '~/components/form/ImagePicker';
 import LocationPicker from '~/components/form/LocationPicker';
 import TextInputField from '~/components/form/TextInputField';
-import { Button } from '~/components/ui/Button';
+import debounce from '~/utils/debounce';
 import uploadImage from '~/utils/imageUpload';
+import isEmptyString from '~/utils/isEmptyString';
 
 type PlaceForm = {
   title: string;
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
   address: string;
   imageUri: string;
 };
 
-const initialState: PlaceForm = {
-  title: '',
-  latitude: 0,
-  longitude: 0,
-  address: '',
-  imageUri: '',
+type FormState = {
+  placeForm: PlaceForm;
+  isValid: boolean;
+  isLoading: boolean;
+};
+
+type Action =
+  | { type: 'UPDATE_FORM'; payload: Partial<PlaceForm> }
+  | { type: 'TOGGLE_IS_VALID'; payload: boolean }
+  | { type: 'TOGGLE_LOADING'; payload: boolean };
+
+const initialState: FormState = {
+  placeForm: {
+    title: '',
+    address: '',
+    imageUri: '',
+  },
+  isLoading: false,
+  isValid: false,
+};
+
+const formReducer = (state: FormState, action: Action): FormState => {
+  switch (action.type) {
+    case 'UPDATE_FORM': {
+      return { ...state, placeForm: { ...state.placeForm, ...action.payload } };
+    }
+    case 'TOGGLE_IS_VALID': {
+      return { ...state, isValid: action.payload };
+    }
+    case 'TOGGLE_LOADING': {
+      return { ...state, isLoading: action.payload };
+    }
+    default: {
+      return state;
+    }
+  }
 };
 
 export default function AddPlace() {
-  const [placeForm, setForm] = useState<PlaceForm>(initialState);
-  const [errors, setErrors] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [state, dispatch] = useReducer(formReducer, initialState);
   const router = useRouter();
+  const navigation = useNavigation();
   const { mutate: insertPlace } = useInsertPlace();
 
   const onUpdateTitle = useCallback((text: string) => {
-    setForm((currentState: PlaceForm) => {
-      return { ...currentState, title: text };
+    dispatch({
+      type: 'UPDATE_FORM',
+      payload: { title: text },
     });
   }, []);
 
   const onSelectImage = useCallback((image: string | null) => {
     if (!image) return;
-    setForm((currentState: PlaceForm) => {
-      return { ...currentState, imageUri: image };
+    dispatch({
+      type: 'UPDATE_FORM',
+      payload: { imageUri: image },
     });
   }, []);
 
   const onSelectLocation = useCallback((coordinates: number[] | null, address: string) => {
     if (!coordinates) return;
-    setForm((currentState: PlaceForm) => {
-      const [longitude, latitude] = coordinates;
-      return { ...currentState, longitude, latitude, address };
+    const [longitude, latitude] = coordinates;
+    dispatch({
+      type: 'UPDATE_FORM',
+      payload: { longitude, latitude, address },
     });
   }, []);
 
-  // TODO: - Improve the sloppy error handling for this form, currently only shows one error at a time
-  const validateForm = (): boolean => {
-    setErrors(null);
+  const validateForm = useCallback(
+    debounce(() => {
+      const { title, latitude, imageUri } = state.placeForm;
+      const isValid = !isEmptyString(title) && !isEmptyString(imageUri) && !!latitude;
 
-    if (placeForm.title.length === 0) {
-      setErrors('Title is Required');
-      return false;
-    }
+      dispatch({ type: 'TOGGLE_IS_VALID', payload: isValid });
+    }, 500),
+    [state.placeForm]
+  );
 
-    if (!placeForm.imageUri) {
-      setErrors('An image is Required.');
-      return false;
-    }
-
-    if (placeForm.latitude === 0) {
-      setErrors('You need to select a place.');
-      return false;
-    }
-
-    return true;
-  };
-
-  const onSubmit = async () => {
+  const onSubmit = useCallback(async () => {
     try {
-      if (!validateForm()) return;
-
-      setIsLoading(true);
+      const { placeForm } = state;
+      dispatch({ type: 'TOGGLE_LOADING', payload: true });
 
       const imagePath = await uploadImage(placeForm?.imageUri ?? '');
-
       const { title, longitude, latitude, address } = placeForm;
+
+      if (!latitude || !longitude) return;
 
       insertPlace(
         { title, longitude, latitude, address, image: imagePath },
         {
           onSuccess: () => {
             router.back();
-            setIsLoading(false);
+            dispatch({ type: 'TOGGLE_LOADING', payload: false });
           },
-          onError: () => {
-            Alert.alert('Error', 'There was a problem saving your place');
-            setIsLoading(false);
+          onError: (error) => {
+            showAlert('There was a problem saving your place:', error.message);
+            dispatch({ type: 'TOGGLE_LOADING', payload: false });
           },
         }
       );
     } catch (error) {
-      Alert.alert('Error', `There was a problem saving your place: ${error}`);
-      setIsLoading(false);
+      const { message } = error as Error;
+      showAlert('There was a problem saving your place:', message);
+      dispatch({ type: 'TOGGLE_LOADING', payload: false });
     }
+  }, [state.placeForm, insertPlace, router]);
+
+  const showAlert = (message: string, error: string) => {
+    Alert.alert('Error', `${message} ${error}`);
   };
 
   useEffect(() => {
-    if (errors) {
-      Alert.alert('Error', errors);
-    }
-  }, [errors]);
+    validateForm();
+  }, [state.placeForm]);
 
-  if (isLoading) {
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: ({ tintColor }: NativeStackHeaderRightProps) => {
+        return (
+          state.isValid && (
+            <Pressable onPress={onSubmit}>
+              <Text style={{ color: tintColor, fontSize: 18 }}>Save Place</Text>
+            </Pressable>
+          )
+        );
+      },
+    });
+  }, [state.isValid]);
+
+  if (state.isLoading) {
     return (
       <FadeIn>
         <Loading title="Saving Place" />
@@ -129,7 +167,7 @@ export default function AddPlace() {
         <View style={styles.content}>
           <FormInputContainer title="Title">
             <TextInputField
-              value={placeForm.title}
+              value={state.placeForm.title}
               onChangeText={onUpdateTitle}
               placeholder="Place Name"
             />
@@ -140,7 +178,6 @@ export default function AddPlace() {
           <FormInputContainer title="Location">
             <LocationPicker onSelectLocation={onSelectLocation} />
           </FormInputContainer>
-          <Button title="Add Place" onPress={onSubmit} />
         </View>
       </ScrollView>
     </Container>

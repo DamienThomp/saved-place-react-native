@@ -1,8 +1,8 @@
 import * as FileSystem from 'expo-file-system';
 
 import { dbClient } from '~/lib/db';
-import decode from '~/utils/Decode';
 import uuid from '~/utils/UUID';
+import decode from '~/utils/decode';
 
 const uploadImage = async (image: string) => {
   if (!image?.startsWith('file://')) {
