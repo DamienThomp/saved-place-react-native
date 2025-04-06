@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 
 import { usePlacesList, useSearchPlace } from '~/api/places';
-import { Container } from '~/components/common/Container';
 import LoadingState from '~/components/common/LoadingState';
 import PlacesList from '~/components/place/PlacesList';
 import IconButton from '~/components/ui/IconButton';
@@ -92,9 +91,7 @@ export default function MainView() {
 
   return (
     <LoadingState isLoading={isLoading} error={error}>
-      <Container>
-        <PlacesList items={filteredList} edit={edit} />
-      </Container>
+      <PlacesList items={filteredList} edit={edit} />
     </LoadingState>
   );
 }
