@@ -4,6 +4,7 @@ import { Alert, StyleSheet } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 
 import PlaceCardItem from './PlaceCardItem';
+import { Container } from '../common/Container';
 
 import { useDeletePlace, useDeletImage } from '~/api/places';
 import ContentUnavailable from '~/components/common/ContentUnavailable';
@@ -24,9 +25,11 @@ export default function PlacesList({ items, edit }: PlacesListProps) {
 
   if (!items || isEmpty(items)) {
     return (
-      <ContentUnavailable color={theme.colors.primary} icon="map-outline">
-        No Places Added.
-      </ContentUnavailable>
+      <Container>
+        <ContentUnavailable color={theme.colors.primary} icon="map-outline">
+          No Places Added.
+        </ContentUnavailable>
+      </Container>
     );
   }
 
@@ -53,6 +56,7 @@ export default function PlacesList({ items, edit }: PlacesListProps) {
       style={styles.list}
       data={items}
       showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior="automatic"
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => (
         <PlaceCardItem
