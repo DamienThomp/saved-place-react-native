@@ -58,6 +58,7 @@ export default function PlacesList({ items, edit }: PlacesListProps) {
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior="automatic"
       keyExtractor={(item) => item.id.toString()}
+      keyboardDismissMode="on-drag"
       renderItem={({ item }) => (
         <PlaceCardItem
           place={item}
@@ -74,6 +75,6 @@ export default function PlacesList({ items, edit }: PlacesListProps) {
 
 const styles = StyleSheet.create({
   list: {
-    margin: 12,
+    marginHorizontal: 12,
   },
 });

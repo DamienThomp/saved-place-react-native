@@ -65,6 +65,7 @@ export default function MainView() {
       headerSearchBarOptions: {
         placeholder: 'Search',
         inputType: 'text',
+        hideWhenScrolling: false,
         onSearchButtonPress: onSearch,
         onCancelButtonPress: onCancelSearch,
         onChangeText: onTextChanged,
