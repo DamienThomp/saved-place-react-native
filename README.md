@@ -28,9 +28,11 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 - [x] ~~add search to mapview for selecting a place. (currently defaults to user location)~~
 - [x] ~~improve async image loader (refactor and add cache)~~
 - [x] ~~add profile screen with user info and sign out button~~
+- [ ] add update action to places list for editing a place
 - [ ] improve search, refactor provider and map components
 - [ ] add map controls to details screen (change theme, ~~pitch~~, ~~toggle to user location~~)
 - [ ] add pagination for list view
+- [ ] hide directions button if location is out of range
 
 ## Screen Shots
 
