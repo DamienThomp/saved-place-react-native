@@ -37,6 +37,10 @@ export default function PlacesList({ items, edit }: PlacesListProps) {
     router.push(`/(main)/${id}`);
   };
 
+  const handleOnEdit = (id: number) => {
+    router.push(`/(main)/form?id=${id}`);
+  };
+
   const handleOnDelete = (id: number) => {
     const item = items.filter((item) => item.id === id)[0];
     deleteItem(id, {
@@ -65,6 +69,7 @@ export default function PlacesList({ items, edit }: PlacesListProps) {
           onSelect={handleOnSelectPlace}
           edit={edit}
           onDelete={handleOnDelete}
+          onEdit={handleOnEdit}
         />
       )}
       itemLayoutAnimation={LinearTransition.duration(250)}

@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { dbClient } from '~/lib/db';
 import { useAuthentication } from '~/providers/AuthProvider';
-import { InsertPlace } from '~/types/types';
+import { CreatePayload, UpdatePayload } from '~/types/types';
 import imageLoader from '~/utils/imageLoader';
 
 export const usePlacesList = () => {
@@ -54,10 +54,11 @@ export const useSearchPlace = (query: string) => {
   });
 };
 
-export const usePlaceDetails = (id: number) => {
+export const usePlaceDetails = (id?: number) => {
   return useQuery({
     queryKey: ['places', id],
     queryFn: async () => {
+      if (!id) return null;
       const { data, error } = await dbClient.from('places').select('*').eq('id', id).single();
 
       if (error) {
@@ -75,8 +76,8 @@ export const useInsertPlace = () => {
   const user_id = session?.user.id;
 
   return useMutation({
-    async mutationFn(data: Omit<InsertPlace, 'id' | 'created_at' | 'user_id'>) {
-      if (!user_id) return;
+    async mutationFn(data: CreatePayload) {
+      if (!user_id) return null;
       const { error, data: newPlace } = await dbClient
         .from('places')
         .insert({ ...data, user_id })
@@ -88,6 +89,28 @@ export const useInsertPlace = () => {
       }
 
       return newPlace;
+    },
+    async onSuccess() {
+      await queryClient.invalidateQueries({ queryKey: ['places'] });
+    },
+  });
+};
+
+export const useUpdatePlace = () => {
+  const queryClient = useQueryClient();
+  // TODO: Remove image from storage if changed
+  return useMutation({
+    async mutationFn(data: UpdatePayload) {
+      const { id } = data;
+      if (!id) return null;
+      const { error } = await dbClient
+        .from('places')
+        .update({ ...data })
+        .eq('id', id);
+
+      if (error) {
+        throw new Error(error.message);
+      }
     },
     async onSuccess() {
       await queryClient.invalidateQueries({ queryKey: ['places'] });

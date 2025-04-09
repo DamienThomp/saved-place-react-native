@@ -4,10 +4,12 @@ import { ImagePickerOptions, launchImageLibraryAsync } from 'expo-image-picker';
 import { memo, useEffect, useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet } from 'react-native';
 
-import ContentUnavailable from '~/components/common/ContentUnavailable';
+import RemoteImage from '../common/RemoteImage';
 
+import ContentUnavailable from '~/components/common/ContentUnavailable';
 interface ImagePickerProps {
   onSelectImage: (image: string | null) => void;
+  editPreviewImage?: string;
 }
 
 const options: ImagePickerOptions = {
@@ -17,7 +19,10 @@ const options: ImagePickerOptions = {
   quality: 0.9,
 };
 
-const ImagePicker = memo(function ImagePicker({ onSelectImage }: ImagePickerProps) {
+const ImagePicker = memo(function ImagePicker({
+  onSelectImage,
+  editPreviewImage,
+}: ImagePickerProps) {
   const [image, setImage] = useState<string | null>(null);
   const theme = useTheme();
 
@@ -53,7 +58,15 @@ const ImagePicker = memo(function ImagePicker({ onSelectImage }: ImagePickerProp
   );
 
   if (image) {
+    console.log('imagePreview: ', image);
     imagePreview = <Image source={{ uri: image }} style={styles.image} />;
+  }
+
+  if (editPreviewImage) {
+    console.log('editImagePreview', editPreviewImage);
+    imagePreview = (
+      <RemoteImage path={editPreviewImage} style={styles.editImage} contentFit="cover" />
+    );
   }
 
   return (
@@ -85,6 +98,11 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 8,
     resizeMode: 'cover',
+  },
+  editImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 8,
   },
 });
 

@@ -90,6 +90,14 @@ export default function MainView() {
     }
   }, [searchError]);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setEditMode(false);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <LoadingState isLoading={isLoading} error={error}>
       <PlacesList items={filteredList} edit={edit} />

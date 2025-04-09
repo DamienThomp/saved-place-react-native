@@ -16,9 +16,13 @@ enum LocationOptions {
 }
 interface LocationPickerProps {
   onSelectLocation: (coordinates: number[], address: string) => void;
+  editCoordinates?: string | undefined;
 }
 
-const LocationPicker = memo(function LocationPicker({ onSelectLocation }: LocationPickerProps) {
+const LocationPicker = memo(function LocationPicker({
+  onSelectLocation,
+  editCoordinates,
+}: LocationPickerProps) {
   const [pickedLocation, setPickedLocation] = useState<string | null>(null);
   const [isLoading, setIsloading] = useState(false);
   const router = useRouter();
@@ -77,10 +81,10 @@ const LocationPicker = memo(function LocationPicker({ onSelectLocation }: Locati
     }
   };
 
-  const getSnapshot = async () => {
-    if (params?.coordinate) {
+  const getSnapshot = async (coordinates: string) => {
+    if (coordinates) {
       setIsloading(true);
-      const coordinate = JSON.parse(params.coordinate);
+      const coordinate = JSON.parse(coordinates);
       const uri = await takeSnapshot({ centerCoordinate: coordinate });
       const address = await getAddress({ centerCoordinate: coordinate });
       onSelectLocation(coordinate, address);
@@ -92,8 +96,15 @@ const LocationPicker = memo(function LocationPicker({ onSelectLocation }: Locati
   };
 
   useEffect(() => {
-    getSnapshot();
+    getSnapshot(params.coordinate);
   }, [params.coordinate]);
+
+  useEffect(() => {
+    if (editCoordinates) {
+      setPickedLocation(editCoordinates);
+      getSnapshot(editCoordinates);
+    }
+  }, [editCoordinates]);
 
   let mapPreview = (
     <ContentUnavailable color={theme.colors.primary} icon="map-outline">

@@ -13,9 +13,10 @@ type PlaceCardItemProps = {
   edit: boolean;
   onSelect: (id: number) => void;
   onDelete: (id: number) => void;
+  onEdit: (id: number) => void;
 };
 
-const PlaceCardItem = memo(({ place, edit, onSelect, onDelete }: PlaceCardItemProps) => {
+const PlaceCardItem = memo(({ place, edit, onSelect, onDelete, onEdit }: PlaceCardItemProps) => {
   const handleDelete = useCallback(() => {
     Alert.alert('Delete', 'Are you sure you want to delete this Place?', [
       { text: 'Cancel', style: 'cancel' },
@@ -29,6 +30,7 @@ const PlaceCardItem = memo(({ place, edit, onSelect, onDelete }: PlaceCardItemPr
   }, [onDelete, place.id]);
 
   const handlePress = useCallback(() => onSelect(place.id), [onSelect, place.id]);
+  const handleOnEdit = useCallback(() => onEdit(place.id), [onEdit, place.id]);
 
   return (
     <Pressable style={styles.cardContainer} onPress={handlePress}>
@@ -38,9 +40,14 @@ const PlaceCardItem = memo(({ place, edit, onSelect, onDelete }: PlaceCardItemPr
         style={styles.titleBackground}
       />
       {edit && (
-        <Animated.View style={styles.editContainer} entering={FadeInDown}>
-          <IconButton icon="trash-bin" color="white" size={28} onPress={handleDelete} />
-        </Animated.View>
+        <>
+          <Animated.View style={[styles.editContainer, styles.deleteItem]} entering={FadeInDown}>
+            <IconButton icon="trash-bin" color="white" size={28} onPress={handleDelete} />
+          </Animated.View>
+          <Animated.View style={[styles.editContainer, styles.editItem]} entering={FadeInDown}>
+            <IconButton icon="pencil" color="white" size={28} onPress={handleOnEdit} />
+          </Animated.View>
+        </>
       )}
       <Text style={styles.title}>{place.title}</Text>
     </Pressable>
@@ -83,10 +90,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 8,
     margin: 12,
-    right: 8,
     padding: 4,
     borderRadius: 8,
-    backgroundColor: 'red',
     elevation: 2,
+  },
+  editItem: {
+    backgroundColor: 'green',
+    left: 8,
+  },
+  deleteItem: {
+    backgroundColor: 'red',
+    right: 8,
   },
 });

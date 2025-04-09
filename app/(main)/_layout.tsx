@@ -41,7 +41,7 @@ export default function MainLayout() {
               ),
             }}
           />
-          <Stack.Screen name="form" options={{ title: 'Add A Place', headerLargeTitle: true }} />
+          <Stack.Screen name="form" options={{ headerLargeTitle: true }} />
           <Stack.Screen
             name="map-modal"
             options={{
