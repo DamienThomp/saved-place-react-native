@@ -14,6 +14,10 @@ export type Enums<T extends keyof Database['public']['Enums']> = Database['publi
 export type Place = Tables<'places'>;
 
 export type InsertPlace = InsertTables<'places'>;
+
+export type UpdatePayload = Omit<InsertPlace, 'created_at' | 'user_id'>;
+export type CreatePayload = Omit<InsertPlace, 'id' | 'created_at' | 'user_id'>;
+
 export interface Coordinates {
   longitude: number;
   latitude: number;

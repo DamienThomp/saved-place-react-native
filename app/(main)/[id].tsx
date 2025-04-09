@@ -1,17 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { usePlaceDetails } from '~/api/places';
 import LoadingState from '~/components/common/LoadingState';
 import RemoteImage from '~/components/common/RemoteImage';
 import DirectionButton from '~/components/map/DirectionButton';
 import Map from '~/components/map/Map';
 import IconButton from '~/components/ui/IconButton';
+import { useLocationDetails } from '~/hooks/useLocationDetails';
 import { useDirections } from '~/providers/DirectionsProvider';
 import { useMapActions } from '~/stores/mapControlsStore';
 
@@ -20,12 +20,9 @@ export default function PlaceDetails() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const theme = useTheme();
-  const { id } = useLocalSearchParams();
   const { setMapCenter } = useMapActions();
 
-  const locationId = parseFloat(Array.isArray(id) ? id[0] : id);
-
-  const { data: place, isLoading, error } = usePlaceDetails(locationId);
+  const { data: place, isLoading, error } = useLocationDetails();
 
   const toggleToPlace = () => {
     if (place) {

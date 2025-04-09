@@ -1,10 +1,10 @@
 import { useTheme } from '@react-navigation/native';
 import { NativeStackHeaderRightProps } from '@react-navigation/native-stack';
 import { useNavigation } from 'expo-router';
-import { useCallback, useLayoutEffect, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, View, Text } from 'react-native';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { useInsertPlace } from '~/api/places';
+import { useInsertPlace, useUpdatePlace } from '~/api/places';
 import { Container } from '~/components/common/Container';
 import FadeIn from '~/components/common/FadeIn';
 import Loading from '~/components/common/Loading';
@@ -12,8 +12,13 @@ import FormInputContainer from '~/components/form/FormInputContainer';
 import ImagePicker from '~/components/form/ImagePicker';
 import LocationPicker from '~/components/form/LocationPicker';
 import TextInputField from '~/components/form/TextInputField';
+import { useEditImagePreview } from '~/hooks/useEditImagePreview';
+import useEditLocation from '~/hooks/useEditLocation';
+import { useLocationDetails } from '~/hooks/useLocationDetails';
+import usePlaceFormHasEdits from '~/hooks/usePlaceFormHasEdits';
 import usePlaceFormValidation from '~/hooks/usePlaceFormValidation';
-import uploadImage from '~/utils/imageUpload';
+import { createPlacePayload } from '~/utils/createPlacePayload';
+import prepareImagePath from '~/utils/prepareImagePath';
 
 export type PlaceForm = {
   title: string;
@@ -29,16 +34,22 @@ const initialState: PlaceForm = {
   imageUri: '',
 };
 
-export default function AddPlace() {
+export default function PlaceFormScreen() {
   const [formData, setFormData] = useState<PlaceForm>(initialState);
-
+  const [originalData, setOriginalData] = useState<PlaceForm | undefined>();
   const [isSaving, setIsSaving] = useState(false);
 
   const navigation = useNavigation();
   const theme = useTheme();
   const { mutate: insertPlace } = useInsertPlace();
+  const { mutate: updatePlace } = useUpdatePlace();
+
+  const { data: existingPlace, isLoading: isLoadingPlace, isEditing } = useLocationDetails();
 
   const { isValid } = usePlaceFormValidation(formData);
+  const { hasEdits } = usePlaceFormHasEdits(formData, originalData, isEditing, isValid);
+  const { editCoordinates } = useEditLocation(existingPlace);
+  const editImagePreview = useEditImagePreview(formData.imageUri);
 
   const updateForm = useCallback((updates: Partial<PlaceForm>) => {
     setFormData((current) => ({ ...current, ...updates }));
@@ -65,25 +76,28 @@ export default function AddPlace() {
     try {
       setIsSaving(true);
 
-      const imagePath = await uploadImage(formData?.imageUri ?? '');
-      const { title, longitude, latitude, address } = formData;
+      const { imageUri } = formData;
 
-      if (!latitude || !longitude) return;
+      const imagePath = await prepareImagePath(imageUri);
 
-      insertPlace(
-        { title, longitude, latitude, address, image: imagePath },
-        {
-          onSettled: () => setIsSaving(false),
-          onSuccess: () => navigation.goBack(),
-          onError: (error) => showAlert('There was a problem saving your place:', error.message),
-        }
-      );
+      const payload = createPlacePayload(formData, imagePath, existingPlace);
+
+      const mutationFn = isEditing ? updatePlace : insertPlace;
+
+      const mutationOptions = {
+        onSettled: () => setIsSaving(false),
+        onSuccess: () => navigation.goBack(),
+        onError: (error: Error) =>
+          showAlert('There was a problem saving your place:', error.message),
+      };
+
+      mutationFn(payload, mutationOptions);
     } catch (error) {
       const { message } = error as Error;
-      showAlert('There was a problem saving your place:', message);
       setIsSaving(false);
+      showAlert('There was a problem saving your place:', message);
     }
-  }, [formData, insertPlace, navigation]);
+  }, [formData, insertPlace, navigation, existingPlace]);
 
   const showAlert = (message: string, error: string) => {
     Alert.alert('Error', `${message} ${error}`);
@@ -91,9 +105,11 @@ export default function AddPlace() {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      title: isEditing ? 'Update A Place' : 'Add A Place',
       headerRight: ({ tintColor }: NativeStackHeaderRightProps) => {
         return (
-          isValid && (
+          isValid &&
+          hasEdits && (
             <Pressable onPress={onSubmit} disabled={isSaving}>
               <Text style={{ color: tintColor, fontSize: 18 }}>Save Place</Text>
             </Pressable>
@@ -101,7 +117,19 @@ export default function AddPlace() {
         );
       },
     });
-  }, [isValid]);
+  }, [isValid, isEditing, onSubmit, navigation, isSaving]);
+
+  useEffect(() => {
+    if (isEditing && existingPlace) {
+      const { title, address, image, longitude, latitude } = existingPlace;
+      setFormData({ title, address, imageUri: image!, longitude, latitude });
+      setOriginalData({ title, address, imageUri: image!, longitude, latitude });
+    }
+  }, [existingPlace, isEditing]);
+
+  if (isEditing && isLoadingPlace) {
+    return <Loading title="Loading Place..." />;
+  }
 
   return (
     <Container>
@@ -115,10 +143,10 @@ export default function AddPlace() {
             />
           </FormInputContainer>
           <FormInputContainer title="Image">
-            <ImagePicker onSelectImage={onSelectImage} />
+            <ImagePicker onSelectImage={onSelectImage} editPreviewImage={editImagePreview} />
           </FormInputContainer>
           <FormInputContainer title="Location">
-            <LocationPicker onSelectLocation={onSelectLocation} />
+            <LocationPicker onSelectLocation={onSelectLocation} editCoordinates={editCoordinates} />
           </FormInputContainer>
         </View>
       </ScrollView>
