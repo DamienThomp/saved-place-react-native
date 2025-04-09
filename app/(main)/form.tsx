@@ -41,6 +41,7 @@ export default function PlaceFormScreen() {
 
   const navigation = useNavigation();
   const theme = useTheme();
+
   const { mutate: insertPlace } = useInsertPlace();
   const { mutate: updatePlace } = useUpdatePlace();
 
