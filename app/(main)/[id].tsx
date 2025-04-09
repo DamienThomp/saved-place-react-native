@@ -75,7 +75,7 @@ export default function PlaceDetails() {
                 />
               )}
             </View>
-            <RemoteImage style={styles.image} path={place?.image} height={250} />
+            <RemoteImage style={styles.image} path={place?.image} height={250} contentFit="cover" />
           </View>
         </Animated.View>
       </View>
@@ -126,7 +126,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   image: {
-    resizeMode: 'cover',
     width: '100%',
     height: 250,
   },

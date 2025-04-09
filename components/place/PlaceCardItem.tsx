@@ -1,5 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { Alert, Pressable, StyleSheet, Text } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
@@ -16,7 +16,7 @@ type PlaceCardItemProps = {
 };
 
 const PlaceCardItem = memo(({ place, edit, onSelect, onDelete }: PlaceCardItemProps) => {
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     Alert.alert('Delete', 'Are you sure you want to delete this Place?', [
       { text: 'Cancel', style: 'cancel' },
       {
@@ -26,14 +26,12 @@ const PlaceCardItem = memo(({ place, edit, onSelect, onDelete }: PlaceCardItemPr
         },
       },
     ]);
-  };
+  }, [onDelete, place.id]);
+
+  const handlePress = useCallback(() => onSelect(place.id), [onSelect, place.id]);
 
   return (
-    <Pressable
-      style={styles.cardContainer}
-      onPress={() => {
-        onSelect(place.id);
-      }}>
+    <Pressable style={styles.cardContainer} onPress={handlePress}>
       <RemoteImage style={styles.image} path={place.image} />
       <LinearGradient
         colors={['transparent', 'rgba(37, 37, 37, 0.6)']}
@@ -78,7 +76,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   image: {
-    resizeMode: 'cover',
     aspectRatio: 1 / 1,
   },
   editContainer: {
