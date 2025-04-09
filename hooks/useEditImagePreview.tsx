@@ -1,15 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 
-export function useEditImagePreview(imageUri: string) {
-  const [editImagePreview, setEditImagePreview] = useState<string | undefined>();
-
-  useEffect(() => {
+export function useEditImagePreview(imageUri: string): string | undefined {
+  return useMemo(() => {
     if (imageUri.startsWith('file://')) {
-      setEditImagePreview(undefined);
-      return;
+      return undefined;
     }
-    setEditImagePreview(imageUri);
-  }, [imageUri]);
 
-  return editImagePreview;
+    return imageUri || undefined;
+  }, [imageUri]);
 }
