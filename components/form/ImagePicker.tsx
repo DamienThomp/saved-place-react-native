@@ -12,6 +12,7 @@ interface ImagePickerProps {
 
 const options: ImagePickerOptions = {
   mediaTypes: ['images'],
+  allowsEditing: true,
   aspect: [3, 2],
   quality: 0.9,
 };

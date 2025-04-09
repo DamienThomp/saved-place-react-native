@@ -1,6 +1,7 @@
+import { Image, ImageContentFit } from 'expo-image';
 import { ComponentProps } from 'react';
-import { Image, View } from 'react-native';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { View } from 'react-native';
+import Animated, { FadeOut } from 'react-native-reanimated';
 
 import ContentUnavailable from './ContentUnavailable';
 import Loading from './Loading';
@@ -10,7 +11,11 @@ import { useImage } from '~/api/places';
 type RemoteImageProps = {
   path?: string | null;
   aspectRatio?: number;
+  contentFit?: ImageContentFit;
 } & Omit<ComponentProps<typeof Image>, 'source'>;
+
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 export default function RemoteImage({ path, ...imageProps }: RemoteImageProps) {
   const { data: image, isLoading, error } = useImage(path);
@@ -46,5 +51,15 @@ export default function RemoteImage({ path, ...imageProps }: RemoteImageProps) {
     );
   }
 
-  return <Animated.Image source={{ uri: image }} {...imageProps} entering={FadeIn.duration(500)} />;
+  return (
+    <Image
+      source={{ uri: image }}
+      placeholder={{ blurhash }}
+      {...imageProps}
+      transition={500}
+      recyclingKey={path}
+      cachePolicy="memory-disk"
+      contentFit={imageProps.contentFit ?? 'cover'}
+    />
+  );
 }

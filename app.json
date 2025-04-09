@@ -15,6 +15,7 @@
         "@rnmapbox/maps",
         {
           "RNMapboxMapsDownloadToken": "sk..."
+
         }
       ],
       [
