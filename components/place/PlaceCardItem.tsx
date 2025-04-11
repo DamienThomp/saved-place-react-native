@@ -6,17 +6,18 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 import RemoteImage from '../common/RemoteImage';
 import IconButton from '../ui/IconButton';
 
+import useEditMoreStore from '~/stores/editModeStore';
 import { Place } from '~/types/types';
 
 type PlaceCardItemProps = {
   place: Place;
-  edit: boolean;
   onSelect: (id: number) => void;
   onDelete: (id: number) => void;
   onEdit: (id: number) => void;
 };
 
-const PlaceCardItem = memo(({ place, edit, onSelect, onDelete, onEdit }: PlaceCardItemProps) => {
+const PlaceCardItem = memo(({ place, onSelect, onDelete, onEdit }: PlaceCardItemProps) => {
+  const { isEditMode } = useEditMoreStore();
   const handleDelete = useCallback(() => {
     Alert.alert('Delete', 'Are you sure you want to delete this Place?', [
       { text: 'Cancel', style: 'cancel' },
@@ -39,7 +40,7 @@ const PlaceCardItem = memo(({ place, edit, onSelect, onDelete, onEdit }: PlaceCa
         colors={['transparent', 'rgba(37, 37, 37, 0.6)']}
         style={styles.titleBackground}
       />
-      {edit && (
+      {isEditMode && (
         <>
           <Animated.View style={[styles.editContainer, styles.deleteItem]} entering={FadeInDown}>
             <IconButton icon="trash-bin" color="white" size={28} onPress={handleDelete} />

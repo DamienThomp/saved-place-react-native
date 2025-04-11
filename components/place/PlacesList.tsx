@@ -13,10 +13,9 @@ import isEmpty from '~/utils/isEmpty';
 
 interface PlacesListProps {
   items: Place[] | null | undefined;
-  edit: boolean;
 }
 
-export default function PlacesList({ items, edit }: PlacesListProps) {
+export default function PlacesList({ items }: PlacesListProps) {
   const router = useRouter();
   const theme = useTheme();
 
@@ -67,7 +66,6 @@ export default function PlacesList({ items, edit }: PlacesListProps) {
         <PlaceCardItem
           place={item}
           onSelect={handleOnSelectPlace}
-          edit={edit}
           onDelete={handleOnDelete}
           onEdit={handleOnEdit}
         />
