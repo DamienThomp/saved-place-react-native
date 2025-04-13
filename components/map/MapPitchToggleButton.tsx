@@ -3,6 +3,7 @@ import { useTheme } from '@react-navigation/native';
 import IconButton from '../ui/IconButton';
 
 import { useIsPitchToggled, useMapActions } from '~/stores/mapControlsStore';
+import MapControlContainer from './MapControlContainer';
 
 export default function MapPitchToggleButton() {
   const isPitchToggled = useIsPitchToggled();
@@ -14,11 +15,13 @@ export default function MapPitchToggleButton() {
   };
 
   return (
-    <IconButton
-      icon={isPitchToggled ? 'layers-outline' : 'layers'}
-      color={theme.colors.primary}
-      size={36}
-      onPress={onTogglePitch}
-    />
+    <MapControlContainer>
+      <IconButton
+        icon={isPitchToggled ? 'layers-outline' : 'layers'}
+        color={theme.colors.card}
+        size={28}
+        onPress={onTogglePitch}
+      />
+    </MapControlContainer>
   );
 }

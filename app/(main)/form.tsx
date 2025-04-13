@@ -123,8 +123,13 @@ export default function PlaceFormScreen() {
   useEffect(() => {
     if (isEditing && existingPlace) {
       const { title, address, image, longitude, latitude } = existingPlace;
-      setFormData({ title, address, imageUri: image!, longitude, latitude });
-      setOriginalData({ title, address, imageUri: image!, longitude, latitude });
+
+      if (!image) return;
+
+      const data = { title, address, imageUri: image, longitude, latitude };
+
+      setFormData(data);
+      setOriginalData(data);
     }
   }, [existingPlace, isEditing]);
 

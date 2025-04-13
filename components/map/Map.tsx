@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     justifyContent: 'center',
     alignItems: 'flex-end',
+    gap: 4,
     padding: 8,
     top: 0,
   },
