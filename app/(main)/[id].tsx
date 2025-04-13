@@ -30,6 +30,8 @@ export default function PlaceDetails() {
     }
   };
 
+  const handleBackButton = () => router.back();
+
   useEffect(() => {
     setDirections?.(null);
     return () => {
@@ -52,9 +54,9 @@ export default function PlaceDetails() {
         <View style={[styles.backButton, { top: insets.top, left: insets.left }]}>
           <IconButton
             icon="chevron-back-circle-sharp"
-            size={34}
-            color={theme.colors.primary}
-            onPress={() => router.back()}
+            size={36}
+            color={theme.colors.text}
+            onPress={handleBackButton}
           />
         </View>
         <Animated.View style={[styles.overlay]} entering={FadeInDown.duration(500).delay(250)}>

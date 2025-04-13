@@ -4,6 +4,7 @@ import IconButton from '../ui/IconButton';
 
 import useUserLocation from '~/hooks/useUserLocation';
 import { useMapActions } from '~/stores/mapControlsStore';
+import MapControlContainer from './MapControlContainer';
 
 export default function MapUserLocationButton() {
   const { setMapCenter } = useMapActions();
@@ -16,12 +17,13 @@ export default function MapUserLocationButton() {
     }
   };
   return (
-    <IconButton
-      icon="navigate-circle-sharp"
-      color={theme.colors.primary}
-      size={36}
-      onPress={onToggleToUserLocation}
-      style={{ paddingTop: 4 }}
-    />
+    <MapControlContainer>
+      <IconButton
+        icon="navigate-circle-sharp"
+        color={theme.colors.card}
+        size={28}
+        onPress={onToggleToUserLocation}
+      />
+    </MapControlContainer>
   );
 }
