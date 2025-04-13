@@ -1,9 +1,9 @@
 import { useTheme } from '@react-navigation/native';
 
+import MapControlContainer from './MapControlContainer';
 import IconButton from '../ui/IconButton';
 
 import { useIsPitchToggled, useMapActions } from '~/stores/mapControlsStore';
-import MapControlContainer from './MapControlContainer';
 
 export default function MapPitchToggleButton() {
   const isPitchToggled = useIsPitchToggled();

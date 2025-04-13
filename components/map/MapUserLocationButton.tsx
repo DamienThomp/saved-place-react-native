@@ -1,10 +1,10 @@
 import { useTheme } from '@react-navigation/native';
 
+import MapControlContainer from './MapControlContainer';
 import IconButton from '../ui/IconButton';
 
 import useUserLocation from '~/hooks/useUserLocation';
 import { useMapActions } from '~/stores/mapControlsStore';
-import MapControlContainer from './MapControlContainer';
 
 export default function MapUserLocationButton() {
   const { setMapCenter } = useMapActions();
