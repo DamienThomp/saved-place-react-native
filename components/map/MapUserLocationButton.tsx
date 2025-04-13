@@ -1,5 +1,3 @@
-import { useTheme } from '@react-navigation/native';
-
 import MapControlContainer from './MapControlContainer';
 import IconButton from '../ui/IconButton';
 
@@ -9,7 +7,6 @@ import { useMapActions } from '~/stores/mapControlsStore';
 export default function MapUserLocationButton() {
   const { setMapCenter } = useMapActions();
   const userLocation = useUserLocation();
-  const theme = useTheme();
 
   const onToggleToUserLocation = () => {
     if (userLocation) {
@@ -20,7 +17,7 @@ export default function MapUserLocationButton() {
     <MapControlContainer>
       <IconButton
         icon="navigate-circle-sharp"
-        color={theme.colors.card}
+        color="white"
         size={28}
         onPress={onToggleToUserLocation}
       />
