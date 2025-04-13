@@ -55,7 +55,7 @@ export default function PlaceDetails() {
           <IconButton
             icon="chevron-back-circle-sharp"
             size={36}
-            color={theme.colors.text}
+            color="rgba(36, 36, 36, 0.8)"
             onPress={handleBackButton}
           />
         </View>
