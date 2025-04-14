@@ -22,6 +22,7 @@ export default function MainLayout() {
             options={{
               title: 'All Places',
               headerLargeTitle: true,
+              headerTitleAlign: 'center',
               headerBlurEffect: 'regular',
               headerStyle: { backgroundColor: 'transparent' },
               headerRight: ({ tintColor }) => (

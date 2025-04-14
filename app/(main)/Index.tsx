@@ -1,3 +1,4 @@
+import { useTheme } from '@react-navigation/native';
 import { NativeStackHeaderRightProps } from '@react-navigation/native-stack';
 import { useNavigation } from 'expo-router';
 import { useLayoutEffect, useState } from 'react';
@@ -16,6 +17,7 @@ export default function MainView() {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const navigation = useNavigation();
+  const theme = useTheme();
 
   const { isEditMode, setEditMode } = useEditModeStore();
   const { filteredList, isLoading, error } = useFilteredPlaces(searchQuery);
@@ -56,6 +58,9 @@ export default function MainView() {
         placeholder: 'Search',
         inputType: 'text',
         hideWhenScrolling: false,
+        headerIconColor: theme.colors.text,
+        hintTextColor: theme.colors.border,
+        textColor: theme.colors.text,
         onSearchButtonPress: onSearch,
         onCancelButtonPress: onCancelSearch,
         onChangeText: onTextChanged,

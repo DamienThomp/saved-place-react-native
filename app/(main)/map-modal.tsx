@@ -58,6 +58,7 @@ export default function MapModal() {
         options={{
           title: 'Select a Location',
           presentation: 'modal',
+          headerTitleAlign: 'center',
           headerRight: () => (
             <IconButton
               icon="checkmark-circle-outline"
@@ -77,6 +78,10 @@ export default function MapModal() {
           headerSearchBarOptions: {
             placeholder: 'Search for a Place',
             inputType: 'text',
+            hideWhenScrolling: false,
+            headerIconColor: theme.colors.text,
+            hintTextColor: theme.colors.border,
+            textColor: theme.colors.text,
             onSearchButtonPress: (event) => {
               setSearchQuery?.(event.nativeEvent.text);
             },
