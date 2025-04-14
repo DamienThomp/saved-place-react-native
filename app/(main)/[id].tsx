@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -19,7 +18,6 @@ export default function PlaceDetails() {
   const { setDirections } = useDirections();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const theme = useTheme();
   const { setMapCenter } = useMapActions();
 
   const { data: place, isLoading, error } = useLocationDetails();

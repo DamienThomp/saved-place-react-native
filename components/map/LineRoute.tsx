@@ -18,8 +18,6 @@ export default function LineRoute({ coordinates }: LineRouteProps) {
       }}>
       <LineLayer
         id="lineLayer"
-        belowLayerID="puck"
-        slot="top"
         style={{
           lineColor: '#FF69B4',
           lineCap: 'round',

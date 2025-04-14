@@ -26,7 +26,7 @@ export default function MainView() {
 
   const toggleEdit = () => setEditMode(!isEditMode);
 
-  const onTextChanged = (event: TextChaTextInputEventngeEvent) => {
+  const onTextChanged = (event: TextInputEvent) => {
     const text = event.nativeEvent.text;
     if (text.length < 1) {
       setSearchQuery('');
@@ -39,7 +39,7 @@ export default function MainView() {
     navigation.setOptions({
       headerLeft: ({ tintColor }: NativeStackHeaderRightProps) => {
         return isEditMode ? (
-          <Pressable onPress={toggleEdit}>
+          <Pressable onPress={toggleEdit} style={{ paddingRight: 16 }}>
             <Text style={{ color: tintColor, fontSize: 18 }}>Done</Text>
           </Pressable>
         ) : (
