@@ -1,6 +1,7 @@
 import Mapbox, { Camera, LocationPuck, MapView, MarkerView, StyleURL } from '@rnmapbox/maps';
 import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import AnnotationContent from './AnnotationContent';
 import LineRoute from './LineRoute';
@@ -48,6 +49,7 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
   const { directionCoordinates } = useDirections();
   const { setMapCenter, toggleMapPitch, resetAll } = useMapActions();
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
+  const insets = useSafeAreaInsets();
 
   const onMapSelection = (feature: GeoJSON.Feature) => {
     if (readOnly) return;
@@ -94,44 +96,48 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
   }, []);
 
   return (
-    <MapView
-      style={styles.map}
-      styleURL={StyleURL.Street}
-      scaleBarEnabled={false}
-      onCameraChanged={onCameraChange}
-      onPress={onMapSelection}>
-      <Camera
-        centerCoordinate={mapCenter}
-        animationDuration={DEFAULTS.animationDuration}
-        defaultSettings={{
-          zoomLevel: DEFAULTS.zoomLevel,
-          pitch: 0,
-          animationDuration: 0,
-        }}
-        pitch={mapPitch}
-      />
+    <View style={{ flex: 1 }}>
+      <MapView
+        style={styles.map}
+        styleURL={StyleURL.Street}
+        scaleBarEnabled={false}
+        onCameraChanged={onCameraChange}
+        onPress={onMapSelection}>
+        <Camera
+          centerCoordinate={mapCenter}
+          animationDuration={DEFAULTS.animationDuration}
+          defaultSettings={{
+            zoomLevel: DEFAULTS.zoomLevel,
+            pitch: 0,
+            animationDuration: 0,
+          }}
+          pitch={mapPitch}
+        />
 
-      {selectedPoint && (
-        <MarkerView coordinate={selectedPoint.coordinate} anchor={{ x: 0.5, y: 1 }}>
-          <AnnotationContent />
-        </MarkerView>
-      )}
+        {selectedPoint && (
+          <MarkerView coordinate={selectedPoint.coordinate} anchor={{ x: 0.5, y: 1 }}>
+            <AnnotationContent />
+          </MarkerView>
+        )}
 
-      <LocationPuck pulsing={{ isEnabled: true }} puckBearing="course" puckBearingEnabled />
+        <LocationPuck pulsing={{ isEnabled: true }} puckBearing="course" puckBearingEnabled />
 
-      {directionCoordinates && <LineRoute coordinates={directionCoordinates} />}
-
+        {directionCoordinates && <LineRoute coordinates={directionCoordinates} />}
+      </MapView>
       {showControls && (
-        <View style={styles.controlsContainer}>
+        <View style={[styles.controlsContainer, { top: insets.top }]}>
           <MapUserLocationButton />
           <MapPitchToggleButton />
         </View>
       )}
-    </MapView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  mapContainer: {
+    flex: 1,
+  },
   map: {
     flex: 1,
   },
@@ -140,11 +146,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   controlsContainer: {
+    position: 'absolute',
     alignSelf: 'flex-end',
     justifyContent: 'center',
     alignItems: 'flex-end',
     gap: 4,
     padding: 8,
-    top: 0,
+    right: 0,
   },
 });
