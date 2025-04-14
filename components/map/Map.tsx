@@ -96,7 +96,7 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.mapContainer}>
       <MapView
         style={styles.map}
         styleURL={StyleURL.Street}
