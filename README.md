@@ -33,6 +33,7 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 - [ ] add map controls to details screen (change theme, ~~pitch~~, ~~toggle to user location~~)
 - [ ] add pagination for list view
 - [ ] hide directions button if location is out of range
+- [ ] add camera support for image picker
 
 ## Screen Shots
 
