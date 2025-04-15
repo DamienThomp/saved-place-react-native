@@ -1,7 +1,7 @@
 import { useTheme } from '@react-navigation/native';
 import { Stack, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { Alert, FlatList, StyleSheet } from 'react-native';
 import Animated, { SlideInUp } from 'react-native-reanimated';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SearchBarCommands } from 'react-native-screens';
@@ -29,10 +29,16 @@ export default function MapModal() {
   };
 
   const onSubmit = () => {
+    if (!selectedPlace) {
+      showAlert('Error', 'You need to select a place.');
+      return;
+    }
     router.back();
     router.setParams({ coordinate: JSON.stringify(selectedPlace) });
     setShowSearchResults(false);
   };
+
+  const showAlert = (title: string, message: string) => Alert.alert(title, message);
 
   useEffect(() => {
     resetAll?.();
@@ -92,7 +98,7 @@ export default function MapModal() {
           },
         }}
       />
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={styles.container}>
         <Map onPress={onMapSelection} coordinates={coordinates} />
         {showSearchResults && (
           <Animated.View
@@ -103,7 +109,6 @@ export default function MapModal() {
                 top: insets.top,
                 backgroundColor: theme.colors.card,
                 borderColor: theme.colors.border,
-                marginTop: 8,
               },
             ]}>
             <FlatList
@@ -126,6 +131,9 @@ export default function MapModal() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   listContainer: {
     position: 'absolute',
     maxHeight: '30%',
@@ -134,6 +142,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 8,
     marginRight: 8,
+    marginTop: 8,
     borderRadius: 12,
     borderWidth: 1,
   },

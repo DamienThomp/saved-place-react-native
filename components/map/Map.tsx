@@ -1,4 +1,4 @@
-import Mapbox, { Camera, LocationPuck, MapView, MarkerView, StyleURL } from '@rnmapbox/maps';
+import Mapbox, { Camera, LocationPuck, MapView, MarkerView } from '@rnmapbox/maps';
 import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -6,11 +6,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AnnotationContent from './AnnotationContent';
 import LineRoute from './LineRoute';
 import MapPitchToggleButton from './MapPitchToggleButton';
+import MapThemeToggleButton from './MapThemeToggleButton';
 import MapUserLocationButton from './MapUserLocationButton';
 
 import useUserLocation from '~/hooks/useUserLocation';
 import { useDirections } from '~/providers/DirectionsProvider';
-import { useMapActions, useMapCenter, useMapPitch } from '~/stores/mapControlsStore';
+import { useMapActions, useMapCenter, useMapPitch, useMapTheme } from '~/stores/mapControlsStore';
 import debounce from '~/utils/debounce';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
@@ -43,13 +44,14 @@ type MapProps = {
 };
 
 export default function Map({ coordinates, readOnly, showControls, onPress }: MapProps) {
+  const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
   const mapCenter = useMapCenter();
   const mapPitch = useMapPitch();
+  const mapTheme = useMapTheme();
+  const insets = useSafeAreaInsets();
   const userLocation = useUserLocation();
   const { directionCoordinates } = useDirections();
   const { setMapCenter, toggleMapPitch, resetAll } = useMapActions();
-  const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
-  const insets = useSafeAreaInsets();
 
   const onMapSelection = (feature: GeoJSON.Feature) => {
     if (readOnly) return;
@@ -99,7 +101,7 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
     <View style={styles.mapContainer}>
       <MapView
         style={styles.map}
-        styleURL={StyleURL.Street}
+        styleURL={mapTheme}
         scaleBarEnabled={false}
         onCameraChanged={onCameraChange}
         onPress={onMapSelection}>
@@ -128,6 +130,7 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
         <View style={[styles.controlsContainer, { top: insets.top }]}>
           <MapUserLocationButton />
           <MapPitchToggleButton />
+          <MapThemeToggleButton />
         </View>
       )}
     </View>

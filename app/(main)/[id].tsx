@@ -49,20 +49,15 @@ export default function PlaceDetails() {
             />
           </Animated.View>
         )}
-        <View style={[styles.backButton, { top: insets.top, left: insets.left }]}>
-          <IconButton
-            icon="chevron-back-circle-sharp"
-            size={36}
-            color="rgba(36, 36, 36, 0.8)"
-            onPress={handleBackButton}
-          />
+        <View style={[styles.backButton, { top: insets.top }]}>
+          <IconButton icon="chevron-back" size={24} color="white" onPress={handleBackButton} />
         </View>
         <Animated.View style={[styles.overlay]} entering={FadeInDown.duration(500).delay(250)}>
           <View style={styles.overlayContent}>
             <View style={styles.info}>
               <Pressable style={styles.titeContainer} onPress={toggleToPlace}>
                 <Text style={[styles.title]}>{place?.title}</Text>
-                <Ionicons name="location-sharp" color="red" size={22} />
+                <Ionicons name="location-sharp" color="red" size={18} />
               </Pressable>
               <Text style={[styles.address]}>{place?.address}</Text>
               {place && (
@@ -87,8 +82,10 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    height: 50,
-    width: 50,
+    left: 8,
+    backgroundColor: 'rgba(36, 36, 36, 0.8)',
+    borderRadius: 22,
+    marginTop: 4,
   },
   overlay: {
     position: 'absolute',
