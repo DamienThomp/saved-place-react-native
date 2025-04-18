@@ -37,8 +37,8 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 ## Screen Shots
 
 ### Place List
-<img width="180" src="https://github.com/user-attachments/assets/b844d45f-ad07-41e1-b4b6-0728db2458c0">
-<img width="180" src="https://github.com/user-attachments/assets/685f9eae-3525-4958-8ead-f56a9fb9785e">
+<img width="180" src="https://github.com/user-attachments/assets/6939b2c4-e9f8-4f6a-ba77-9df841625c23">
+<img width="180" src="https://github.com/user-attachments/assets/3f6f9266-ec5e-48ba-a38b-7c892b571827">
 
 ### Place Form
 <img width="200" src="https://github.com/user-attachments/assets/1c671c23-872d-41ff-990f-c290dda93aa9">
@@ -46,6 +46,7 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 <img width="200" src="https://github.com/user-attachments/assets/c2b513dd-b912-41c0-9f5a-16acbb3a9064">
 
 ### Details
-<img width="200" src="https://github.com/user-attachments/assets/158edd6b-debf-40a6-9fa4-be005e265b60">
-<img width="200" src="https://github.com/user-attachments/assets/3f8e4e92-4eed-4e2f-8c25-66b6214eec5a">
+<img width="200" src="https://github.com/user-attachments/assets/f7b15d93-dd4b-4798-8852-095074f94a26">
+<img width="200" src="https://github.com/user-attachments/assets/64477499-282c-4871-aaad-2a9ac54da6e5">
+<img width="200" src="https://github.com/user-attachments/assets/88122658-9aa3-48d3-a02c-009a2e013e01">
 
