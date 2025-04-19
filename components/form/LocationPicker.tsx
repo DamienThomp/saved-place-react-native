@@ -6,7 +6,7 @@ import { ActionSheetIOS, Alert, Image, Platform, Pressable, StyleSheet } from 'r
 import ContentUnavailable from '../common/ContentUnavailable';
 import Loading from '../common/Loading';
 
-import useUserLocation from '~/hooks/useUserLocation';
+import { useLocation } from '~/providers/LocationProvider';
 import { getAddress, takeSnapshot } from '~/utils/mapBoxUtils';
 
 enum LocationOptions {
@@ -27,14 +27,14 @@ const LocationPicker = memo(function LocationPicker({
   const [isLoading, setIsloading] = useState(false);
   const router = useRouter();
   const theme = useTheme();
-  const location = useUserLocation();
+  const { userLocation } = useLocation();
 
   const params = useLocalSearchParams<{ coordinate: string }>();
 
   const handleLocateUser = async () => {
-    if (!location) return;
+    if (!userLocation) return;
     setIsloading(true);
-    const centerCoordinate = [location.longitude, location.latitude];
+    const centerCoordinate = [userLocation.longitude, userLocation.latitude];
     const uri = await takeSnapshot({ centerCoordinate });
     const address = await getAddress({ centerCoordinate });
 

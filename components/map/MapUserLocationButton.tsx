@@ -1,14 +1,15 @@
 import MapControlContainer from './MapControlContainer';
 import IconButton from '../ui/IconButton';
 
-import useUserLocation from '~/hooks/useUserLocation';
+import { useLocation } from '~/providers/LocationProvider';
 import { useMapActions } from '~/stores/mapControlsStore';
 
 export default function MapUserLocationButton() {
   const { setMapCenter } = useMapActions();
-  const userLocation = useUserLocation();
+  const { userLocation } = useLocation();
 
   const onToggleToUserLocation = () => {
+    console.log(userLocation);
     if (userLocation) {
       setMapCenter([userLocation.longitude, userLocation.latitude]);
     }

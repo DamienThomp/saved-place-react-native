@@ -1,25 +1,15 @@
-import {
-  getCurrentPositionAsync,
-  LocationObjectCoords,
-  useForegroundPermissions,
-} from 'expo-location';
+import { getCurrentPositionAsync, LocationObjectCoords } from 'expo-location';
 import { useEffect, useState } from 'react';
 
-import verifyPermission from '~/utils/verifyPermission';
+import useLocationPermissions from './useLocationPermissions';
 
 export default function useUserLocation() {
-  const [location, setLocation] = useState<LocationObjectCoords | null>(null);
-  const [locationPermission, requestPermission] = useForegroundPermissions();
+  const [userLocation, setLocation] = useState<LocationObjectCoords | null>(null);
+  const locationPermission = useLocationPermissions();
 
   useEffect(() => {
     const getLocation = async () => {
-      const hasPermission = await verifyPermission(
-        locationPermission,
-        'This app needs permission to find your location.',
-        requestPermission
-      );
-
-      if (!hasPermission) return;
+      if (!locationPermission?.granted) return;
 
       const result = await getCurrentPositionAsync();
       setLocation(result.coords);
@@ -28,5 +18,5 @@ export default function useUserLocation() {
     getLocation();
   }, []);
 
-  return location;
+  return { userLocation, setLocation };
 }
