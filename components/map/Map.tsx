@@ -9,8 +9,8 @@ import MapPitchToggleButton from './MapPitchToggleButton';
 import MapThemeToggleButton from './MapThemeToggleButton';
 import MapUserLocationButton from './MapUserLocationButton';
 
-import useUserLocation from '~/hooks/useUserLocation';
 import { useDirections } from '~/providers/DirectionsProvider';
+import { useLocation } from '~/providers/LocationProvider';
 import { useMapActions, useMapCenter, useMapPitch, useMapTheme } from '~/stores/mapControlsStore';
 import debounce from '~/utils/debounce';
 
@@ -49,7 +49,7 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
   const mapPitch = useMapPitch();
   const mapTheme = useMapTheme();
   const insets = useSafeAreaInsets();
-  const userLocation = useUserLocation();
+  const { userLocation } = useLocation();
   const { directionCoordinates } = useDirections();
   const { setMapCenter, toggleMapPitch, resetAll } = useMapActions();
 
