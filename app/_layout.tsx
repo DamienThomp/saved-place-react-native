@@ -17,10 +17,10 @@ export default function Layout() {
         <AuthProvider>
           <QueryProvider>
             <GestureHandlerRootView>
-              <Stack>
-                <Stack.Screen name="index" options={{ headerShown: false, animation: 'fade' }} />
-                <Stack.Screen name="(auth)" options={{ headerShown: false, animation: 'fade' }} />
-                <Stack.Screen name="(main)" options={{ headerShown: false, animation: 'fade' }} />
+              <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
+                <Stack.Screen name="index" />
+                <Stack.Screen name="(auth)" />
+                <Stack.Screen name="(main)" />
               </Stack>
             </GestureHandlerRootView>
           </QueryProvider>
