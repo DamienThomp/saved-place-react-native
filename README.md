@@ -30,6 +30,7 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 - [x] ~~add profile screen with user info and sign out button~~
 - [x] ~~add update action to places list for editing a place~~
 - [x] ~~add map controls to details screen (change theme, ~~pitch~~, ~~toggle to user location~~)~~
+- [ ] Fix session refresh on Android
 - [ ] improve search, refactor provider and map components
 - [ ] add pagination for list view
 - [ ] add camera support for image picker
@@ -39,6 +40,8 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 ### Place List
 <img width="180" src="https://github.com/user-attachments/assets/6939b2c4-e9f8-4f6a-ba77-9df841625c23">
 <img width="180" src="https://github.com/user-attachments/assets/3f6f9266-ec5e-48ba-a38b-7c892b571827">
+<img width="180" src="https://github.com/user-attachments/assets/e965c27a-d8be-45d2-a0db-effb8c16285d">
+<img width="180" src="https://github.com/user-attachments/assets/e485d4f9-b684-4186-9610-f3a0fa7d8386">
 
 ### Place Form
 <img width="200" src="https://github.com/user-attachments/assets/1c671c23-872d-41ff-990f-c290dda93aa9">
