@@ -30,10 +30,11 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 - [x] ~~add profile screen with user info and sign out button~~
 - [x] ~~add update action to places list for editing a place~~
 - [x] ~~add map controls to details screen (change theme, ~~pitch~~, ~~toggle to user location~~)~~
+- [x] ~~add camera support for image picker~~
 - [ ] Fix session refresh on Android
 - [ ] improve search, refactor provider and map components
 - [ ] add pagination for list view
-- [ ] add camera support for image picker
+
 
 ## Screen Shots
 
