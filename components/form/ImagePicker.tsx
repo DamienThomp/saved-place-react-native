@@ -1,8 +1,15 @@
 import { useTheme } from '@react-navigation/native';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
-import { ImagePickerOptions, launchImageLibraryAsync } from 'expo-image-picker';
+import {
+  ImagePickerOptions,
+  ImagePickerResult,
+  launchCameraAsync,
+  launchImageLibraryAsync,
+  requestCameraPermissionsAsync,
+  requestMediaLibraryPermissionsAsync,
+} from 'expo-image-picker';
 import { memo, useEffect, useState } from 'react';
-import { Alert, Image, Pressable, StyleSheet } from 'react-native';
+import { ActionSheetIOS, Alert, Image, Platform, Pressable, StyleSheet } from 'react-native';
 
 import RemoteImage from '../common/RemoteImage';
 
@@ -12,8 +19,19 @@ interface ImagePickerProps {
   editPreviewImage?: string;
 }
 
+enum PickerType {
+  CAMERA = 'camera',
+  LIBRARY = 'library',
+}
+
+enum PickerOptions {
+  CANCEL = 'Cancel',
+  CAMERA = 'Use Camera',
+  LIBRARY = 'Use Library',
+}
+
 const options: ImagePickerOptions = {
-  mediaTypes: ['images'],
+  mediaTypes: ['images', 'livePhotos'],
   allowsEditing: true,
   aspect: [3, 2],
   quality: 0.9,
@@ -26,9 +44,50 @@ const ImagePicker = memo(function ImagePicker({
   const [image, setImage] = useState<string | null>(null);
   const theme = useTheme();
 
-  const onImageUpdate = async () => {
+  const selectType = async () => {
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: [PickerOptions.CAMERA, PickerOptions.LIBRARY, PickerOptions.CANCEL],
+          destructiveButtonIndex: 2,
+          cancelButtonIndex: 2,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 0) {
+            onImageUpdate(PickerType.CAMERA);
+          }
+          if (buttonIndex === 1) {
+            onImageUpdate(PickerType.LIBRARY);
+          }
+        }
+      );
+    }
+
+    if (Platform.OS === 'android') {
+      Alert.alert('Pick a Place', '', [
+        {
+          text: PickerOptions.CANCEL,
+          style: 'cancel',
+        },
+        {
+          text: PickerOptions.LIBRARY,
+          onPress: () => {
+            onImageUpdate(PickerType.CAMERA);
+          },
+        },
+        {
+          text: PickerOptions.CAMERA,
+          onPress: () => {
+            onImageUpdate(PickerType.CAMERA);
+          },
+        },
+      ]);
+    }
+  };
+
+  const onImageUpdate = async (pickerType: PickerType) => {
     try {
-      const imageResult = await launchImageLibraryAsync(options);
+      const imageResult = await getImage(pickerType, options);
 
       if (!imageResult.canceled) {
         const context = ImageManipulator.manipulate(imageResult.assets[0].uri);
@@ -45,6 +104,29 @@ const ImagePicker = memo(function ImagePicker({
     }
   };
 
+  const getImage = async (
+    type: PickerType,
+    options: ImagePickerOptions
+  ): Promise<ImagePickerResult> => {
+    switch (type) {
+      case 'camera': {
+        const cameraPermission = await requestCameraPermissionsAsync();
+        if (cameraPermission.granted === false) {
+          throw new Error('You need to give this app permission to use your camera');
+        }
+        return await launchCameraAsync(options);
+      }
+      case 'library':
+      default: {
+        const libraryPermission = await requestMediaLibraryPermissionsAsync();
+        if (libraryPermission.granted === false) {
+          throw new Error('You need to give this app permission to use your library');
+        }
+        return await launchImageLibraryAsync(options);
+      }
+    }
+  };
+
   useEffect(() => {
     if (image) {
       onSelectImage(image);
@@ -58,12 +140,10 @@ const ImagePicker = memo(function ImagePicker({
   );
 
   if (image) {
-    console.log('imagePreview: ', image);
     imagePreview = <Image source={{ uri: image }} style={styles.image} />;
   }
 
   if (editPreviewImage) {
-    console.log('editImagePreview', editPreviewImage);
     imagePreview = (
       <RemoteImage path={editPreviewImage} style={styles.editImage} contentFit="cover" />
     );
@@ -71,7 +151,7 @@ const ImagePicker = memo(function ImagePicker({
 
   return (
     <Pressable
-      onPress={onImageUpdate}
+      onPress={selectType}
       style={({ pressed }) => [
         styles.preview,
         {
