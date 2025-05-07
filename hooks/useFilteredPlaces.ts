@@ -8,7 +8,7 @@ import { Place } from '~/types/types';
 export default function useFilteredPlaces(query: string) {
   const [filteredList, setFilteredList] = useState<Place[] | null>(null);
 
-  const { data, error, isLoading } = usePlacesList();
+  const { data, error, isLoading, refetch } = usePlacesList();
   const { data: searchResults, error: searchError } = useSearchPlace(query);
 
   useEffect(() => {
@@ -28,5 +28,5 @@ export default function useFilteredPlaces(query: string) {
     }
   }, [searchError]);
 
-  return { filteredList, error, isLoading };
+  return { filteredList, error, isLoading, refetch };
 }

@@ -13,9 +13,11 @@ import isEmpty from '~/utils/isEmpty';
 
 interface PlacesListProps {
   items: Place[] | null | undefined;
+  isLoading: boolean;
+  onRefresh: () => void;
 }
 
-export default function PlacesList({ items }: PlacesListProps) {
+export default function PlacesList({ items, isLoading, onRefresh }: PlacesListProps) {
   const router = useRouter();
   const theme = useTheme();
 
@@ -62,6 +64,8 @@ export default function PlacesList({ items }: PlacesListProps) {
       contentInsetAdjustmentBehavior="automatic"
       keyExtractor={(item) => item.id.toString()}
       keyboardDismissMode="on-drag"
+      onRefresh={onRefresh}
+      refreshing={isLoading}
       renderItem={({ item }) => (
         <PlaceCardItem
           place={item}
