@@ -1,5 +1,6 @@
 import { useTheme } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
+import { useCallback } from 'react';
 import { Alert, StyleSheet } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 
@@ -24,6 +25,34 @@ export default function PlacesList({ items, isLoading, onRefresh }: PlacesListPr
   const { mutate: deleteItem } = useDeletePlace();
   const { mutate: deleteImage } = useDeletImage();
 
+  const handleOnSelectPlace = useCallback((id: number) => {
+    router.push(`/(main)/${id}`);
+  }, []);
+
+  const handleOnEdit = useCallback((id: number) => {
+    router.push(`/(main)/form?id=${id}`);
+  }, []);
+
+  const handleOnDelete = useCallback(
+    (id: number) => {
+      const item = items?.filter((item) => item.id === id)[0];
+
+      if (!item) return;
+
+      deleteItem(id, {
+        onError: () => {
+          Alert.alert('Error', 'There was a problem deleting your place');
+        },
+        onSuccess: () => {
+          if (item?.image) {
+            deleteImage(item.image);
+          }
+        },
+      });
+    },
+    [items]
+  );
+
   if (!items || isEmpty(items)) {
     return (
       <Container>
@@ -33,28 +62,6 @@ export default function PlacesList({ items, isLoading, onRefresh }: PlacesListPr
       </Container>
     );
   }
-
-  const handleOnSelectPlace = (id: number) => {
-    router.push(`/(main)/${id}`);
-  };
-
-  const handleOnEdit = (id: number) => {
-    router.push(`/(main)/form?id=${id}`);
-  };
-
-  const handleOnDelete = (id: number) => {
-    const item = items.filter((item) => item.id === id)[0];
-    deleteItem(id, {
-      onError: () => {
-        Alert.alert('Error', 'There was a problem deleting your place');
-      },
-      onSuccess: () => {
-        if (item?.image) {
-          deleteImage(item.image);
-        }
-      },
-    });
-  };
 
   return (
     <Animated.FlatList
