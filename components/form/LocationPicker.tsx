@@ -32,18 +32,25 @@ const LocationPicker = memo(function LocationPicker({
   const params = useLocalSearchParams<{ coordinate: string }>();
 
   const handleLocateUser = async () => {
-    if (!userLocation) return;
-    setIsloading(true);
-    const centerCoordinate = [userLocation.longitude, userLocation.latitude];
-    const uri = await takeSnapshot({ centerCoordinate });
-    const address = await getAddress({ centerCoordinate });
+    try {
+      if (!userLocation) {
+        throw new Error("Can't get your current location.");
+      }
+      setIsloading(true);
+      const centerCoordinate = [userLocation.longitude, userLocation.latitude];
+      const uri = await takeSnapshot({ centerCoordinate });
+      const address = await getAddress({ centerCoordinate });
 
-    onSelectLocation(centerCoordinate, address);
+      onSelectLocation(centerCoordinate, address);
 
-    if (uri) {
-      setPickedLocation(uri);
+      if (uri) {
+        setPickedLocation(uri);
+      }
+    } catch (error) {
+      Alert.alert('Something went wrong!', `${error}`);
+    } finally {
+      setIsloading(false);
     }
-    setIsloading(false);
   };
 
   const handleLocateOnMap = () => {
