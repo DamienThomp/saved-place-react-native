@@ -12,9 +12,9 @@ export default function AnnotationContent({ title, onPressed }: AnnotationConten
     <View>
       <View style={styles.touchableContainer}>
         <IconButton
-          icon="pin"
-          size={36}
-          color="white"
+          icon="location-sharp"
+          size={40}
+          color="red"
           onPress={() => {
             onPressed?.();
           }}
@@ -27,7 +27,6 @@ export default function AnnotationContent({ title, onPressed }: AnnotationConten
 
 const styles = StyleSheet.create({
   touchableContainer: {
-    backgroundColor: 'red',
     borderRadius: 60,
     alignItems: 'center',
     justifyContent: 'center',
