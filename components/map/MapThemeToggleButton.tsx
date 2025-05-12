@@ -12,7 +12,7 @@ export default function MapThemeToggleButton() {
   return (
     <MapControlContainer>
       <IconButton
-        icon={isLightMode ? 'moon-sharp' : 'sunny-sharp'}
+        icon={isLightMode ? 'sunny-sharp' : 'moon-sharp'}
         color="white"
         size={28}
         onPress={onToggleLightMode}
