@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import AnnotationContent from './AnnotationContent';
 import LineRoute from './LineRoute';
+import MapMarkers from './MapMarker';
 import MapPitchToggleButton from './MapPitchToggleButton';
 import MapThemeToggleButton from './MapThemeToggleButton';
 import MapUserLocationButton from './MapUserLocationButton';
@@ -12,6 +13,7 @@ import MapUserLocationButton from './MapUserLocationButton';
 import { useDirections } from '~/providers/DirectionsProvider';
 import { useLocation } from '~/providers/LocationProvider';
 import { useMapActions, useMapCenter, useMapPitch, useMapTheme } from '~/stores/mapControlsStore';
+import { Place } from '~/types/types';
 import debounce from '~/utils/debounce';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
@@ -36,14 +38,24 @@ type Properties = {
   screenPointY: number;
 };
 
+// TODO: Convert to zustand store
 type MapProps = {
   coordinates?: Coordinates | null;
+  places?: Place[] | null;
   readOnly?: boolean;
   showControls?: boolean;
+  zoomLevel?: number | null;
   onPress?: (selected: SelectedPoint | null) => void;
 };
 
-export default function Map({ coordinates, readOnly, showControls, onPress }: MapProps) {
+export default function Map({
+  coordinates,
+  readOnly,
+  showControls,
+  zoomLevel,
+  places,
+  onPress,
+}: MapProps) {
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
   const mapCenter = useMapCenter();
   const mapPitch = useMapPitch();
@@ -109,7 +121,7 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
           centerCoordinate={mapCenter}
           animationDuration={DEFAULTS.animationDuration}
           defaultSettings={{
-            zoomLevel: DEFAULTS.zoomLevel,
+            zoomLevel: zoomLevel ?? DEFAULTS.zoomLevel,
             pitch: 0,
             animationDuration: 0,
           }}
@@ -121,6 +133,8 @@ export default function Map({ coordinates, readOnly, showControls, onPress }: Ma
             <AnnotationContent />
           </MarkerView>
         )}
+
+        {places && <MapMarkers data={places} />}
 
         <LocationPuck pulsing={{ isEnabled: true }} puckBearing="course" puckBearingEnabled />
 
