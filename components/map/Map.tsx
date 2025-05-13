@@ -12,14 +12,19 @@ import MapUserLocationButton from './MapUserLocationButton';
 
 import { useDirections } from '~/providers/DirectionsProvider';
 import { useLocation } from '~/providers/LocationProvider';
-import { useMapActions, useMapCenter, useMapPitch, useMapTheme } from '~/stores/mapControlsStore';
+import {
+  useMapActions,
+  useMapCenter,
+  useMapPitch,
+  useMapTheme,
+  useMapZoomLevel,
+} from '~/stores/mapControlsStore';
 import { Place } from '~/types/types';
 import debounce from '~/utils/debounce';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
 
 const DEFAULTS = {
-  zoomLevel: 14,
   animationDuration: 500,
 };
 
@@ -44,26 +49,19 @@ type MapProps = {
   places?: Place[] | null;
   readOnly?: boolean;
   showControls?: boolean;
-  zoomLevel?: number | null;
   onPress?: (selected: SelectedPoint | null) => void;
 };
 
-export default function Map({
-  coordinates,
-  readOnly,
-  showControls,
-  zoomLevel,
-  places,
-  onPress,
-}: MapProps) {
+export default function Map({ coordinates, readOnly, showControls, places, onPress }: MapProps) {
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
   const mapCenter = useMapCenter();
   const mapPitch = useMapPitch();
   const mapTheme = useMapTheme();
+  const zoomLevel = useMapZoomLevel();
   const insets = useSafeAreaInsets();
   const { userLocation } = useLocation();
   const { directionCoordinates } = useDirections();
-  const { setMapCenter, toggleMapPitch, resetAll } = useMapActions();
+  const { setMapZoomLevel, setMapCenter, toggleMapPitch, resetAll } = useMapActions();
 
   const onMapSelection = (feature: GeoJSON.Feature) => {
     if (readOnly) return;
@@ -79,7 +77,10 @@ export default function Map({
   };
 
   const onCameraChange = useCallback(
-    debounce((event: Mapbox.MapState) => setMapCenter(event.properties.center), 1000),
+    debounce((event: Mapbox.MapState) => {
+      setMapCenter(event.properties.center);
+      setMapZoomLevel(event.properties.zoom);
+    }, 1000),
     []
   );
 
@@ -120,12 +121,11 @@ export default function Map({
         <Camera
           centerCoordinate={mapCenter}
           animationDuration={DEFAULTS.animationDuration}
+          zoomLevel={zoomLevel}
+          pitch={mapPitch}
           defaultSettings={{
-            zoomLevel: zoomLevel ?? DEFAULTS.zoomLevel,
-            pitch: 0,
             animationDuration: 0,
           }}
-          pitch={mapPitch}
         />
 
         {selectedPoint && (
