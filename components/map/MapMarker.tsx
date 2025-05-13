@@ -4,6 +4,7 @@ import { featureCollection, point } from '@turf/helpers';
 import { useMemo } from 'react';
 
 import pin from '~/assets/map-pin.png';
+import { useIsLightMode } from '~/stores/mapControlsStore';
 import { Place } from '~/types/types';
 
 type MapMarkersProps = {
@@ -11,14 +12,15 @@ type MapMarkersProps = {
 };
 
 export default function MapMarkers({ data }: MapMarkersProps) {
+  const isLightMode = useIsLightMode();
   const points = useMemo(
-    () => data.map((place) => point([place.longitude, place.latitude], { place })),
+    () => data.map((place) => point([place.longitude, place.latitude], { title: place.title })),
     [data]
   );
 
   const onPress = async (event: OnPressEvent) => {
     //TODO: add point selection logic
-    console.log(event);
+    console.log(JSON.stringify(event.features, null, '\t'));
   };
 
   return (
@@ -29,7 +31,7 @@ export default function MapMarkers({ data }: MapMarkersProps) {
           textField: ['get', 'point_count'],
           textSize: 18,
           textColor: '#ffffff',
-          textPitchAlignment: 'map',
+          textPitchAlignment: 'viewport',
         }}
       />
 
@@ -38,7 +40,7 @@ export default function MapMarkers({ data }: MapMarkersProps) {
         belowLayerID="clusters-count"
         filter={['has', 'point_count']}
         style={{
-          circlePitchAlignment: 'map',
+          circlePitchAlignment: 'viewport',
           circleColor: 'red',
           circleRadius: 20,
           circleOpacity: 1,
@@ -56,6 +58,21 @@ export default function MapMarkers({ data }: MapMarkersProps) {
           iconAllowOverlap: true,
           iconAnchor: 'center',
           iconKeepUpright: true,
+        }}
+      />
+
+      <SymbolLayer
+        id="callout"
+        style={{
+          iconTextFit: 'both',
+          iconTextFitPadding: [5, 5, 5, 5],
+          textSize: 16,
+          iconAllowOverlap: true,
+          textAllowOverlap: true,
+          textColor: isLightMode ? 'black' : 'white',
+          textFont: ['Open Sans SemiBold'],
+          textOffset: [0, 1.8],
+          textField: '{title}',
         }}
       />
 
