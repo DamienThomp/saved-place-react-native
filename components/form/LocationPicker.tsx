@@ -54,7 +54,7 @@ const LocationPicker = memo(function LocationPicker({
   };
 
   const handleLocateOnMap = () => {
-    router.push('/(main)/map-modal');
+    router.push('/map-modal');
   };
 
   const onPickLocation = () => {

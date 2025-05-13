@@ -12,6 +12,7 @@ import FormInputContainer from '~/components/form/FormInputContainer';
 import ImagePicker from '~/components/form/ImagePicker';
 import LocationPicker from '~/components/form/LocationPicker';
 import TextInputField from '~/components/form/TextInputField';
+import IconButton from '~/components/ui/IconButton';
 import { useEditImagePreview } from '~/hooks/useEditImagePreview';
 import useEditLocation from '~/hooks/useEditLocation';
 import { useLocationDetails } from '~/hooks/useLocationDetails';
@@ -104,9 +105,22 @@ export default function PlaceFormScreen() {
     Alert.alert('Error', `${message} ${error}`);
   };
 
+  const onBack = () => navigation.goBack();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: isEditing ? 'Update A Place' : 'Add A Place',
+      headerLeft: ({ tintColor }: NativeStackHeaderRightProps) => {
+        return (
+          <IconButton
+            color={tintColor}
+            size={28}
+            icon="chevron-back"
+            onPress={onBack}
+            style={{ padding: 0 }}
+          />
+        );
+      },
       headerRight: ({ tintColor }: NativeStackHeaderRightProps) => {
         return (
           isValid &&

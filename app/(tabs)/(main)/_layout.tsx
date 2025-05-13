@@ -28,33 +28,16 @@ export default function MainLayout() {
                 headerBlurEffect: 'regular',
                 headerStyle: { backgroundColor: 'transparent' },
                 headerRight: ({ tintColor }) => (
-                  <>
-                    <IconButton
-                      icon="person-circle"
-                      color={tintColor}
-                      size={26}
-                      onPress={() => router.push('/profile')}
-                    />
-                    <IconButton
-                      icon="add-circle-outline"
-                      color={tintColor}
-                      size={26}
-                      onPress={() => router.push('/form')}
-                      style={{ paddingRight: 0 }}
-                    />
-                  </>
+                  <IconButton
+                    icon="add-circle-outline"
+                    color={tintColor}
+                    size={26}
+                    onPress={() => router.push('/form')}
+                    style={{ paddingRight: 0 }}
+                  />
                 ),
               }}
             />
-            <Stack.Screen name="form" options={{ headerLargeTitle: true }} />
-            <Stack.Screen
-              name="map-modal"
-              options={{
-                title: 'Select a Location',
-                presentation: 'modal',
-              }}
-            />
-            <Stack.Screen name="[id]" options={{ headerShown: false }} />
           </Stack>
         </MapSearchProvider>
       </DirectionsProvider>
