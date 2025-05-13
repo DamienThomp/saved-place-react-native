@@ -26,11 +26,11 @@ export default function PlacesList({ items, isLoading, onRefresh }: PlacesListPr
   const { mutate: deleteImage } = useDeletImage();
 
   const handleOnSelectPlace = useCallback((id: number) => {
-    router.push(`/(main)/${id}`);
+    router.push(`/${id}`);
   }, []);
 
   const handleOnEdit = useCallback((id: number) => {
-    router.push(`/(main)/form?id=${id}`);
+    router.push(`/form?id=${id}`);
   }, []);
 
   const handleOnDelete = useCallback(

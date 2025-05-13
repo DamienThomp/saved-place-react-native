@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@react-navigation/native';
+import { Redirect } from 'expo-router';
 import { useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 
 import { Container } from '~/components/common/Container';
+import Loading from '~/components/common/Loading';
 import { Button } from '~/components/ui/Button';
 import { dbClient } from '~/lib/db';
 import { useAuthentication } from '~/providers/AuthProvider';
@@ -26,8 +28,13 @@ export default function ProfileScreen() {
   };
 
   if (loading) {
-    return;
+    return <Loading />;
   }
+
+  if (!session) {
+    return <Redirect href="/(auth)/sign-in" />;
+  }
+
   return (
     <Container>
       <View style={styles.innerContainer}>

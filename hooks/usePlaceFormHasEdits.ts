@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { PlaceForm } from '~/app/(main)/form';
+import { PlaceForm } from '~/app/(other)/form';
 
 export default function usePlaceFormHasEdits(
   placeFormData: PlaceForm,
