@@ -35,22 +35,22 @@ export default function RoutLayout() {
               }}
             />
             <Tabs.Screen
-              name="(profile)"
-              options={{
-                title: 'Profile',
-                headerShown: false,
-                tabBarIcon: ({ color, size }) => (
-                  <Ionicons color={color} size={size} name="person" />
-                ),
-              }}
-            />
-            <Tabs.Screen
               name="(global)"
               options={{
                 title: 'Global',
                 headerShown: false,
                 tabBarIcon: ({ color, size }) => (
                   <Ionicons color={color} size={size} name="globe-outline" />
+                ),
+              }}
+            />
+            <Tabs.Screen
+              name="(profile)"
+              options={{
+                title: 'Profile',
+                headerShown: false,
+                tabBarIcon: ({ color, size }) => (
+                  <Ionicons color={color} size={size} name="person" />
                 ),
               }}
             />
