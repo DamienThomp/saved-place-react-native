@@ -69,6 +69,7 @@ export default function PlacesList({ items, isLoading, onRefresh }: PlacesListPr
       data={items}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior="automatic"
+      contentContainerStyle={{ paddingBottom: 48 }}
       keyExtractor={(item) => item.id.toString()}
       keyboardDismissMode="on-drag"
       onRefresh={onRefresh}
