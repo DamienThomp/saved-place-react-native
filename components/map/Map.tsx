@@ -24,6 +24,8 @@ import debounce from '~/utils/debounce';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
 
+console.log('Mapbox token:', process.env.EXPO_PUBLIC_MAPBOX_TOKEN);
+
 const DEFAULTS = {
   animationDuration: 500,
 };

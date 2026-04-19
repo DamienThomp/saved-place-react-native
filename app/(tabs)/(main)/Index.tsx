@@ -1,5 +1,8 @@
 import { useTheme } from '@react-navigation/native';
-import { NativeStackHeaderRightProps } from '@react-navigation/native-stack';
+import {
+  NativeStackHeaderItemProps,
+  NativeStackHeaderRightProps,
+} from '@react-navigation/native-stack';
 import { useNavigation } from 'expo-router';
 import { useLayoutEffect, useState } from 'react';
 import { NativeSyntheticEvent, Pressable, Text, TextInputFocusEventData } from 'react-native';
@@ -39,32 +42,25 @@ export default function MainView() {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: ({ tintColor }: NativeStackHeaderRightProps) => {
+      headerLeft: ({ tintColor }: NativeStackHeaderItemProps) => {
         return isEditMode ? (
-          <Pressable onPress={toggleEdit} style={{ paddingRight: 16 }}>
+          <Pressable onPress={toggleEdit}>
             <Text style={{ color: tintColor, fontSize: 18 }}>Done</Text>
           </Pressable>
         ) : (
-          <IconButton
-            icon="create"
-            color={tintColor}
-            size={26}
-            onPress={toggleEdit}
-            style={{ paddingLeft: 0 }}
-          />
+          <IconButton icon="create" color={tintColor} size={26} onPress={toggleEdit} />
         );
       },
-      headerSearchBarOptions: {
-        placeholder: 'Search',
-        inputType: 'text',
-        hideWhenScrolling: false,
-        headerIconColor: theme.colors.text,
-        hintTextColor: theme.colors.border,
-        textColor: theme.colors.text,
-        onSearchButtonPress: onSearch,
-        onCancelButtonPress: onCancelSearch,
-        onChangeText: onTextChanged,
-      },
+      // headerSearchBarOptions: {
+      //   placeholder: 'Search',
+      //   inputType: 'text',
+      //   headerIconColor: theme.colors.text,
+      //   hintTextColor: theme.colors.border,
+      //   textColor: theme.colors.text,
+      //   onSearchButtonPress: onSearch,
+      //   onCancelButtonPress: onCancelSearch,
+      //   onChangeText: onTextChanged,
+      // },
     });
   }, [navigation, filteredList, isEditMode]);
 

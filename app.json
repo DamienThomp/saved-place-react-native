@@ -15,7 +15,6 @@
         "@rnmapbox/maps",
         {
           "RNMapboxMapsDownloadToken": "sk..."
-
         }
       ],
       [
@@ -31,7 +30,8 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera"
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,
@@ -43,7 +43,7 @@
     "splash": {
       "image": "./assets/splashIcon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000"
+      "backgroundColor": "#000000"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -58,7 +58,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/appIcon.png",
-        "backgroundColor": "#000"
+        "backgroundColor": "#000000"
       },
       "package": "com.anonymous.savedplace",
       "permissions": [
