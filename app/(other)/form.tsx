@@ -1,5 +1,8 @@
 import { useTheme } from '@react-navigation/native';
-import { NativeStackHeaderRightProps } from '@react-navigation/native-stack';
+import {
+  NativeStackHeaderItemProps,
+  NativeStackHeaderRightProps,
+} from '@react-navigation/native-stack';
 import { useNavigation } from 'expo-router';
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -79,7 +82,6 @@ export default function PlaceFormScreen() {
       setIsSaving(true);
 
       const { imageUri } = formData;
-
       const imagePath = await prepareImagePath(imageUri);
 
       const payload = createPlacePayload(formData, imagePath, existingPlace);
@@ -99,7 +101,7 @@ export default function PlaceFormScreen() {
       setIsSaving(false);
       showAlert('There was a problem saving your place:', message);
     }
-  }, [formData, insertPlace, navigation, existingPlace]);
+  }, [formData, insertPlace, navigation, existingPlace, isEditing, updatePlace]);
 
   const showAlert = (message: string, error: string) => {
     Alert.alert('Error', `${message} ${error}`);
@@ -110,7 +112,7 @@ export default function PlaceFormScreen() {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: isEditing ? 'Update A Place' : 'Add A Place',
-      headerLeft: ({ tintColor }: NativeStackHeaderRightProps) => {
+      headerLeft: ({ tintColor }: NativeStackHeaderItemProps) => {
         return (
           <IconButton
             color={tintColor}
@@ -121,15 +123,12 @@ export default function PlaceFormScreen() {
           />
         );
       },
-      headerRight: ({ tintColor }: NativeStackHeaderRightProps) => {
-        return (
-          isValid &&
-          hasEdits && (
-            <Pressable onPress={onSubmit} disabled={isSaving}>
-              <Text style={{ color: tintColor, fontSize: 18 }}>Save Place</Text>
-            </Pressable>
-          )
-        );
+      headerRight: ({ tintColor }: NativeStackHeaderItemProps) => {
+        return isValid && hasEdits ? (
+          <Pressable onPress={onSubmit} disabled={isSaving}>
+            <Text style={{ color: tintColor, fontSize: 18, paddingHorizontal: 8 }}>Save Place</Text>
+          </Pressable>
+        ) : null;
       },
     });
   }, [isValid, isEditing, onSubmit, navigation, isSaving]);
