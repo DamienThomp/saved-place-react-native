@@ -14,7 +14,6 @@ export default function RoutLayout() {
         <MapSearchProvider>
           <Tabs
             screenOptions={{
-              tabBarStyle: { position: 'absolute' },
               tabBarBackground: () => (
                 <BlurView
                   intensity={80}

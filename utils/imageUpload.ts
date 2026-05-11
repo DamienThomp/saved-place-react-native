@@ -1,6 +1,6 @@
 import { dbClient } from '~/lib/db';
 import uuid from '~/utils/UUID';
-import decode from '~/utils/decode';
+import decode from '~/utils/Decode';
 import fileToBase64 from '~/utils/fileToBase64';
 
 const uploadImage = async (image: string) => {

@@ -1,5 +1,5 @@
 import { StyleURL } from '@rnmapbox/maps';
-import { Position } from '@rnmapbox/maps/lib/typescript/src/types/Position';
+import type { Position } from 'geojson';
 import { create } from 'zustand';
 
 const DEFAULTS = {
