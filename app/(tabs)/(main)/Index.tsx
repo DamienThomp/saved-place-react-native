@@ -51,16 +51,16 @@ export default function MainView() {
           <IconButton icon="create" color={tintColor} size={26} onPress={toggleEdit} />
         );
       },
-      // headerSearchBarOptions: {
-      //   placeholder: 'Search',
-      //   inputType: 'text',
-      //   headerIconColor: theme.colors.text,
-      //   hintTextColor: theme.colors.border,
-      //   textColor: theme.colors.text,
-      //   onSearchButtonPress: onSearch,
-      //   onCancelButtonPress: onCancelSearch,
-      //   onChangeText: onTextChanged,
-      // },
+      headerSearchBarOptions: {
+        placeholder: 'Search',
+        inputType: 'text',
+        headerIconColor: theme.colors.text,
+        hintTextColor: theme.colors.border,
+        textColor: theme.colors.text,
+        onSearchButtonPress: onSearch,
+        onCancelButtonPress: onCancelSearch,
+        onChangeText: onTextChanged,
+      },
     });
   }, [navigation, filteredList, isEditMode]);
 

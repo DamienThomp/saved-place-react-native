@@ -60,7 +60,6 @@ export default function MapModal() {
   return (
     <>
       <Stack.Screen
-        name="map-modal"
         options={{
           title: 'Select a Location',
           presentation: 'modal',

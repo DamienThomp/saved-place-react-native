@@ -1,6 +1,6 @@
 import Mapbox, { Camera, LocationPuck, MapView, MarkerView } from '@rnmapbox/maps';
 import { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import AnnotationContent from './AnnotationContent';
@@ -114,6 +114,11 @@ export default function Map({ coordinates, readOnly, showControls, places, onPre
 
   return (
     <View style={styles.mapContainer}>
+    {!mapCenter ? (
+      <View style={styles.mapContainer}>
+        <Text>No map center</Text>
+      </View>
+    ) : (
       <MapView
         style={styles.map}
         styleURL={mapTheme}
@@ -142,6 +147,7 @@ export default function Map({ coordinates, readOnly, showControls, places, onPre
 
         {directionCoordinates && <LineRoute coordinates={directionCoordinates} />}
       </MapView>
+      )}
       {showControls && (
         <View style={[styles.controlsContainer, { top: insets.top }]}>
           <MapUserLocationButton />
