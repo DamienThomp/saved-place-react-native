@@ -1,5 +1,5 @@
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { useTheme } from '@react-navigation/native';
+import { useTheme } from 'expo-router/react-navigation';
 import { forwardRef } from 'react';
 import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 

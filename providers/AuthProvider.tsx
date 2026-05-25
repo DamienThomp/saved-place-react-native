@@ -37,9 +37,11 @@ export default function AuthProvider({ children }: PropsWithChildren) {
 
     fetchSession();
 
-    dbClient.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription} } = dbClient.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return <AuthContext.Provider value={{ session, loading }}>{children}</AuthContext.Provider>;

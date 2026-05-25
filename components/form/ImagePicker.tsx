@@ -1,4 +1,4 @@
-import { useTheme } from '@react-navigation/native';
+import { useTheme } from 'expo-router/react-navigation';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import {
   ImagePickerOptions,
@@ -91,7 +91,7 @@ const ImagePicker = memo(function ImagePicker({
 
       if (!imageResult.canceled) {
         const context = ImageManipulator.manipulate(imageResult.assets[0].uri);
-        context.resize({ width: 600, height: 400 });
+        context.resize({ width: 600, height: 600 });
         const image = await context.renderAsync();
         const result = await image.saveAsync({
           format: SaveFormat.PNG,

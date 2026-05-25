@@ -13,7 +13,7 @@ export default function GlobalView() {
 
   useFocusEffect(
     useCallback(() => {
-      setMapZoomLevel(2);
+      setMapZoomLevel(6.5);
       toggleLightMode(false);
       refetch();
     }, [])

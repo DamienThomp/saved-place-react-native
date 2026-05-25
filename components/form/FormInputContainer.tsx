@@ -1,4 +1,4 @@
-import { useTheme } from '@react-navigation/native';
+import { useTheme } from 'expo-router/react-navigation';
 import { PropsWithChildren } from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 
