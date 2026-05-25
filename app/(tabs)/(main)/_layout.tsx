@@ -20,7 +20,7 @@ export default function MainLayout() {
         <MapSearchProvider>
           <Stack>
             <Stack.Screen
-              name="Index"
+              name="index"
               options={{
                 title: 'All Places',
                 headerLargeTitle: true,
