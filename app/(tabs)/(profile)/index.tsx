@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '@react-navigation/native';
+import { useTheme } from 'expo-router/react-navigation';
 import { Redirect } from 'expo-router';
 import { useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';

@@ -118,19 +118,13 @@ export const deletePlace = async (id: number) => {
 };
 
 export const insertImage = async (path: string) => {
-  const { data, error } = await dbClient.storage.from('place-images').download(path);
+  const { data, error } = await dbClient.storage.from('place-images').createSignedUrl(path, 60 * 60);
 
   if (error) {
     throw new Error(error.message);
   }
 
-  if (data) {
-    const result = await imageLoader(data);
-
-    return result;
-  }
-
-  return null;
+  return data?.signedUrl ?? null;
 };
 
 export const deleteImage = async (path: string) => {

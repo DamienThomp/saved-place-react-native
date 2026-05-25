@@ -1,4 +1,4 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router/react-navigation';
 import Mapbox from '@rnmapbox/maps';
 import { Stack } from 'expo-router';
 import { useColorScheme } from 'react-native';
@@ -9,8 +9,6 @@ import AuthProvider from '~/providers/AuthProvider';
 import QueryProvider from '~/providers/QueryProvider';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
-
-console.log('Mapbox token:', process.env.EXPO_PUBLIC_MAPBOX_TOKEN);
 
 export default function Layout() {
   const colorScheme = useColorScheme();

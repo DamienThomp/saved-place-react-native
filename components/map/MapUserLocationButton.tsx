@@ -9,10 +9,9 @@ export default function MapUserLocationButton() {
   const { userLocation } = useLocation();
 
   const onToggleToUserLocation = () => {
-    console.log(userLocation);
-    if (userLocation) {
-      setMapCenter([userLocation.longitude, userLocation.latitude]);
-    }
+    if (!userLocation) return;
+      
+    setMapCenter([userLocation.longitude, userLocation.latitude]);
   };
   return (
     <MapControlContainer>

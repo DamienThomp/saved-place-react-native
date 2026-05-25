@@ -2,12 +2,10 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-
-    "baseUrl": ".",
     "paths": {
-      "~/*": ["*"]
+      "~/*": ["./*"]
     },
     "allowUmdGlobalAccess": true
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", ".eslint.js"]
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", ".eslint.js", "app.config.js"]
 }

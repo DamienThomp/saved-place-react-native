@@ -1,4 +1,4 @@
-import { useTheme } from '@react-navigation/native';
+import { useTheme } from 'expo-router/react-navigation';
 import { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Text, View, StyleSheet, Alert } from 'react-native';
 

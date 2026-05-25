@@ -1,8 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
-import { BlurView } from 'expo-blur';
-import { Tabs } from 'expo-router';
-import { StyleSheet } from 'react-native';
-
+import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import DirectionsProvider from '~/providers/DirectionsProvider';
 import LocationProvider from '~/providers/LocationProvider';
 import MapSearchProvider from '~/providers/MapSearchProvider';
@@ -12,48 +8,20 @@ export default function RoutLayout() {
     <LocationProvider>
       <DirectionsProvider>
         <MapSearchProvider>
-          <Tabs
-            screenOptions={{
-              tabBarBackground: () => (
-                <BlurView
-                  intensity={80}
-                  style={{
-                    ...StyleSheet.absoluteFillObject,
-                    overflow: 'hidden',
-                    backgroundColor: 'transparent',
-                  }}
-                />
-              ),
-            }}>
-            <Tabs.Screen
-              name="(main)"
-              options={{
-                title: 'Main',
-                headerShown: false,
-                tabBarIcon: ({ color, size }) => <Ionicons color={color} size={size} name="list" />,
-              }}
-            />
-            <Tabs.Screen
-              name="(global)"
-              options={{
-                title: 'Global',
-                headerShown: false,
-                tabBarIcon: ({ color, size }) => (
-                  <Ionicons color={color} size={size} name="globe-outline" />
-                ),
-              }}
-            />
-            <Tabs.Screen
-              name="(profile)"
-              options={{
-                title: 'Profile',
-                headerShown: false,
-                tabBarIcon: ({ color, size }) => (
-                  <Ionicons color={color} size={size} name="person" />
-                ),
-              }}
-            />
-          </Tabs>
+          <NativeTabs>
+            <NativeTabs.Trigger name="(main)">
+              <NativeTabs.Trigger.Label>Main</NativeTabs.Trigger.Label>
+              <NativeTabs.Trigger.Icon sf="list.bullet" md="list" />
+            </NativeTabs.Trigger>
+            <NativeTabs.Trigger name="(global)">
+              <NativeTabs.Trigger.Label>Global</NativeTabs.Trigger.Label>
+              <NativeTabs.Trigger.Icon sf="globe" md="globe" />
+            </NativeTabs.Trigger>
+            <NativeTabs.Trigger name="(profile)">
+              <NativeTabs.Trigger.Label>Profile</NativeTabs.Trigger.Label>
+              <NativeTabs.Trigger.Icon sf="person" md="person" />
+            </NativeTabs.Trigger>
+          </NativeTabs>
         </MapSearchProvider>
       </DirectionsProvider>
     </LocationProvider>

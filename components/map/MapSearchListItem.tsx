@@ -1,5 +1,5 @@
 import { SearchBoxSuggestion } from '@mapbox/search-js-core';
-import { useTheme } from '@react-navigation/native';
+import { useTheme } from 'expo-router/react-navigation';
 import { Pressable, Text, StyleSheet } from 'react-native';
 
 import { useMapSearch } from '~/providers/MapSearchProvider';

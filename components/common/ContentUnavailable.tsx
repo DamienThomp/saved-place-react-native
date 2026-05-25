@@ -1,9 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { PropsWithChildren } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ColorValue, StyleSheet, Text, View } from 'react-native';
 
 interface ContentUnavailableProps {
-  color?: string;
+  color?: ColorValue;
   icon: keyof typeof Ionicons.glyphMap;
 }
 

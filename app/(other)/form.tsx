@@ -1,11 +1,7 @@
-import { useTheme } from '@react-navigation/native';
-import {
-  NativeStackHeaderItemProps,
-  NativeStackHeaderRightProps,
-} from '@react-navigation/native-stack';
 import { useNavigation } from 'expo-router';
+import { useTheme } from 'expo-router/react-navigation';
 import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, ColorValue, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { useInsertPlace, useUpdatePlace } from '~/api/places';
 import { Container } from '~/components/common/Container';
@@ -112,7 +108,7 @@ export default function PlaceFormScreen() {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: isEditing ? 'Update A Place' : 'Add A Place',
-      headerLeft: ({ tintColor }: NativeStackHeaderItemProps) => {
+      headerLeft: ({ tintColor }: { tintColor?: ColorValue }) => {
         return (
           <IconButton
             color={tintColor}
@@ -123,7 +119,7 @@ export default function PlaceFormScreen() {
           />
         );
       },
-      headerRight: ({ tintColor }: NativeStackHeaderItemProps) => {
+      headerRight: ({ tintColor }: { tintColor?: ColorValue }) => {
         return isValid && hasEdits ? (
           <Pressable onPress={onSubmit} disabled={isSaving}>
             <Text style={{ color: tintColor, fontSize: 18, paddingHorizontal: 8 }}>Save Place</Text>

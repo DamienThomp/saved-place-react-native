@@ -1,11 +1,13 @@
-import { useTheme } from '@react-navigation/native';
-import {
-  NativeStackHeaderItemProps,
-  NativeStackHeaderRightProps,
-} from '@react-navigation/native-stack';
 import { useNavigation } from 'expo-router';
+import { useTheme } from 'expo-router/react-navigation';
 import { useLayoutEffect, useState } from 'react';
-import { NativeSyntheticEvent, Pressable, Text, TextInputFocusEventData } from 'react-native';
+import {
+  ColorValue,
+  NativeSyntheticEvent,
+  Pressable,
+  Text,
+  TextInputFocusEventData,
+} from 'react-native';
 
 import LoadingState from '~/components/common/LoadingState';
 import PlacesList from '~/components/place/PlacesList';
@@ -42,7 +44,7 @@ export default function MainView() {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: ({ tintColor }: NativeStackHeaderItemProps) => {
+      headerLeft: ({ tintColor }: { tintColor?: ColorValue }) => {
         return isEditMode ? (
           <Pressable onPress={toggleEdit}>
             <Text style={{ color: tintColor, fontSize: 18 }}>Done</Text>

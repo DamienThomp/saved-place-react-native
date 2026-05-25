@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useTheme } from '@react-navigation/native';
+import { useTheme } from 'expo-router/react-navigation';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import Swipeable, { SwipeableMethods } from 'react-native-gesture-handler/ReanimatedSwipeable';
 import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
