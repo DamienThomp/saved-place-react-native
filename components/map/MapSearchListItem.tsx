@@ -20,6 +20,8 @@ export default function MapSearchListItem({ item, onSelected }: MapSearchListIte
 
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Select from search results"
       onPress={() => {
         onSelectSearchResult(item);
       }}

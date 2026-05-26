@@ -46,11 +46,20 @@ export default function MainView() {
     navigation.setOptions({
       headerLeft: ({ tintColor }: { tintColor?: ColorValue }) => {
         return isEditMode ? (
-          <Pressable onPress={toggleEdit}>
+          <Pressable
+            accessibilityRole="togglebutton"
+            accessibilityLabel="Toggle edit buttons off"
+            onPress={toggleEdit}>
             <Text style={{ color: tintColor, fontSize: 18 }}>Done</Text>
           </Pressable>
         ) : (
-          <IconButton icon="create" color={tintColor} size={26} onPress={toggleEdit} />
+          <IconButton
+            icon="create"
+            color={tintColor}
+            size={26}
+            accessibilityLabel="Toggle edit buttons on"
+            onPress={toggleEdit}
+          />
         );
       },
       headerSearchBarOptions: {

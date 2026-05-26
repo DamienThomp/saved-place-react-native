@@ -151,6 +151,8 @@ const ImagePicker = memo(function ImagePicker({
 
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Pick an image with camera or camera roll"
       onPress={selectType}
       style={({ pressed }) => [
         styles.preview,

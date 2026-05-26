@@ -15,6 +15,7 @@ export default function AnnotationContent({ title, onPressed }: AnnotationConten
           icon="location-sharp"
           size={40}
           color="red"
+          accessibilityLabel="Location"
           onPress={() => {
             onPressed?.();
           }}

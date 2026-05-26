@@ -34,7 +34,11 @@ const PlaceCardItem = memo(({ place, onSelect, onDelete, onEdit }: PlaceCardItem
   const handleOnEdit = useCallback(() => onEdit(place.id), [onEdit, place.id]);
 
   return (
-    <Pressable style={styles.cardContainer} onPress={handlePress}>
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Show place details"
+      style={styles.cardContainer}
+      onPress={handlePress}>
       <RemoteImage style={styles.image} path={place.image} />
       <LinearGradient
         colors={['transparent', 'rgba(37, 37, 37, 0.6)']}
@@ -43,10 +47,22 @@ const PlaceCardItem = memo(({ place, onSelect, onDelete, onEdit }: PlaceCardItem
       {isEditMode && (
         <>
           <Animated.View style={[styles.editContainer, styles.deleteItem]} entering={FadeInDown}>
-            <IconButton icon="trash-bin" color="white" size={28} onPress={handleDelete} />
+            <IconButton
+              icon="trash-bin"
+              color="white"
+              size={28}
+              accessibilityLabel="Delete Place"
+              onPress={handleDelete}
+            />
           </Animated.View>
           <Animated.View style={[styles.editContainer, styles.editItem]} entering={FadeInDown}>
-            <IconButton icon="pencil" color="white" size={28} onPress={handleOnEdit} />
+            <IconButton
+              icon="pencil"
+              color="white"
+              size={28}
+              accessibilityLabel="Edite Place"
+              onPress={handleOnEdit}
+            />
           </Animated.View>
         </>
       )}

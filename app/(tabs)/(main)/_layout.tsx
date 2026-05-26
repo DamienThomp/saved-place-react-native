@@ -36,6 +36,7 @@ export default function MainLayout() {
                     icon="add-circle-outline"
                     color={tintColor}
                     size={26}
+                    accessibilityLabel="Add new place"
                     onPress={redirectToForm}
                   />
                 ),

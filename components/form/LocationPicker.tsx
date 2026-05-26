@@ -133,6 +133,8 @@ const LocationPicker = memo(function LocationPicker({
 
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Pick a location"
       onPress={onPickLocation}
       style={({ pressed }) => [
         styles.preview,
