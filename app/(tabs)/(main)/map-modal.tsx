@@ -72,6 +72,7 @@ export default function MapModal() {
               icon="checkmark-circle-outline"
               color="green"
               size={24}
+              accessibilityLabel="Submit selected location"
               onPress={onSubmit}
             />
           ),
@@ -80,6 +81,7 @@ export default function MapModal() {
               icon="close-circle-outline"
               color="red"
               size={24}
+              accessibilityLabel="Cancel"
               onPress={() => router.back()}
             />
           ),

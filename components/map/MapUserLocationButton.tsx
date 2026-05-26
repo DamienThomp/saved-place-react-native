@@ -10,7 +10,7 @@ export default function MapUserLocationButton() {
 
   const onToggleToUserLocation = () => {
     if (!userLocation) return;
-      
+
     setMapCenter([userLocation.longitude, userLocation.latitude]);
   };
 
@@ -20,6 +20,7 @@ export default function MapUserLocationButton() {
         icon="navigate-circle-sharp"
         color="white"
         size={28}
+        accessibilityLabel="Toggle to current location"
         onPress={onToggleToUserLocation}
       />
     </MapControlContainer>

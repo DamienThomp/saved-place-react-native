@@ -15,6 +15,7 @@ export const Button = forwardRef<View, ButtonProps>(
     const theme = useTheme();
     return (
       <TouchableOpacity
+        accessibilityRole="button"
         ref={ref}
         {...props}
         style={[styles.button, { backgroundColor: theme.colors.primary }, props.style]}>

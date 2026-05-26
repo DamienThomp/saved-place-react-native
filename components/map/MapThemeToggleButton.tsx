@@ -15,6 +15,7 @@ export default function MapThemeToggleButton() {
         icon={isLightMode ? 'sunny-sharp' : 'moon-sharp'}
         color="white"
         size={28}
+        accessibilityLabel="Toggle map theme"
         onPress={onToggleLightMode}
       />
     </MapControlContainer>

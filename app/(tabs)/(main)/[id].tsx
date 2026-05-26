@@ -50,12 +50,22 @@ export default function PlaceDetails() {
           </Animated.View>
         )}
         <View style={[styles.backButton, { top: insets.top }]}>
-          <IconButton icon="chevron-back" size={24} color="white" onPress={handleBackButton} />
+          <IconButton
+            accessibilityLabel="Go back"
+            icon="chevron-back"
+            size={24}
+            color="white"
+            onPress={handleBackButton}
+          />
         </View>
         <Animated.View style={[styles.overlay]} entering={FadeInDown.duration(500).delay(250)}>
           <View style={styles.overlayContent}>
             <View style={styles.info}>
-              <Pressable style={styles.titeContainer} onPress={toggleToPlace}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Center map on place"
+                style={styles.titeContainer}
+                onPress={toggleToPlace}>
                 <Text style={[styles.title]}>{place?.title}</Text>
                 <Ionicons name="location-sharp" color="red" size={18} />
               </Pressable>

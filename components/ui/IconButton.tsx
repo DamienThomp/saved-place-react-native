@@ -6,12 +6,22 @@ type IconButtonProps = {
   size?: number;
   color?: ColorValue;
   style?: ViewStyle;
+  accessibilityLabel: string;
   onPress: () => void;
 };
 
-export default function IconButton({ icon, size, color, onPress, style }: IconButtonProps) {
+export default function IconButton({
+  icon,
+  size,
+  color,
+  accessibilityLabel,
+  onPress,
+  style,
+}: IconButtonProps) {
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
       style={({ pressed }) => [styles.button, pressed && styles.pressed, style]}
       onPress={onPress}>
       <Ionicons name={icon} size={size} color={color} />

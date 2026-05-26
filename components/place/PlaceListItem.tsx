@@ -40,7 +40,11 @@ export default function PlaceListItem({ item, onSelect, onDelete }: PlaceItemPro
     });
     return (
       <Animated.View style={[{ padding: 8 }, styleAnimation]}>
-        <Pressable onPress={() => handleDelete(swipeable)} style={styles.iconContainer}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="delete place"
+          onPress={() => handleDelete(swipeable)}
+          style={styles.iconContainer}>
           <Ionicons name="trash-bin" size={40} color="white" />
         </Pressable>
       </Animated.View>
@@ -50,6 +54,8 @@ export default function PlaceListItem({ item, onSelect, onDelete }: PlaceItemPro
   return (
     <Swipeable friction={2} rightThreshold={40} renderRightActions={RightAction}>
       <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="select place"
         onPress={() => onSelect(item.id)}
         style={({ pressed }) => [
           styles.item,

@@ -88,7 +88,7 @@ export default function PlaceFormScreen() {
 
       const mutationOptions = {
         onSettled: () => setIsSaving(false),
-        onSuccess: () => { 
+        onSuccess: () => {
           clearMapLocation();
           navigation.goBack();
         },
@@ -108,9 +108,9 @@ export default function PlaceFormScreen() {
     Alert.alert('Error', `${message} ${error}`);
   };
 
-  const onBack = () => { 
+  const onBack = () => {
     clearMapLocation();
-    navigation.goBack(); 
+    navigation.goBack();
   };
 
   useLayoutEffect(() => {
@@ -122,6 +122,7 @@ export default function PlaceFormScreen() {
             color={tintColor}
             size={28}
             icon="chevron-back"
+            accessibilityLabel="Cancel"
             onPress={onBack}
             style={{ padding: 0 }}
           />
@@ -129,7 +130,11 @@ export default function PlaceFormScreen() {
       },
       headerRight: ({ tintColor }: { tintColor?: ColorValue }) => {
         return isValid && hasEdits ? (
-          <Pressable onPress={onSubmit} disabled={isSaving}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Save Place"
+            onPress={onSubmit}
+            disabled={isSaving}>
             <Text style={{ color: tintColor, fontSize: 18, paddingHorizontal: 8 }}>Save Place</Text>
           </Pressable>
         ) : null;
