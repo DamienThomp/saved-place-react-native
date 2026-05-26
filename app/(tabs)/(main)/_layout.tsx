@@ -11,8 +11,8 @@ export default function MainLayout() {
   const router = useRouter();
 
   const redirectToForm = () => {
-    router.push('/form')
-  }
+    router.push('/form');
+  };
 
   if (!session) {
     return <Redirect href="/(auth)/sign-in" />;
@@ -41,7 +41,14 @@ export default function MainLayout() {
                 ),
               }}
             />
-            <Stack.Screen name="form" options={{ headerShown: true, headerLargeTitle: true }} />
+            <Stack.Screen
+              name="form"
+              options={{
+                headerShown: true,
+                headerLargeTitle: true,
+                presentation: 'formSheet',
+              }}
+            />
             <Stack.Screen
               name="map-modal"
               options={{
