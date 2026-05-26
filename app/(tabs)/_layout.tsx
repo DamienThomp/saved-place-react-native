@@ -1,14 +1,19 @@
+import { usePathname } from 'expo-router';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import DirectionsProvider from '~/providers/DirectionsProvider';
 import LocationProvider from '~/providers/LocationProvider';
 import MapSearchProvider from '~/providers/MapSearchProvider';
 
 export default function RoutLayout() {
+  const pathName = usePathname()
+
+  const showTabs = pathName === '/'
+
   return (
     <LocationProvider>
       <DirectionsProvider>
         <MapSearchProvider>
-          <NativeTabs>
+          <NativeTabs hidden={!showTabs}>
             <NativeTabs.Trigger name="(main)">
               <NativeTabs.Trigger.Label>Main</NativeTabs.Trigger.Label>
               <NativeTabs.Trigger.Icon sf="list.bullet" md="list" />

@@ -12,23 +12,28 @@ type RemoteImageProps = {
   path?: string | null;
   aspectRatio?: number;
   contentFit?: ImageContentFit;
+  height?: number;
+  width?: number;
 } & Omit<ComponentProps<typeof Image>, 'source'>;
+
+const TRANSITION_TIME = 500
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
-export default function RemoteImage({ path, ...imageProps }: RemoteImageProps) {
+export default function RemoteImage({ path, height, width, ...imageProps }: RemoteImageProps) {
   const { data: image, isLoading, error } = useImage(path);
+
+  const baseStyle = {
+    flex: 1,
+    height,
+    width,
+    aspectRatio: imageProps.aspectRatio,
+  };
 
   if (isLoading) {
     return (
-      <View
-        style={{
-          flex: 1,
-          height: imageProps.height,
-          width: imageProps.width,
-          aspectRatio: imageProps.aspectRatio,
-        }}>
+      <View style={baseStyle}>
         <Loading />
       </View>
     );
@@ -37,12 +42,7 @@ export default function RemoteImage({ path, ...imageProps }: RemoteImageProps) {
   if (!image || error) {
     return (
       <Animated.View
-        style={{
-          flex: 1,
-          height: imageProps.height,
-          width: imageProps.width,
-          aspectRatio: imageProps.aspectRatio,
-        }}
+        style={baseStyle}
         exiting={FadeOut}>
         <ContentUnavailable icon="image-outline" color="white">
           No Image
@@ -56,7 +56,7 @@ export default function RemoteImage({ path, ...imageProps }: RemoteImageProps) {
       source={{ uri: image }}
       placeholder={{ blurhash }}
       {...imageProps}
-      transition={500}
+      transition={TRANSITION_TIME}
       recyclingKey={path}
       cachePolicy="memory-disk"
       contentFit={imageProps.contentFit ?? 'cover'}

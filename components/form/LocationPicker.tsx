@@ -8,6 +8,7 @@ import Loading from '../common/Loading';
 
 import { useLocation } from '~/providers/LocationProvider';
 import { getAddress, takeSnapshot } from '~/utils/mapBoxUtils';
+import useMapSelectionStore from '~/stores/mapSelectionStore';
 
 enum LocationOptions {
   Cancel = 'Cancel',
@@ -28,6 +29,7 @@ const LocationPicker = memo(function LocationPicker({
   const router = useRouter();
   const theme = useTheme();
   const { userLocation } = useLocation();
+  const { coordinate } = useMapSelectionStore();
 
   const params = useLocalSearchParams<{ coordinate: string }>();
 
@@ -103,8 +105,10 @@ const LocationPicker = memo(function LocationPicker({
   };
 
   useEffect(() => {
-    getSnapshot(params.coordinate);
-  }, [params.coordinate]);
+    if (coordinate) {
+      getSnapshot(coordinate);
+    }
+  }, [coordinate]);
 
   useEffect(() => {
     if (editCoordinates) {

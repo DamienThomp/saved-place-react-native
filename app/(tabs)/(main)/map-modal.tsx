@@ -10,6 +10,7 @@ import Map, { SelectedPoint } from '~/components/map/Map';
 import MapSearchListItem from '~/components/map/MapSearchListItem';
 import IconButton from '~/components/ui/IconButton';
 import { useMapSearch } from '~/providers/MapSearchProvider';
+import useMapSelectionStore from '~/stores/mapSelectionStore';
 
 export default function MapModal() {
   const { setSearchQuery, searchResults, coordinates, resetAll } = useMapSearch();
@@ -19,6 +20,7 @@ export default function MapModal() {
   const [showSearchResults, setShowSearchResults] = useState<boolean>(false);
   const router = useRouter();
   const searchBarRef = useRef<SearchBarCommands | null>(null);
+  const { setCoordinate } = useMapSelectionStore();
 
   const onMapSelection = (selection: SelectedPoint | null) => {
     if (!selection) return;
@@ -33,9 +35,10 @@ export default function MapModal() {
       showAlert('Error', 'You need to select a place.');
       return;
     }
-    router.back();
-    router.setParams({ coordinate: JSON.stringify(selectedPlace) });
+
     setShowSearchResults(false);
+    setCoordinate(JSON.stringify(selectedPlace));
+    router.back();
   };
 
   const showAlert = (title: string, message: string) => Alert.alert(title, message);

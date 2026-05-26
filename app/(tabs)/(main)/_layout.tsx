@@ -10,6 +10,10 @@ export default function MainLayout() {
   const { session } = useAuthentication();
   const router = useRouter();
 
+  const redirectToForm = () => {
+    router.push('/form')
+  }
+
   if (!session) {
     return <Redirect href="/(auth)/sign-in" />;
   }
@@ -18,7 +22,7 @@ export default function MainLayout() {
     <LocationProvider>
       <DirectionsProvider>
         <MapSearchProvider>
-          <Stack>
+          <Stack screenOptions={{ animation: 'default' }}>
             <Stack.Screen
               name="index"
               options={{
@@ -32,11 +36,21 @@ export default function MainLayout() {
                     icon="add-circle-outline"
                     color={tintColor}
                     size={26}
-                    onPress={() => router.push('/form')}
+                    onPress={redirectToForm}
                   />
                 ),
               }}
             />
+            <Stack.Screen name="form" options={{ headerShown: true, headerLargeTitle: true }} />
+            <Stack.Screen
+              name="map-modal"
+              options={{
+                title: 'Select a Location',
+                presentation: 'modal',
+                headerShown: true,
+              }}
+            />
+            <Stack.Screen name="[id]" options={{ headerShown: false }} />
           </Stack>
         </MapSearchProvider>
       </DirectionsProvider>
