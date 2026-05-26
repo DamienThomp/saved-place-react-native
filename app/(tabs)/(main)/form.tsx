@@ -17,6 +17,7 @@ import useEditLocation from '~/hooks/useEditLocation';
 import { useLocationDetails } from '~/hooks/useLocationDetails';
 import usePlaceFormHasEdits from '~/hooks/usePlaceFormHasEdits';
 import usePlaceFormValidation from '~/hooks/usePlaceFormValidation';
+import useMapSelectionStore from '~/stores/mapSelectionStore';
 import { createPlacePayload } from '~/utils/createPlacePayload';
 import prepareImagePath from '~/utils/prepareImagePath';
 
@@ -39,6 +40,7 @@ export default function PlaceFormScreen() {
   const [originalData, setOriginalData] = useState<PlaceForm | undefined>();
   const [isSaving, setIsSaving] = useState(false);
 
+  const { clear: clearMapLocation } = useMapSelectionStore();
   const navigation = useNavigation();
   const theme = useTheme();
 
@@ -86,7 +88,10 @@ export default function PlaceFormScreen() {
 
       const mutationOptions = {
         onSettled: () => setIsSaving(false),
-        onSuccess: () => navigation.goBack(),
+        onSuccess: () => { 
+          clearMapLocation();
+          navigation.goBack();
+        },
         onError: (error: Error) =>
           showAlert('There was a problem saving your place:', error.message),
       };
@@ -103,7 +108,10 @@ export default function PlaceFormScreen() {
     Alert.alert('Error', `${message} ${error}`);
   };
 
-  const onBack = () => navigation.goBack();
+  const onBack = () => { 
+    clearMapLocation();
+    navigation.goBack(); 
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({

@@ -13,6 +13,7 @@ export default function MapUserLocationButton() {
       
     setMapCenter([userLocation.longitude, userLocation.latitude]);
   };
+
   return (
     <MapControlContainer>
       <IconButton
