@@ -37,10 +37,7 @@ const options: ImagePickerOptions = {
   quality: 0.9,
 };
 
-const ImagePicker = memo(function ImagePicker({
-  onSelectImage,
-  editPreviewImage,
-}: ImagePickerProps) {
+const ImagePicker = ({ onSelectImage, editPreviewImage }: ImagePickerProps) => {
   const [image, setImage] = useState<string | null>(null);
   const theme = useTheme();
 
@@ -164,7 +161,7 @@ const ImagePicker = memo(function ImagePicker({
       {imagePreview}
     </Pressable>
   );
-});
+};
 
 const styles = StyleSheet.create({
   preview: {
