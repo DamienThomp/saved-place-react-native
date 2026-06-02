@@ -11,6 +11,7 @@ import {
 
 import getDirections from '~/lib/directions';
 import { Coordinates, MapboxDirections } from '~/types/types';
+import { DirectionType } from '~/lib/directions';
 
 type SelectedPoint = {
   longitude: number;
@@ -23,9 +24,11 @@ type DirectionsContextState = {
   directionCoordinates?: [number, number][] | undefined;
   routeTime?: number | undefined;
   routeDistance?: number | undefined;
+  mode?: DirectionType;
   error?: string | undefined;
   setSelectedPoint?: Dispatch<SetStateAction<SelectedPoint | undefined>>;
   setDirections?: Dispatch<SetStateAction<MapboxDirections | null | undefined>>;
+  setMode?: Dispatch<SetStateAction<DirectionType | undefined>>;
   setError?: Dispatch<SetStateAction<string | undefined>>;
 };
 
@@ -39,6 +42,7 @@ const isError = (response: MapboxDirections | undefined): boolean => {
 export default function DirectionsProvider({ children }: PropsWithChildren) {
   const [directions, setDirections] = useState<MapboxDirections | null>();
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint>();
+  const [mode, setMode] = useState<DirectionType>();
   const [error, setError] = useState<string>();
 
   useEffect(() => {
@@ -47,7 +51,7 @@ export default function DirectionsProvider({ children }: PropsWithChildren) {
       const start: Coordinates = { longitude: coords.longitude, latitude: coords.latitude };
       const end: Coordinates = { longitude, latitude };
 
-      const response = await getDirections(start, end);
+      const response = await getDirections(start, end, mode);
 
       if (isError(response)) {
         setError(response?.message);
@@ -61,13 +65,15 @@ export default function DirectionsProvider({ children }: PropsWithChildren) {
       setError(undefined);
       fetchDirections({ ...selectedPoint });
     }
-  }, [selectedPoint]);
+  }, [selectedPoint, mode]);
 
   return (
     <DirectionsContext.Provider
       value={{
         selectedPoint,
         setSelectedPoint,
+        mode,
+        setMode,
         setDirections,
         setError,
         directions,

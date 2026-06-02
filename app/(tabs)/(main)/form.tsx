@@ -54,6 +54,10 @@ export default function PlaceFormScreen() {
   const { editCoordinates } = useEditLocation(existingPlace);
   const editImagePreview = useEditImagePreview(formData.imageUri);
 
+  const showAlert = (message: string, error: string) => {
+    Alert.alert('Error', `${message} ${error}`);
+  };
+
   const updateForm = useCallback((updates: Partial<PlaceForm>) => {
     setFormData((current) => ({ ...current, ...updates }));
   }, []);
@@ -76,6 +80,8 @@ export default function PlaceFormScreen() {
   }, []);
 
   const onSubmit = useCallback(async () => {
+    const mutationFn = isEditing ? updatePlace : insertPlace;
+
     try {
       setIsSaving(true);
 
@@ -83,8 +89,6 @@ export default function PlaceFormScreen() {
       const imagePath = await prepareImagePath(imageUri);
 
       const payload = createPlacePayload(formData, imagePath, existingPlace);
-
-      const mutationFn = isEditing ? updatePlace : insertPlace;
 
       const mutationOptions = {
         onSettled: () => setIsSaving(false),
@@ -102,11 +106,16 @@ export default function PlaceFormScreen() {
       setIsSaving(false);
       showAlert('There was a problem saving your place:', message);
     }
-  }, [formData, insertPlace, navigation, existingPlace, isEditing, updatePlace]);
-
-  const showAlert = (message: string, error: string) => {
-    Alert.alert('Error', `${message} ${error}`);
-  };
+  }, [
+    formData,
+    insertPlace,
+    navigation,
+    existingPlace,
+    isEditing,
+    updatePlace,
+    clearMapLocation,
+    showAlert,
+  ]);
 
   const onBack = () => {
     clearMapLocation();

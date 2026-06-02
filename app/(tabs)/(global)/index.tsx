@@ -16,7 +16,7 @@ export default function GlobalView() {
       setMapZoomLevel(6.5);
       toggleLightMode(false);
       refetch();
-    }, [])
+    }, [setMapZoomLevel, toggleLightMode, refetch])
   );
 
   return (

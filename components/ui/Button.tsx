@@ -1,30 +1,33 @@
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useTheme } from 'expo-router/react-navigation';
-import { forwardRef } from 'react';
-import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import { Pressable, PressableProps, StyleSheet, Text, View } from 'react-native';
 
 type ButtonProps = {
   title?: string;
   icon?: keyof typeof FontAwesome5.glyphMap;
   color?: string;
   size?: number;
-} & TouchableOpacityProps;
+  ref?: React.Ref<View>;
+} & PressableProps;
 
-export const Button = forwardRef<View, ButtonProps>(
-  ({ title, icon, color, size, ...props }, ref) => {
-    const theme = useTheme();
-    return (
-      <TouchableOpacity
-        accessibilityRole="button"
-        ref={ref}
-        {...props}
-        style={[styles.button, { backgroundColor: theme.colors.primary }, props.style]}>
-        <Text style={styles.buttonText}>{title}</Text>
-        {icon && <FontAwesome5 name={icon} color={color ?? 'white'} size={size ?? 16} />}
-      </TouchableOpacity>
-    );
-  }
-);
+export function Button({ title, icon, color, size, ref, ...props }: ButtonProps) {
+  const theme = useTheme();
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      ref={ref}
+      {...props}
+      style={(state) => [
+        styles.button,
+        { backgroundColor: theme.colors.primary, opacity: state.pressed ? 0.8 : 1 },
+        typeof props.style === 'function' ? props.style(state) : props.style,
+      ]}>
+      {title && <Text style={styles.buttonText}>{title}</Text>}
+      {icon && <FontAwesome5 name={icon} color={color ?? 'white'} size={size ?? 16} />}
+    </Pressable>
+  );
+}
 
 const styles = StyleSheet.create({
   button: {
