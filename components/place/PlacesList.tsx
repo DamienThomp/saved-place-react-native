@@ -25,13 +25,13 @@ export default function PlacesList({ items, isLoading, onRefresh }: PlacesListPr
   const { mutate: deleteItem } = useDeletePlace();
   const { mutate: deleteImage } = useDeletImage();
 
-  const handleOnSelectPlace = useCallback((id: number) => {
+  const handleOnSelectPlace = (id: number) => {
     router.push(`/${id}`);
-  }, []);
+  };
 
-  const handleOnEdit = useCallback((id: number) => {
+  const handleOnEdit = (id: number) => {
     router.push(`/form?id=${id}`);
-  }, []);
+  };
 
   const handleOnDelete = useCallback(
     (id: number) => {
@@ -50,7 +50,7 @@ export default function PlacesList({ items, isLoading, onRefresh }: PlacesListPr
         },
       });
     },
-    [items]
+    [items, deleteImage, deleteItem]
   );
 
   if (!items || isEmpty(items)) {
