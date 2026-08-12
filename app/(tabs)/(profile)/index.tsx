@@ -1,33 +1,28 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from 'expo-router/react-navigation';
 import { Redirect } from 'expo-router';
-import { useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 
+import { useSignOut } from '~/api/auth';
 import { Container } from '~/components/common/Container';
 import Loading from '~/components/common/Loading';
 import { Button } from '~/components/ui/Button';
-import { dbClient } from '~/lib/db';
 import { useAuthentication } from '~/providers/AuthProvider';
 
 export default function ProfileScreen() {
-  const [loading, setIsLoading] = useState(false);
   const { session } = useAuthentication();
   const theme = useTheme();
+  const { mutate: signOut, isPending } = useSignOut();
 
-  const handleSignout = async () => {
-    setIsLoading(true);
-
-    const { error } = await dbClient.auth.signOut();
-
-    if (error) {
-      Alert.alert('Sign Out Error', `Unable to sign you out: ${error}`);
-    }
-
-    setIsLoading(false);
+  const handleSignout = () => {
+    signOut(undefined, {
+      onError: (error) => {
+        Alert.alert('Sign Out Error', `Unable to sign you out: ${error.message}`);
+      },
+    });
   };
 
-  if (loading) {
+  if (isPending) {
     return <Loading />;
   }
 

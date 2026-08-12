@@ -8,7 +8,7 @@ import {
   requestCameraPermissionsAsync,
   requestMediaLibraryPermissionsAsync,
 } from 'expo-image-picker';
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActionSheetIOS, Alert, Image, Platform, Pressable, StyleSheet } from 'react-native';
 
 import RemoteImage from '../common/RemoteImage';

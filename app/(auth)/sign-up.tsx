@@ -1,36 +1,31 @@
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
 import { Alert } from 'react-native';
 
+import { useSignUp } from '~/api/auth';
 import AuthForm from '~/components/auth/AuthForm';
 import { Container } from '~/components/common/Container';
 import Loading from '~/components/common/Loading';
-import { dbClient } from '~/lib/db';
 
 export default function SignUpScreen() {
   const router = useRouter();
-  const [loading, setIsLoading] = useState(false);
+  const { mutate: signUp, isPending } = useSignUp();
 
-  const onSignUp = async (email: string, password: string) => {
-    setIsLoading(true);
-
-    const { error } = await dbClient.auth.signUp({
-      email,
-      password,
-    });
-
-    if (error) {
-      Alert.alert('Error in Sign Up', `${error.message}`);
-    }
-
-    setIsLoading(false);
+  const onSignUp = (email: string, password: string) => {
+    signUp(
+      { email, password },
+      {
+        onError: (error) => {
+          Alert.alert('Error in Sign Up', error.message);
+        },
+      }
+    );
   };
 
   const redirectToSignIn = () => {
     router.back();
   };
 
-  if (loading) {
+  if (isPending) {
     return <Loading />;
   }
 

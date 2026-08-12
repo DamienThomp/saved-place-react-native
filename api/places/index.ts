@@ -24,6 +24,8 @@ export const usePlacesList = () => {
 
       return await getPlaces(id);
     },
+    meta: { persist: true },
+    enabled: !!id,
   });
 };
 
@@ -49,6 +51,8 @@ export const usePlaceDetails = (id?: number) => {
 
       return await getPlace(id);
     },
+    meta: { persist: true },
+    enabled: !!id,
   });
 };
 

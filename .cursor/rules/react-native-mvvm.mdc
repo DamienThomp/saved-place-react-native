@@ -1,0 +1,50 @@
+---
+description: MVVM architecture for React Native screens — hooks as view models
+globs: app/**/*.tsx
+alwaysApply: false
+---
+
+# React Native MVVM
+
+Prefer MVVM for screens. Screen components are the **View**; custom hooks are the **ViewModel**.
+
+## View (screen component)
+- Render UI only — layout, styling, and wiring props/handlers from the view model
+- Avoid business logic, API calls, validation, and side effects in the screen file
+- Keep navigation setup (`useLayoutEffect`, header options) minimal; move reusable logic into the view model hook when it grows
+
+## ViewModel (custom hook)
+- One hook per screen, named `use<ScreenName>ViewModel` (e.g. `useSignUpViewModel` for `sign-up.tsx`)
+- Colocate in `hooks/` (e.g. `hooks/useSignUpViewModel.ts`)
+- Own state, derived data, mutations/queries, validation, and side effects
+- Return a plain object: `{ state, actions, status }` (or similar) for the view to consume
+
+## Model
+- Data types live in `types/`
+- API/data access lives in `api/` (React Query hooks, Supabase calls, etc.)
+- ViewModels compose model-layer hooks; views do not call `api/` directly
+
+## Example
+
+```tsx
+// hooks/useSignUpViewModel.ts
+export function useSignUpViewModel() {
+  const router = useRouter();
+  const { mutate: signUp, isPending } = useSignUp();
+
+  const signUpUser = (email: string, password: string) => { /* ... */ };
+  const goToSignIn = () => router.back();
+
+  return { isPending, signUpUser, goToSignIn };
+}
+
+// app/(auth)/sign-up.tsx — View only
+export default function SignUpScreen() {
+  const { isPending, signUpUser, goToSignIn } = useSignUpViewModel();
+  // render only
+}
+```
+
+## Existing patterns to follow
+- `useFilteredPlaces` is a good view-model-style hook — extend this pattern to auth and profile screens
+- Screens like `sign-up.tsx` and `sign-in.tsx` should extract inline logic into dedicated view model hooks
