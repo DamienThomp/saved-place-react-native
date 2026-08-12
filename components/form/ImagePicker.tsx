@@ -8,7 +8,7 @@ import {
   requestCameraPermissionsAsync,
   requestMediaLibraryPermissionsAsync,
 } from 'expo-image-picker';
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActionSheetIOS, Alert, Image, Platform, Pressable, StyleSheet } from 'react-native';
 
 import RemoteImage from '../common/RemoteImage';
@@ -37,10 +37,7 @@ const options: ImagePickerOptions = {
   quality: 0.9,
 };
 
-const ImagePicker = memo(function ImagePicker({
-  onSelectImage,
-  editPreviewImage,
-}: ImagePickerProps) {
+const ImagePicker = ({ onSelectImage, editPreviewImage }: ImagePickerProps) => {
   const [image, setImage] = useState<string | null>(null);
   const theme = useTheme();
 
@@ -151,6 +148,8 @@ const ImagePicker = memo(function ImagePicker({
 
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Pick an image with camera or camera roll"
       onPress={selectType}
       style={({ pressed }) => [
         styles.preview,
@@ -162,7 +161,7 @@ const ImagePicker = memo(function ImagePicker({
       {imagePreview}
     </Pressable>
   );
-});
+};
 
 const styles = StyleSheet.create({
   preview: {

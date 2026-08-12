@@ -20,10 +20,7 @@ interface LocationPickerProps {
   editCoordinates?: string | undefined;
 }
 
-const LocationPicker = memo(function LocationPicker({
-  onSelectLocation,
-  editCoordinates,
-}: LocationPickerProps) {
+const LocationPicker = ({ onSelectLocation, editCoordinates }: LocationPickerProps) => {
   const [pickedLocation, setPickedLocation] = useState<string | null>(null);
   const [isLoading, setIsloading] = useState(false);
   const router = useRouter();
@@ -34,11 +31,13 @@ const LocationPicker = memo(function LocationPicker({
   const params = useLocalSearchParams<{ coordinate: string }>();
 
   const handleLocateUser = async () => {
+    if (!userLocation) {
+      Alert.alert('Error', "Can't get your current location.");
+      return;
+    }
+    setIsloading(true);
+
     try {
-      if (!userLocation) {
-        throw new Error("Can't get your current location.");
-      }
-      setIsloading(true);
       const centerCoordinate = [userLocation.longitude, userLocation.latitude];
       const uri = await takeSnapshot({ centerCoordinate });
       const address = await getAddress({ centerCoordinate });
@@ -50,9 +49,9 @@ const LocationPicker = memo(function LocationPicker({
       }
     } catch (error) {
       Alert.alert('Something went wrong!', `${error}`);
-    } finally {
-      setIsloading(false);
     }
+
+    setIsloading(false);
   };
 
   const handleLocateOnMap = () => {
@@ -133,6 +132,8 @@ const LocationPicker = memo(function LocationPicker({
 
   return (
     <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Pick a location"
       onPress={onPickLocation}
       style={({ pressed }) => [
         styles.preview,
@@ -144,7 +145,7 @@ const LocationPicker = memo(function LocationPicker({
       {mapPreview}
     </Pressable>
   );
-});
+};
 
 const styles = StyleSheet.create({
   preview: {

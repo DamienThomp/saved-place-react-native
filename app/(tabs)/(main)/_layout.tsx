@@ -11,8 +11,8 @@ export default function MainLayout() {
   const router = useRouter();
 
   const redirectToForm = () => {
-    router.push('/form')
-  }
+    router.push('/form');
+  };
 
   if (!session) {
     return <Redirect href="/(auth)/sign-in" />;
@@ -36,12 +36,20 @@ export default function MainLayout() {
                     icon="add-circle-outline"
                     color={tintColor}
                     size={26}
+                    accessibilityLabel="Add new place"
                     onPress={redirectToForm}
                   />
                 ),
               }}
             />
-            <Stack.Screen name="form" options={{ headerShown: true, headerLargeTitle: true }} />
+            <Stack.Screen
+              name="form"
+              options={{
+                headerShown: true,
+                headerLargeTitle: true,
+                presentation: 'formSheet',
+              }}
+            />
             <Stack.Screen
               name="map-modal"
               options={{

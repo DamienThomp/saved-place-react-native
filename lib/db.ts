@@ -42,8 +42,38 @@ export const getProfile = async (id: string) => {
   return data;
 };
 
+export const signIn = async (email: string, password: string) => {
+  const { data, error } = await dbClient.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};
+
+export const signUp = async (email: string, password: string) => {
+  const { data, error } = await dbClient.auth.signUp({
+    email,
+    password,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};
+
 export const signOut = async () => {
-  return dbClient.auth.signOut();
+  const { error } = await dbClient.auth.signOut();
+
+  if (error) {
+    throw error;
+  }
 };
 
 export const getPlaces = async (userId: string) => {

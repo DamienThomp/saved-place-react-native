@@ -1,13 +1,7 @@
 import { useNavigation } from 'expo-router';
 import { useTheme } from 'expo-router/react-navigation';
 import { useLayoutEffect, useState } from 'react';
-import {
-  ColorValue,
-  NativeSyntheticEvent,
-  Pressable,
-  Text,
-  TextInputFocusEventData,
-} from 'react-native';
+import { ColorValue, Pressable, Text, TextInputChangeEvent } from 'react-native';
 
 import LoadingState from '~/components/common/LoadingState';
 import PlacesList from '~/components/place/PlacesList';
@@ -15,8 +9,6 @@ import IconButton from '~/components/ui/IconButton';
 import { useEditModeNavigation } from '~/hooks/useEditModeNavigation';
 import useFilteredPlaces from '~/hooks/useFilteredPlaces';
 import useEditModeStore from '~/stores/editModeStore';
-
-type TextInputEvent = NativeSyntheticEvent<TextInputFocusEventData>;
 
 export default function MainView() {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -27,13 +19,13 @@ export default function MainView() {
   const { isEditMode, setEditMode } = useEditModeStore();
   const { filteredList, isLoading, error, refetch } = useFilteredPlaces(searchQuery);
 
-  const onSearch = (event: TextInputEvent) => setSearchQuery(event.nativeEvent.text);
+  const onSearch = (event: TextInputChangeEvent) => setSearchQuery(event.nativeEvent.text);
 
   const onCancelSearch = () => setSearchQuery('');
 
   const toggleEdit = () => setEditMode(!isEditMode);
 
-  const onTextChanged = (event: TextInputEvent) => {
+  const onTextChanged = (event: TextInputChangeEvent) => {
     const text = event.nativeEvent.text;
     if (text.length < 1) {
       setSearchQuery('');
@@ -46,11 +38,20 @@ export default function MainView() {
     navigation.setOptions({
       headerLeft: ({ tintColor }: { tintColor?: ColorValue }) => {
         return isEditMode ? (
-          <Pressable onPress={toggleEdit}>
+          <Pressable
+            accessibilityRole="togglebutton"
+            accessibilityLabel="Toggle edit buttons off"
+            onPress={toggleEdit}>
             <Text style={{ color: tintColor, fontSize: 18 }}>Done</Text>
           </Pressable>
         ) : (
-          <IconButton icon="create" color={tintColor} size={26} onPress={toggleEdit} />
+          <IconButton
+            icon="create"
+            color={tintColor}
+            size={26}
+            accessibilityLabel="Toggle edit buttons on"
+            onPress={toggleEdit}
+          />
         );
       },
       headerSearchBarOptions: {

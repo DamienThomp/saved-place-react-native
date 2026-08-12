@@ -17,6 +17,7 @@ export default function MapPitchToggleButton() {
         icon={isPitchToggled ? 'layers-outline' : 'layers'}
         color="white"
         size={28}
+        accessibilityLabel="Toggle map pitch"
         onPress={onTogglePitch}
       />
     </MapControlContainer>

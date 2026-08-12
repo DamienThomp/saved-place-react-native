@@ -54,6 +54,10 @@ export default function PlaceFormScreen() {
   const { editCoordinates } = useEditLocation(existingPlace);
   const editImagePreview = useEditImagePreview(formData.imageUri);
 
+  const showAlert = (message: string, error: string) => {
+    Alert.alert('Error', `${message} ${error}`);
+  };
+
   const updateForm = useCallback((updates: Partial<PlaceForm>) => {
     setFormData((current) => ({ ...current, ...updates }));
   }, []);
@@ -76,6 +80,8 @@ export default function PlaceFormScreen() {
   }, []);
 
   const onSubmit = useCallback(async () => {
+    const mutationFn = isEditing ? updatePlace : insertPlace;
+
     try {
       setIsSaving(true);
 
@@ -84,11 +90,9 @@ export default function PlaceFormScreen() {
 
       const payload = createPlacePayload(formData, imagePath, existingPlace);
 
-      const mutationFn = isEditing ? updatePlace : insertPlace;
-
       const mutationOptions = {
         onSettled: () => setIsSaving(false),
-        onSuccess: () => { 
+        onSuccess: () => {
           clearMapLocation();
           navigation.goBack();
         },
@@ -102,15 +106,20 @@ export default function PlaceFormScreen() {
       setIsSaving(false);
       showAlert('There was a problem saving your place:', message);
     }
-  }, [formData, insertPlace, navigation, existingPlace, isEditing, updatePlace]);
+  }, [
+    formData,
+    insertPlace,
+    navigation,
+    existingPlace,
+    isEditing,
+    updatePlace,
+    clearMapLocation,
+    showAlert,
+  ]);
 
-  const showAlert = (message: string, error: string) => {
-    Alert.alert('Error', `${message} ${error}`);
-  };
-
-  const onBack = () => { 
+  const onBack = () => {
     clearMapLocation();
-    navigation.goBack(); 
+    navigation.goBack();
   };
 
   useLayoutEffect(() => {
@@ -122,6 +131,7 @@ export default function PlaceFormScreen() {
             color={tintColor}
             size={28}
             icon="chevron-back"
+            accessibilityLabel="Cancel"
             onPress={onBack}
             style={{ padding: 0 }}
           />
@@ -129,7 +139,11 @@ export default function PlaceFormScreen() {
       },
       headerRight: ({ tintColor }: { tintColor?: ColorValue }) => {
         return isValid && hasEdits ? (
-          <Pressable onPress={onSubmit} disabled={isSaving}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Save Place"
+            onPress={onSubmit}
+            disabled={isSaving}>
             <Text style={{ color: tintColor, fontSize: 18, paddingHorizontal: 8 }}>Save Place</Text>
           </Pressable>
         ) : null;
