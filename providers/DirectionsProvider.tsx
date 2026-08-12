@@ -9,9 +9,8 @@ import {
   useState,
 } from 'react';
 
-import getDirections from '~/lib/directions';
+import { DirectionType, getDirections } from '~/api/directions';
 import { Coordinates, MapboxDirections } from '~/types/types';
-import { DirectionType } from '~/lib/directions';
 
 type SelectedPoint = {
   longitude: number;

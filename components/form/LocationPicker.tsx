@@ -6,9 +6,10 @@ import { ActionSheetIOS, Alert, Image, Platform, Pressable, StyleSheet } from 'r
 import ContentUnavailable from '../common/ContentUnavailable';
 import Loading from '../common/Loading';
 
+import { getAddress } from '~/api/geocode';
 import { useLocation } from '~/providers/LocationProvider';
-import { getAddress, takeSnapshot } from '~/utils/mapBoxUtils';
 import useMapSelectionStore from '~/stores/mapSelectionStore';
+import { takeSnapshot } from '~/utils/mapBoxUtils';
 
 enum LocationOptions {
   Cancel = 'Cancel',
@@ -28,8 +29,6 @@ const LocationPicker = ({ onSelectLocation, editCoordinates }: LocationPickerPro
   const { userLocation } = useLocation();
   const { coordinate } = useMapSelectionStore();
 
-  const params = useLocalSearchParams<{ coordinate: string }>();
-
   const handleLocateUser = async () => {
     if (!userLocation) {
       Alert.alert('Error', "Can't get your current location.");
@@ -40,7 +39,7 @@ const LocationPicker = ({ onSelectLocation, editCoordinates }: LocationPickerPro
     try {
       const centerCoordinate = [userLocation.longitude, userLocation.latitude];
       const uri = await takeSnapshot({ centerCoordinate });
-      const address = await getAddress({ centerCoordinate });
+      const address = await getAddress(centerCoordinate);
 
       onSelectLocation(centerCoordinate, address);
 
@@ -94,7 +93,7 @@ const LocationPicker = ({ onSelectLocation, editCoordinates }: LocationPickerPro
       setIsloading(true);
       const coordinate = JSON.parse(coordinates);
       const uri = await takeSnapshot({ centerCoordinate: coordinate });
-      const address = await getAddress({ centerCoordinate: coordinate });
+      const address = await getAddress(coordinate);
       onSelectLocation(coordinate, address);
       if (uri) {
         setPickedLocation(uri);
