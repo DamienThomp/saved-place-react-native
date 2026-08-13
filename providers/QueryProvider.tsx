@@ -24,6 +24,9 @@ export default function QueryProvider({ children }: PropsWithChildren) {
         persister: queryPersister,
         buster: '1.0.0',
         maxAge: ONE_DAY,
+        dehydrateOptions: {
+          shouldDehydrateQuery: (query) => query.meta?.persist === true,
+        },
       }}>
       {children}
     </PersistQueryClientProvider>

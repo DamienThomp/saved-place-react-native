@@ -17,7 +17,16 @@ export default function MainView() {
   const theme = useTheme();
 
   const { isEditMode, setEditMode } = useEditModeStore();
-  const { filteredList, isLoading, error, refetch } = useFilteredPlaces(searchQuery);
+  const {
+    filteredList,
+    isLoading,
+    isRefreshing,
+    isFetchingNextPage,
+    loadMore,
+    error,
+    refetch,
+    emptyMessage,
+  } = useFilteredPlaces(searchQuery);
 
   const onSearch = (event: TextInputChangeEvent) => setSearchQuery(event.nativeEvent.text);
 
@@ -69,7 +78,15 @@ export default function MainView() {
 
   return (
     <LoadingState isLoading={isLoading} error={error}>
-      <PlacesList items={filteredList} onRefresh={refetch} isLoading={isLoading} />
+      <PlacesList
+        items={filteredList}
+        onRefresh={refetch}
+        isLoadingInitial={isLoading}
+        isRefreshing={isRefreshing}
+        isFetchingNextPage={isFetchingNextPage}
+        onEndReached={loadMore}
+        emptyMessage={emptyMessage}
+      />
     </LoadingState>
   );
 }

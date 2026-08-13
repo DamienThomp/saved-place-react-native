@@ -2,9 +2,15 @@ import { createClient } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
 
 import 'react-native-url-polyfill/auto';
-import { Database } from '~/types/database.types';
+import { Database, Tables } from '~/types/database.types';
 import { CreatePayload, UpdatePayload } from '~/types/types';
-import imageLoader from '~/utils/imageLoader';
+
+export const PLACES_PAGE_SIZE = 5;
+
+export type PaginatedPlaces = {
+  data: Tables<'places'>[];
+  hasMore: boolean;
+};
 
 export { Session } from '@supabase/supabase-js';
 
@@ -76,7 +82,33 @@ export const signOut = async () => {
   }
 };
 
-export const getPlaces = async (userId: string) => {
+export const getPlaces = async (
+  userId: string,
+  { page = 0, pageSize = PLACES_PAGE_SIZE }: { page?: number; pageSize?: number } = {}
+): Promise<PaginatedPlaces> => {
+  const from = page * pageSize;
+  const to = from + pageSize - 1;
+
+  const { data, error } = await dbClient
+    .from('places')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .range(from, to);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const rows = data ?? [];
+
+  return {
+    data: rows,
+    hasMore: rows.length === pageSize,
+  };
+};
+
+export const getAllPlaces = async (userId: string) => {
   const { data, error } = await dbClient
     .from('places')
     .select('*')

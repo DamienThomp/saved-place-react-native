@@ -1,8 +1,8 @@
 # Saved Place
 
-Saved Place is a React Native demo application that allows users to save and view places with associated titles, addresses, photos, and locations on a map. 
+Saved Place is a React Native demo application that allows users to save and view places with associated titles, addresses, photos, and locations on a map.
 Users can see these places in a list, view details about them, and interact with them through an interactive map interface powered by [MapBox](https://www.mapbox.com/).
-The main purpose of this demo project was to experiment with MapBox and Supabase integration in a React Native application. 
+The main purpose of this demo project was to experiment with MapBox and Supabase integration in a React Native application.
 
 ## Features
 
@@ -22,6 +22,7 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 - **Expo:** This app uses Expo and Expo-Router.
 
 ## Future Improvements
+
 - [x] ~~add directions to details screen~~
 - [x] ~~add transition animations~~
 - [x] ~~add swipe to delete~~
@@ -31,23 +32,25 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 - [x] ~~add update action to places list for editing a place~~
 - [x] ~~add map controls to details screen (change theme, ~~pitch~~, ~~toggle to user location~~)~~
 - [x] ~~add camera support for image picker~~
-- [ ] add pagination for list view
+- [x] ~~add pagination for list view~~ currently loads five at a time on scroll before reaching end of list.
 
 ## Screen Shots
 
 ### Place List
+
 <img width="180" src="https://github.com/user-attachments/assets/6939b2c4-e9f8-4f6a-ba77-9df841625c23">
 <img width="180" src="https://github.com/user-attachments/assets/3f6f9266-ec5e-48ba-a38b-7c892b571827">
 <img width="180" src="https://github.com/user-attachments/assets/e965c27a-d8be-45d2-a0db-effb8c16285d">
 <img width="180" src="https://github.com/user-attachments/assets/e485d4f9-b684-4186-9610-f3a0fa7d8386">
 
 ### Place Form
+
 <img width="200" src="https://github.com/user-attachments/assets/1c671c23-872d-41ff-990f-c290dda93aa9">
 <img width="200" src="https://github.com/user-attachments/assets/19c7718a-e43f-43e8-9fd5-d36bfaa41434">
 <img width="200" src="https://github.com/user-attachments/assets/c2b513dd-b912-41c0-9f5a-16acbb3a9064">
 
 ### Details
+
 <img width="200" src="https://github.com/user-attachments/assets/f7b15d93-dd4b-4798-8852-095074f94a26">
 <img width="200" src="https://github.com/user-attachments/assets/64477499-282c-4871-aaad-2a9ac54da6e5">
 <img width="200" src="https://github.com/user-attachments/assets/88122658-9aa3-48d3-a02c-009a2e013e01">
-

@@ -1,12 +1,14 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
   createPlace,
   deleteImage,
   deletePlace,
+  getAllPlaces,
   getPlace,
   getPlaces,
   insertImage,
+  PLACES_PAGE_SIZE,
   searchPlaces,
   updatePlace,
 } from '~/lib/db';
@@ -17,15 +19,32 @@ export const usePlacesList = () => {
   const { session } = useAuthentication();
   const id = session?.user.id;
 
+  return useInfiniteQuery({
+    queryKey: ['places', 'list', { userId: id }],
+    queryFn: async ({ pageParam }) => {
+      if (!id) return { data: [], hasMore: false };
+
+      return await getPlaces(id, { page: pageParam, pageSize: PLACES_PAGE_SIZE });
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => (lastPage.hasMore ? allPages.length : undefined),
+    enabled: !!id,
+  });
+};
+
+export const useAllPlaces = () => {
+  const { session } = useAuthentication();
+  const id = session?.user.id;
+
   return useQuery({
-    queryKey: ['places', { userId: id }],
+    queryKey: ['places', 'all', { userId: id }],
     queryFn: async () => {
       if (!id) return null;
 
-      return await getPlaces(id);
+      return await getAllPlaces(id);
     },
-    meta: { persist: true },
     enabled: !!id,
+    meta: { persist: true },
   });
 };
 
@@ -34,18 +53,19 @@ export const useSearchPlace = (query: string) => {
   const id = session?.user.id;
 
   return useQuery({
-    queryKey: ['places', query],
+    queryKey: ['places', 'search', query],
     queryFn: async () => {
       if (!query || !id) return null;
 
       return await searchPlaces(id, query);
     },
+    enabled: !!query && !!id,
   });
 };
 
 export const usePlaceDetails = (id?: number) => {
   return useQuery({
-    queryKey: ['places', id],
+    queryKey: ['places', 'detail', id],
     queryFn: async () => {
       if (!id) return null;
 

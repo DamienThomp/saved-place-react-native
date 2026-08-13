@@ -1,7 +1,4 @@
 import MapboxGL from '@rnmapbox/maps';
-import axios from 'axios';
-
-const token = process.env.EXPO_PUBLIC_MAPBOX_TOKEN || null;
 
 export interface MapSnapShotProps {
   centerCoordinate: number[];
@@ -27,29 +24,4 @@ export async function takeSnapshot(args: MapSnapShotProps): Promise<string | und
   const options = { ...DEFAULT_OPTIONS, ...args };
   const result = await MapboxGL.snapshotManager.takeSnap(options);
   return result;
-}
-
-export async function getAddress({ centerCoordinate }: MapSnapShotProps) {
-  const [long, lat] = centerCoordinate;
-
-  const response = await axios({
-    method: 'get',
-    url: `https://api.mapbox.com/search/geocode/v6/reverse`,
-    withCredentials: false,
-    params: {
-      longitude: long,
-      latitude: lat,
-      types: 'address',
-      limit: 1,
-      access_token: token,
-    },
-  });
-
-  if (!response.data) {
-    throw new Error('Invalid response fetching address');
-  }
-
-  const { data } = response;
-
-  return data?.features[0]?.properties?.full_address ?? 'n/a';
 }
