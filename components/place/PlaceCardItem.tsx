@@ -1,5 +1,4 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { memo, useCallback } from 'react';
 import { Alert, Pressable, StyleSheet, Text } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
@@ -16,9 +15,9 @@ type PlaceCardItemProps = {
   onEdit: (id: number) => void;
 };
 
-const PlaceCardItem = memo(({ place, onSelect, onDelete, onEdit }: PlaceCardItemProps) => {
+const PlaceCardItem = ({ place, onSelect, onDelete, onEdit }: PlaceCardItemProps) => {
   const { isEditMode } = useEditMoreStore();
-  const handleDelete = useCallback(() => {
+  const handleDelete = () => {
     Alert.alert('Delete', 'Are you sure you want to delete this Place?', [
       { text: 'Cancel', style: 'cancel' },
       {
@@ -28,15 +27,16 @@ const PlaceCardItem = memo(({ place, onSelect, onDelete, onEdit }: PlaceCardItem
         },
       },
     ]);
-  }, [onDelete, place.id]);
+  };
 
-  const handlePress = useCallback(() => onSelect(place.id), [onSelect, place.id]);
-  const handleOnEdit = useCallback(() => onEdit(place.id), [onEdit, place.id]);
+  const handlePress = () => onSelect(place.id);
+  const handleOnEdit = () => onEdit(place.id);
 
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel="Show place details"
+      accessibilityLabel={`Show details for ${place.title}`}
+      accessibilityHint="Opens place details screen."
       style={styles.cardContainer}
       onPress={handlePress}>
       <RemoteImage style={styles.image} path={place.image} />
@@ -51,7 +51,7 @@ const PlaceCardItem = memo(({ place, onSelect, onDelete, onEdit }: PlaceCardItem
               icon="trash-bin"
               color="white"
               size={28}
-              accessibilityLabel="Delete Place"
+              accessibilityLabel={`Delete ${place.title}`}
               onPress={handleDelete}
             />
           </Animated.View>
@@ -60,7 +60,7 @@ const PlaceCardItem = memo(({ place, onSelect, onDelete, onEdit }: PlaceCardItem
               icon="pencil"
               color="white"
               size={28}
-              accessibilityLabel="Edite Place"
+              accessibilityLabel={`Edit ${place.title}`}
               onPress={handleOnEdit}
             />
           </Animated.View>
@@ -69,7 +69,7 @@ const PlaceCardItem = memo(({ place, onSelect, onDelete, onEdit }: PlaceCardItem
       <Text style={styles.title}>{place.title}</Text>
     </Pressable>
   );
-});
+};
 
 export default PlaceCardItem;
 

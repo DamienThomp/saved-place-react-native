@@ -1,26 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Alert } from 'react-native';
 
 import { usePlacesList, useSearchPlace } from '~/api/places';
-import { Place } from '~/types/types';
 
-// TODO: - Refactor to include paginated results
 export default function useFilteredPlaces(query: string) {
-  const [filteredList, setFilteredList] = useState<Place[] | null>(null);
+  const {
+    data,
+    error,
+    isLoading,
+    isRefetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = usePlacesList();
 
-  const { data, error, isLoading, refetch } = usePlacesList();
   const { data: searchResults, error: searchError } = useSearchPlace(query);
 
-  useEffect(() => {
-    if (searchResults) {
-      setFilteredList(searchResults);
-      return;
-    }
+  const isSearching = query.length > 0;
 
-    if (data) {
-      setFilteredList(data);
+  const paginatedList = useMemo(
+    () => data?.pages.flatMap((page) => page.data) ?? null,
+    [data]
+  );
+
+  const filteredList = isSearching ? (searchResults ?? null) : paginatedList;
+
+  const loadMore = useCallback(() => {
+    if (!isSearching && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
     }
-  }, [data, searchResults]);
+  }, [isSearching, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   useEffect(() => {
     if (searchError) {
@@ -28,5 +38,15 @@ export default function useFilteredPlaces(query: string) {
     }
   }, [searchError]);
 
-  return { filteredList, error, isLoading, refetch };
+  return {
+    filteredList,
+    error,
+    isLoading,
+    isRefreshing: isRefetching && !isFetchingNextPage,
+    isFetchingNextPage,
+    hasNextPage: !isSearching && !!hasNextPage,
+    loadMore,
+    refetch,
+    emptyMessage: isSearching ? `No results for "${query}"` : 'No Places Added.',
+  };
 }

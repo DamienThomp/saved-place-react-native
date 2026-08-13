@@ -1,29 +1,41 @@
 import { useTheme } from 'expo-router/react-navigation';
 import { useRouter } from 'expo-router';
 import { useCallback } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet } from 'react-native';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 
 import PlaceCardItem from './PlaceCardItem';
-import { Container } from '../common/Container';
 
 import { useDeletePlace, useDeletImage } from '~/api/places';
 import ContentUnavailable from '~/components/common/ContentUnavailable';
 import { Place } from '~/types/types';
-import isEmpty from '~/utils/isEmpty';
 
 interface PlacesListProps {
   items: Place[] | null | undefined;
-  isLoading: boolean;
+  isLoadingInitial: boolean;
+  isRefreshing: boolean;
+  isFetchingNextPage?: boolean;
+  emptyMessage?: string;
   onRefresh: () => void;
+  onEndReached?: () => void;
 }
 
-export default function PlacesList({ items, isLoading, onRefresh }: PlacesListProps) {
+export default function PlacesList({
+  items,
+  isLoadingInitial,
+  isRefreshing,
+  isFetchingNextPage,
+  emptyMessage,
+  onRefresh,
+  onEndReached,
+}: PlacesListProps) {
   const router = useRouter();
   const theme = useTheme();
 
   const { mutate: deleteItem } = useDeletePlace();
   const { mutate: deleteImage } = useDeletImage();
+
+  const listData = items ?? [];
 
   const handleOnSelectPlace = (id: number) => {
     router.push(`/${id}`);
@@ -53,27 +65,33 @@ export default function PlacesList({ items, isLoading, onRefresh }: PlacesListPr
     [items, deleteImage, deleteItem]
   );
 
-  if (!items || isEmpty(items)) {
-    return (
-      <Container>
-        <ContentUnavailable color={theme.colors.primary} icon="map-outline">
-          No Places Added.
-        </ContentUnavailable>
-      </Container>
-    );
-  }
-
   return (
     <Animated.FlatList
       style={styles.list}
-      data={items}
+      data={listData}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior="automatic"
-      contentContainerStyle={{ paddingBottom: 48 }}
+      contentContainerStyle={[styles.content, listData.length === 0 && styles.emptyContent]}
       keyExtractor={(item) => item.id.toString()}
       keyboardDismissMode="on-drag"
       onRefresh={onRefresh}
-      refreshing={isLoading}
+      refreshing={isRefreshing}
+      onEndReached={onEndReached}
+      onEndReachedThreshold={0.5}
+      initialNumToRender={3}
+      maxToRenderPerBatch={2}
+      ListEmptyComponent={
+        !isLoadingInitial
+          ? () => (
+              <ContentUnavailable color={theme.colors.primary} icon="map-outline">
+                {emptyMessage ?? 'No Places Added.'}
+              </ContentUnavailable>
+            )
+          : null
+      }
+      ListFooterComponent={
+        isFetchingNextPage ? () => <ActivityIndicator style={styles.footer} /> : null
+      }
       renderItem={({ item }) => (
         <PlaceCardItem
           place={item}
@@ -83,7 +101,6 @@ export default function PlacesList({ items, isLoading, onRefresh }: PlacesListPr
         />
       )}
       itemLayoutAnimation={LinearTransition.duration(250)}
-      windowSize={2}
     />
   );
 }
@@ -91,5 +108,14 @@ export default function PlacesList({ items, isLoading, onRefresh }: PlacesListPr
 const styles = StyleSheet.create({
   list: {
     marginHorizontal: 12,
+  },
+  content: {
+    paddingBottom: 48,
+  },
+  emptyContent: {
+    flexGrow: 1,
+  },
+  footer: {
+    padding: 16,
   },
 });
