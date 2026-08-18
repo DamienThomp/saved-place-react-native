@@ -4,7 +4,6 @@ import { create } from 'zustand';
 
 const DEFAULTS = {
   zoomLevel: 14,
-  mapTheme: StyleURL.Street,
   mapPitch: 0,
   isLightMode: true,
   pitchIsToggled: false,
@@ -21,7 +20,6 @@ type MapControlActions = {
 
 type MapControlsStore = {
   zoomLevel: number;
-  mapTheme: StyleURL;
   isLightMode: boolean;
   pitchIsToggled: boolean;
   mapPitch: number;
@@ -43,14 +41,12 @@ const useMapControlStore = create<MapControlsStore>()((set) => ({
       set({ mapPitch: value });
     },
     toggleMapPitch: (value) => set({ pitchIsToggled: value, mapPitch: value ? 60 : 0 }),
-    toggleLightMode: (value) =>
-      set({ isLightMode: value, mapTheme: value ? StyleURL.Street : StyleURL.TrafficNight }),
+    toggleLightMode: (value) => set({ isLightMode: value }),
     resetAll: () => set({ ...initialState }),
   },
 }));
 
 export const useMapZoomLevel = () => useMapControlStore((state) => state.zoomLevel);
-export const useMapTheme = () => useMapControlStore((state) => state.mapTheme);
 export const useIsLightMode = () => useMapControlStore((state) => state.isLightMode);
 export const useIsPitchToggled = () => useMapControlStore((state) => state.pitchIsToggled);
 export const useMapCenter = () => useMapControlStore((state) => state.mapCenter);

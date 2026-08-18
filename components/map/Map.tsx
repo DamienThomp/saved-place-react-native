@@ -1,4 +1,4 @@
-import Mapbox, { Camera, LocationPuck, MapView, MarkerView } from '@rnmapbox/maps';
+import Mapbox, { Camera, LocationPuck, MapView, MarkerView, StyleImport } from '@rnmapbox/maps';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { LayoutChangeEvent, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -13,12 +13,13 @@ import MapUserLocationButton from './MapUserLocationButton';
 import { useDirections } from '~/providers/DirectionsProvider';
 import { useLocation } from '~/providers/LocationProvider';
 import {
+  useIsLightMode,
   useMapActions,
   useMapCenter,
   useMapPitch,
-  useMapTheme,
   useMapZoomLevel,
 } from '~/stores/mapControlsStore';
+import { MAPBOX_STANDARD_STYLE } from '~/utils/mapBoxUtils';
 import { Place } from '~/types/types';
 import debounce from '~/utils/debounce';
 
@@ -55,9 +56,9 @@ type MapProps = {
 export default function Map({ coordinates, readOnly, showControls, places, onPress }: MapProps) {
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
   const [isLayoutReady, setIsLayoutReady] = useState(false);
+  const isLightMode = useIsLightMode();
   const mapCenter = useMapCenter();
   const mapPitch = useMapPitch();
-  const mapTheme = useMapTheme();
   const zoomLevel = useMapZoomLevel();
   const insets = useSafeAreaInsets();
   const { userLocation } = useLocation();
@@ -93,6 +94,13 @@ export default function Map({ coordinates, readOnly, showControls, places, onPre
         setMapZoomLevel(event.properties.zoom);
       }, 1000),
     [setMapCenter, setMapZoomLevel]
+  );
+
+  const standardStyleConfig = useMemo(
+    () => ({
+      lightPreset: isLightMode ? ('day' as const) : ('night' as const),
+    }),
+    [isLightMode]
   );
 
   useEffect(() => {
@@ -131,10 +139,11 @@ export default function Map({ coordinates, readOnly, showControls, places, onPre
         isLayoutReady && (
           <MapView
             style={styles.map}
-            styleURL={mapTheme}
+            styleURL={MAPBOX_STANDARD_STYLE}
             scaleBarEnabled={false}
             onCameraChanged={onCameraChange}
             onPress={onMapSelection}>
+            <StyleImport id="basemap" existing={true} config={standardStyleConfig} />
             <Camera
               centerCoordinate={mapCenter}
               animationDuration={DEFAULTS.animationDuration}

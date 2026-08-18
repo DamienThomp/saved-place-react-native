@@ -1,5 +1,7 @@
 import MapboxGL from '@rnmapbox/maps';
 
+export const MAPBOX_STANDARD_STYLE = 'mapbox://styles/mapbox/standard';
+
 export interface MapSnapShotProps {
   centerCoordinate: number[];
   width?: number;
@@ -7,7 +9,7 @@ export interface MapSnapShotProps {
   zoomLevel?: number;
   pitch?: number;
   heading?: number;
-  styleURL?: MapboxGL.StyleURL;
+  styleURL?: string;
   writeToDisk?: boolean;
 }
 
@@ -16,7 +18,7 @@ const DEFAULT_OPTIONS: MapSnapShotProps = {
   width: 375,
   height: 200,
   zoomLevel: 16,
-  styleURL: MapboxGL.StyleURL.Street,
+  styleURL: MAPBOX_STANDARD_STYLE,
   writeToDisk: true,
 };
 
