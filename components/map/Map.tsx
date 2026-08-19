@@ -1,6 +1,6 @@
 import Mapbox, { Camera, LocationPuck, MapView, MarkerView, StyleImport } from '@rnmapbox/maps';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { LayoutChangeEvent, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, LayoutChangeEvent, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import AnnotationContent from './AnnotationContent';
@@ -54,6 +54,7 @@ type MapProps = {
 };
 
 export default function Map({ coordinates, readOnly, showControls, places, onPress }: MapProps) {
+  console.log('[Map] render', coordinates, readOnly, showControls);
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
   const [isLayoutReady, setIsLayoutReady] = useState(false);
   const isLightMode = useIsLightMode();
@@ -105,17 +106,19 @@ export default function Map({ coordinates, readOnly, showControls, places, onPre
 
   useEffect(() => {
     if (coordinates) {
+      console.log('setMapCenter from coordinates', coordinates.longitude, coordinates.latitude);
       setMapCenter([coordinates.longitude, coordinates.latitude]);
+      setMapZoomLevel(15);
       setSelectedPoint({
         coordinate: [coordinates.longitude, coordinates.latitude],
       });
-      return;
     }
 
-    if (userLocation) {
+    if (userLocation && !coordinates) {
+      console.log('setMapCenter from userLocation', userLocation.longitude, userLocation.latitude);
       setMapCenter([userLocation.longitude, userLocation.latitude]);
     }
-  }, [userLocation, coordinates]);
+  }, [userLocation, coordinates, setMapCenter]);
 
   useEffect(() => {
     if (directionCoordinates) {
@@ -123,50 +126,44 @@ export default function Map({ coordinates, readOnly, showControls, places, onPre
     }
   }, [directionCoordinates]);
 
-  useEffect(() => {
-    return () => {
-      resetAll();
-    };
-  }, []);
-
   return (
     <View style={styles.mapContainer} onLayout={onLayout}>
       {!mapCenter ? (
         <View style={styles.mapContainer}>
           <Text>No map center</Text>
         </View>
+      ) : isLayoutReady ? (
+        <MapView
+          style={styles.map}
+          styleURL={MAPBOX_STANDARD_STYLE}
+          scaleBarEnabled={false}
+          onCameraChanged={onCameraChange}
+          onPress={onMapSelection}>
+          <StyleImport id="basemap" existing={true} config={standardStyleConfig} />
+          <Camera
+            centerCoordinate={mapCenter}
+            animationDuration={DEFAULTS.animationDuration}
+            zoomLevel={zoomLevel}
+            pitch={mapPitch}
+            defaultSettings={{
+              animationDuration: 0,
+            }}
+          />
+
+          {selectedPoint && (
+            <MarkerView coordinate={selectedPoint.coordinate} anchor={{ x: 0.5, y: 1 }}>
+              <AnnotationContent />
+            </MarkerView>
+          )}
+
+          {places && <MapMarkers data={places} />}
+
+          <LocationPuck pulsing={{ isEnabled: true }} puckBearing="course" puckBearingEnabled />
+
+          {directionCoordinates && <LineRoute coordinates={directionCoordinates} />}
+        </MapView>
       ) : (
-        isLayoutReady && (
-          <MapView
-            style={styles.map}
-            styleURL={MAPBOX_STANDARD_STYLE}
-            scaleBarEnabled={false}
-            onCameraChanged={onCameraChange}
-            onPress={onMapSelection}>
-            <StyleImport id="basemap" existing={true} config={standardStyleConfig} />
-            <Camera
-              centerCoordinate={mapCenter}
-              animationDuration={DEFAULTS.animationDuration}
-              zoomLevel={zoomLevel}
-              pitch={mapPitch}
-              defaultSettings={{
-                animationDuration: 0,
-              }}
-            />
-
-            {selectedPoint && (
-              <MarkerView coordinate={selectedPoint.coordinate} anchor={{ x: 0.5, y: 1 }}>
-                <AnnotationContent />
-              </MarkerView>
-            )}
-
-            {places && <MapMarkers data={places} />}
-
-            <LocationPuck pulsing={{ isEnabled: true }} puckBearing="course" puckBearingEnabled />
-
-            {directionCoordinates && <LineRoute coordinates={directionCoordinates} />}
-          </MapView>
-        )
+        <ActivityIndicator style={styles.map} />
       )}
       {showControls && (
         <View style={[styles.controlsContainer, { top: insets.top }]}>

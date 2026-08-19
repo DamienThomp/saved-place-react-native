@@ -15,6 +15,7 @@ import { useDirections } from '~/providers/DirectionsProvider';
 import { useMapActions } from '~/stores/mapControlsStore';
 
 export default function PlaceDetails() {
+  console.log('[PlaceDetails] render');
   const { setDirections } = useDirections();
   const router = useRouter();
   const insets = useSafeAreaInsets();

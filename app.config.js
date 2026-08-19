@@ -12,10 +12,7 @@ export default {
     plugins: [
         "expo-router",
         [
-          "@rnmapbox/maps",
-          {
-            RNMapboxMapsDownloadToken: process.env.EXPO_PUBLIC_MAPBOX_TOKEN
-          }
+          "@rnmapbox/maps", {}
         ],
         [
           "expo-location",
@@ -44,7 +41,11 @@ export default {
           }
         ],
         "expo-secure-store",
-        "expo-font"
+        "expo-font",
+        "expo-build-properties",
+        "expo-image",
+        "expo-secure-store",
+        "expo-font",
       ],
       experiments: {
         typedRoutes: true,

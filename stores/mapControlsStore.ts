@@ -1,4 +1,3 @@
-import { StyleURL } from '@rnmapbox/maps';
 import type { Position } from 'geojson';
 import { create } from 'zustand';
 
@@ -36,13 +35,21 @@ const useMapControlStore = create<MapControlsStore>()((set) => ({
   ...initialState,
   actions: {
     setMapZoomLevel: (value) => set({ zoomLevel: value }),
-    setMapCenter: (position) => set({ mapCenter: position }),
+    setMapCenter: (position) => {
+      console.log('[mapControls] setMapCenter', position);
+      console.trace();
+      set({ mapCenter: position });
+    },
     setMapPitch: (value) => {
       set({ mapPitch: value });
     },
     toggleMapPitch: (value) => set({ pitchIsToggled: value, mapPitch: value ? 60 : 0 }),
     toggleLightMode: (value) => set({ isLightMode: value }),
-    resetAll: () => set({ ...initialState }),
+    resetAll: () => {
+      console.log('[mapControls] resetAll');
+      console.trace();
+      set({ ...initialState });
+    },
   },
 }));
 
