@@ -2,6 +2,14 @@ import MapboxGL from '@rnmapbox/maps';
 
 export const MAPBOX_STANDARD_STYLE = 'mapbox://styles/mapbox/standard';
 
+export const MAP_CAMERA = {
+  DEFAULT_ZOOM: 14,
+  PLACE_DETAIL_ZOOM: 17,
+  GLOBAL_ZOOM: 6,
+  PITCH_ANGLE: 60,
+  ANIMATION_DURATION_MS: 500,
+} as const;
+
 export interface MapSnapShotProps {
   centerCoordinate: number[];
   width?: number;

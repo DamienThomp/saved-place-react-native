@@ -8,7 +8,7 @@ export default function MapPitchToggleButton() {
   const { toggleMapPitch } = useMapActions();
 
   const onTogglePitch = () => {
-    toggleMapPitch(!isPitchToggled);
+    toggleMapPitch();
   };
 
   return (

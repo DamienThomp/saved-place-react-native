@@ -7,7 +7,7 @@ export default function MapThemeToggleButton() {
   const isLightMode = useIsLightMode();
   const { toggleLightMode } = useMapActions();
 
-  const onToggleLightMode = () => toggleLightMode(!isLightMode);
+  const onToggleLightMode = () => toggleLightMode();
 
   return (
     <MapControlContainer>

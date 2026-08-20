@@ -1,6 +1,7 @@
 import Mapbox, { Camera, LocationPuck, MapView, MarkerView, StyleImport } from '@rnmapbox/maps';
+import type { Position } from 'geojson';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, LayoutChangeEvent, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, LayoutChangeEvent, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import AnnotationContent from './AnnotationContent';
@@ -13,21 +14,15 @@ import MapUserLocationButton from './MapUserLocationButton';
 import { useDirections } from '~/providers/DirectionsProvider';
 import { useLocation } from '~/providers/LocationProvider';
 import {
+  useCameraCommand,
   useIsLightMode,
   useMapActions,
-  useMapCenter,
   useMapPitch,
-  useMapZoomLevel,
 } from '~/stores/mapControlsStore';
-import { MAPBOX_STANDARD_STYLE } from '~/utils/mapBoxUtils';
 import { Place } from '~/types/types';
-import debounce from '~/utils/debounce';
+import { MAPBOX_STANDARD_STYLE, MAP_CAMERA } from '~/utils/mapBoxUtils';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
-
-const DEFAULTS = {
-  animationDuration: 500,
-};
 
 type Coordinates = {
   longitude: number;
@@ -44,7 +39,6 @@ type Properties = {
   screenPointY: number;
 };
 
-// TODO: Convert to zustand store
 type MapProps = {
   coordinates?: Coordinates | null;
   places?: Place[] | null;
@@ -54,17 +48,26 @@ type MapProps = {
 };
 
 export default function Map({ coordinates, readOnly, showControls, places, onPress }: MapProps) {
-  console.log('[Map] render', coordinates, readOnly, showControls);
+  const cameraRef = useRef<Camera>(null);
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
   const [isLayoutReady, setIsLayoutReady] = useState(false);
   const isLightMode = useIsLightMode();
-  const mapCenter = useMapCenter();
   const mapPitch = useMapPitch();
-  const zoomLevel = useMapZoomLevel();
+  const cameraCommand = useCameraCommand();
   const insets = useSafeAreaInsets();
   const { userLocation } = useLocation();
   const { directionCoordinates } = useDirections();
-  const { setMapZoomLevel, setMapCenter, toggleMapPitch, resetAll } = useMapActions();
+  const { flyTo, setPitchToggled } = useMapActions();
+
+  const initialCenter = useMemo<Position | null>(() => {
+    if (coordinates) {
+      return [coordinates.longitude, coordinates.latitude];
+    }
+    if (userLocation) {
+      return [userLocation.longitude, userLocation.latitude];
+    }
+    return null;
+  }, [coordinates, userLocation]);
 
   const onLayout = useCallback((event: LayoutChangeEvent) => {
     const { width, height } = event.nativeEvent.layout;
@@ -76,26 +79,15 @@ export default function Map({ coordinates, readOnly, showControls, places, onPre
   const onMapSelection = (feature: GeoJSON.Feature) => {
     if (readOnly) return;
     const properties = feature.properties as GeoJSON.GeoJsonProperties;
-    const { coordinates } = feature.geometry as GeoJSON.Point;
+    const { coordinates: pointCoordinates } = feature.geometry as GeoJSON.Point;
     const point = {
-      coordinate: coordinates,
+      coordinate: pointCoordinates,
       properties: properties as Properties,
     };
 
     setSelectedPoint(point);
     onPress?.(point);
   };
-
-  const onCameraChange = useMemo(
-    () =>
-      debounce((event: Mapbox.MapState) => {
-        const { center } = event.properties;
-        if (center[0] === 0 && center[1] === 0) return;
-        setMapCenter(center);
-        setMapZoomLevel(event.properties.zoom);
-      }, 1000),
-    [setMapCenter, setMapZoomLevel]
-  );
 
   const standardStyleConfig = useMemo(
     () => ({
@@ -105,49 +97,55 @@ export default function Map({ coordinates, readOnly, showControls, places, onPre
   );
 
   useEffect(() => {
+    if (!cameraCommand?.sequence) return;
+
+    cameraRef.current?.setCamera({
+      animationDuration: MAP_CAMERA.ANIMATION_DURATION_MS,
+      ...(cameraCommand.center ? { centerCoordinate: cameraCommand.center } : {}),
+      ...(cameraCommand.zoom != null ? { zoomLevel: cameraCommand.zoom } : {}),
+    });
+  }, [cameraCommand?.sequence]);
+
+  useEffect(() => {
     if (coordinates) {
-      console.log('setMapCenter from coordinates', coordinates.longitude, coordinates.latitude);
-      setMapCenter([coordinates.longitude, coordinates.latitude]);
-      setMapZoomLevel(15);
+      flyTo([coordinates.longitude, coordinates.latitude], MAP_CAMERA.PLACE_DETAIL_ZOOM);
       setSelectedPoint({
         coordinate: [coordinates.longitude, coordinates.latitude],
       });
+      return;
     }
 
-    if (userLocation && !coordinates) {
-      console.log('setMapCenter from userLocation', userLocation.longitude, userLocation.latitude);
-      setMapCenter([userLocation.longitude, userLocation.latitude]);
+    if (userLocation) {
+      flyTo([userLocation.longitude, userLocation.latitude]);
     }
-  }, [userLocation, coordinates, setMapCenter]);
+  }, [userLocation, coordinates, flyTo]);
 
   useEffect(() => {
     if (directionCoordinates) {
-      toggleMapPitch(true);
+      setPitchToggled(true);
     }
-  }, [directionCoordinates]);
+  }, [directionCoordinates, setPitchToggled]);
 
   return (
     <View style={styles.mapContainer} onLayout={onLayout}>
-      {!mapCenter ? (
-        <View style={styles.mapContainer}>
-          <Text>No map center</Text>
-        </View>
+      {!initialCenter ? (
+        <ActivityIndicator style={styles.map} />
       ) : isLayoutReady ? (
         <MapView
           style={styles.map}
           styleURL={MAPBOX_STANDARD_STYLE}
           scaleBarEnabled={false}
-          onCameraChanged={onCameraChange}
           onPress={onMapSelection}>
           <StyleImport id="basemap" existing={true} config={standardStyleConfig} />
           <Camera
-            centerCoordinate={mapCenter}
-            animationDuration={DEFAULTS.animationDuration}
-            zoomLevel={zoomLevel}
-            pitch={mapPitch}
+            ref={cameraRef}
             defaultSettings={{
+              centerCoordinate: initialCenter,
+              zoomLevel: coordinates ? MAP_CAMERA.PLACE_DETAIL_ZOOM : MAP_CAMERA.DEFAULT_ZOOM,
+              pitch: mapPitch,
               animationDuration: 0,
             }}
+            pitch={mapPitch}
           />
 
           {selectedPoint && (
