@@ -1,13 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import LoadingState from '~/components/common/LoadingState';
 import RemoteImage from '~/components/common/RemoteImage';
-import DirectionButton from '~/components/map/DirectionButton';
+import DirectionsBottomSheet from '~/components/map/directions/sheet/DirectionsBottomSheet';
 import Map from '~/components/map/Map';
 import IconButton from '~/components/ui/IconButton';
 import { useLocationDetails } from '~/hooks/useLocationDetails';
@@ -20,6 +20,7 @@ export default function PlaceDetails() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { flyTo } = useMapActions();
+  const [isDirectionsSheetPresented, setIsDirectionsSheetPresented] = useState(false);
 
   const { data: place, isLoading, error } = useLocationDetails();
 
@@ -36,6 +37,10 @@ export default function PlaceDetails() {
   };
 
   const handleBackButton = () => router.back();
+
+  const openDirectionsSheet = () => {
+    setIsDirectionsSheetPresented(true);
+  };
 
   useEffect(() => {
     setDirections?.(null);
@@ -64,25 +69,38 @@ export default function PlaceDetails() {
         <Animated.View style={[styles.overlay]} entering={FadeInDown.duration(500).delay(250)}>
           <View style={styles.overlayContent}>
             <View style={styles.info}>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Center map on place"
-                style={styles.titeContainer}
-                onPress={toggleToPlace}>
-                <Text style={[styles.title]}>{place?.title}</Text>
-                <Ionicons name="location-sharp" color="red" size={18} />
-              </Pressable>
+              <View style={styles.titleRow}>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Center map on place"
+                  style={styles.titleContainer}
+                  onPress={toggleToPlace}>
+                  <Text style={[styles.title]}>{place?.title}</Text>
+                  <Ionicons name="location-sharp" color="red" size={18} />
+                </Pressable>
+                {place && (
+                  <IconButton
+                    accessibilityLabel="Get directions"
+                    icon="navigate"
+                    size={22}
+                    color="white"
+                    onPress={openDirectionsSheet}
+                  />
+                )}
+              </View>
               <Text style={[styles.address]}>{place?.address}</Text>
-              {place && (
-                <DirectionButton
-                  coordinates={{ longitude: place.longitude, latitude: place.latitude }}
-                  color="white"
-                />
-              )}
             </View>
             <RemoteImage style={styles.image} path={place?.image} height={250} contentFit="cover" />
           </View>
         </Animated.View>
+        {place && (
+          <DirectionsBottomSheet
+            isPresented={isDirectionsSheetPresented}
+            onDismiss={() => setIsDirectionsSheetPresented(false)}
+            coordinates={{ longitude: place.longitude, latitude: place.latitude }}
+            title={place.title}
+          />
+        )}
       </View>
     </LoadingState>
   );
@@ -117,7 +135,13 @@ const styles = StyleSheet.create({
     marginTop: 12,
     gap: 12,
   },
-  titeContainer: {
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  titleContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',

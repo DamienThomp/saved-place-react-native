@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Alert } from 'react-native';
+import { Alert, PressableProps } from 'react-native';
 
 import { Button } from '~/components/ui/Button';
 import { useDirections } from '~/providers/DirectionsProvider';
@@ -8,15 +8,23 @@ import { Coordinates } from '~/types/types';
 type DirectionButtonProps = {
   coordinates: Coordinates;
   color?: string;
+  onDirectionsRequested?: () => void;
+  style?: PressableProps['style'];
 };
 
-export default function DirectionButton({ coordinates, color }: DirectionButtonProps) {
+export default function DirectionButton({
+  coordinates,
+  color,
+  onDirectionsRequested,
+  style,
+}: DirectionButtonProps) {
   const { setSelectedPoint, error, setError } = useDirections();
 
   const onGetDirections = () => {
     if (setSelectedPoint) {
       setSelectedPoint(coordinates);
     }
+    onDirectionsRequested?.();
   };
 
   useEffect(() => {
@@ -29,6 +37,12 @@ export default function DirectionButton({ coordinates, color }: DirectionButtonP
   }, [error]);
 
   return (
-    <Button title="Get Directions" icon="directions" color={color} onPress={onGetDirections} />
+    <Button
+      title="Get Directions"
+      icon="directions"
+      color={color}
+      onPress={onGetDirections}
+      style={style}
+    />
   );
 }

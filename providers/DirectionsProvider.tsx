@@ -27,7 +27,7 @@ type DirectionsContextState = {
   error?: string | undefined;
   setSelectedPoint?: Dispatch<SetStateAction<SelectedPoint | undefined>>;
   setDirections?: Dispatch<SetStateAction<MapboxDirections | null | undefined>>;
-  setMode?: Dispatch<SetStateAction<DirectionType | undefined>>;
+  setMode?: Dispatch<SetStateAction<DirectionType>>;
   setError?: Dispatch<SetStateAction<string | undefined>>;
 };
 
@@ -41,7 +41,7 @@ const isError = (response: MapboxDirections | undefined): boolean => {
 export default function DirectionsProvider({ children }: PropsWithChildren) {
   const [directions, setDirections] = useState<MapboxDirections | null>();
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint>();
-  const [mode, setMode] = useState<DirectionType>();
+  const [mode, setMode] = useState<DirectionType>(DirectionType.Driving);
   const [error, setError] = useState<string>();
 
   useEffect(() => {
