@@ -1,27 +1,28 @@
-import { useFocusEffect } from 'expo-router';
+import { useFocusEffect, useIsFocused } from 'expo-router';
 import { useCallback } from 'react';
 
 import { useAllPlaces } from '~/api/places';
 import LoadingState from '~/components/common/LoadingState';
 import Map from '~/components/map/Map';
 import { useMapActions } from '~/stores/mapControlsStore';
+import { MAP_CAMERA } from '~/utils/mapBoxUtils';
 
 export default function GlobalView() {
-  const { setMapZoomLevel } = useMapActions();
+  const { setZoom, setLightMode } = useMapActions();
   const { data, error, isLoading, refetch } = useAllPlaces();
-  const { toggleLightMode } = useMapActions();
+  const isFocused = useIsFocused();
 
   useFocusEffect(
     useCallback(() => {
-      setMapZoomLevel(6.5);
-      toggleLightMode(false);
+      setZoom(MAP_CAMERA.GLOBAL_ZOOM);
+      setLightMode(false);
       refetch();
-    }, [setMapZoomLevel, toggleLightMode, refetch])
+    }, [setZoom, setLightMode, refetch])
   );
 
   return (
     <LoadingState isLoading={isLoading} error={error}>
-      <Map readOnly showControls places={data} />
+      {isFocused && <Map readOnly showControls places={data} />}
     </LoadingState>
   );
 }

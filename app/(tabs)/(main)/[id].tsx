@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -13,19 +13,26 @@ import IconButton from '~/components/ui/IconButton';
 import { useLocationDetails } from '~/hooks/useLocationDetails';
 import { useDirections } from '~/providers/DirectionsProvider';
 import { useMapActions } from '~/stores/mapControlsStore';
+import { MAP_CAMERA } from '~/utils/mapBoxUtils';
 
 export default function PlaceDetails() {
   const { setDirections } = useDirections();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { setMapCenter } = useMapActions();
+  const { flyTo } = useMapActions();
 
   const { data: place, isLoading, error } = useLocationDetails();
 
+  const coordinates = useMemo(() => {
+    if (!place) return;
+
+    return { longitude: place.longitude, latitude: place.latitude };
+  }, [place]);
+
   const toggleToPlace = () => {
-    if (place) {
-      setMapCenter([place.longitude, place.latitude]);
-    }
+    if (!place) return;
+
+    flyTo([place.longitude, place.latitude], MAP_CAMERA.PLACE_DETAIL_ZOOM);
   };
 
   const handleBackButton = () => router.back();
@@ -42,11 +49,7 @@ export default function PlaceDetails() {
       <View style={styles.container}>
         {place && (
           <Animated.View style={{ height: '75%' }} entering={FadeIn.duration(500)}>
-            <Map
-              coordinates={{ longitude: place.longitude, latitude: place.latitude }}
-              readOnly
-              showControls
-            />
+            <Map coordinates={coordinates} readOnly showControls />
           </Animated.View>
         )}
         <View style={[styles.backButton, { top: insets.top }]}>

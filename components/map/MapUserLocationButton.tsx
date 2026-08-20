@@ -5,13 +5,13 @@ import { useLocation } from '~/providers/LocationProvider';
 import { useMapActions } from '~/stores/mapControlsStore';
 
 export default function MapUserLocationButton() {
-  const { setMapCenter } = useMapActions();
+  const { flyTo } = useMapActions();
   const { userLocation } = useLocation();
 
   const onToggleToUserLocation = () => {
     if (!userLocation) return;
 
-    setMapCenter([userLocation.longitude, userLocation.latitude]);
+    flyTo([userLocation.longitude, userLocation.latitude]);
   };
 
   return (

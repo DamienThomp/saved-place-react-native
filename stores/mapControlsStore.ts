@@ -1,58 +1,80 @@
-import { StyleURL } from '@rnmapbox/maps';
 import type { Position } from 'geojson';
 import { create } from 'zustand';
 
-const DEFAULTS = {
-  zoomLevel: 14,
-  mapTheme: StyleURL.Street,
-  mapPitch: 0,
-  isLightMode: true,
-  pitchIsToggled: false,
+import { MAP_CAMERA } from '~/utils/mapBoxUtils';
+
+type CameraCommand = {
+  center?: Position;
+  zoom?: number;
+  sequence: number;
 };
 
 type MapControlActions = {
-  setMapZoomLevel: (value: number) => void;
-  setMapCenter: (position: Position) => void;
-  setMapPitch: (value: number) => void;
-  toggleLightMode: (value: boolean) => void;
-  toggleMapPitch: (value: boolean) => void;
+  flyTo: (center: Position, zoom?: number) => void;
+  setZoom: (zoom: number) => void;
+  setLightMode: (value: boolean) => void;
+  toggleLightMode: () => void;
+  setPitchToggled: (value: boolean) => void;
+  toggleMapPitch: () => void;
   resetAll: () => void;
 };
 
 type MapControlsStore = {
-  zoomLevel: number;
-  mapTheme: StyleURL;
   isLightMode: boolean;
   pitchIsToggled: boolean;
   mapPitch: number;
-  mapCenter?: Position;
+  cameraCommand: CameraCommand | null;
   actions: MapControlActions;
 };
 
 const initialState: Omit<MapControlsStore, 'actions'> = {
-  ...DEFAULTS,
-  mapCenter: undefined,
+  isLightMode: true,
+  pitchIsToggled: false,
+  mapPitch: 0,
+  cameraCommand: null,
 };
+
+const nextSequence = (current: CameraCommand | null) => (current?.sequence ?? 0) + 1;
 
 const useMapControlStore = create<MapControlsStore>()((set) => ({
   ...initialState,
   actions: {
-    setMapZoomLevel: (value) => set({ zoomLevel: value }),
-    setMapCenter: (position) => set({ mapCenter: position }),
-    setMapPitch: (value) => {
-      set({ mapPitch: value });
-    },
-    toggleMapPitch: (value) => set({ pitchIsToggled: value, mapPitch: value ? 60 : 0 }),
-    toggleLightMode: (value) =>
-      set({ isLightMode: value, mapTheme: value ? StyleURL.Street : StyleURL.TrafficNight }),
+    flyTo: (center, zoom) =>
+      set((state) => ({
+        cameraCommand: {
+          center,
+          zoom,
+          sequence: nextSequence(state.cameraCommand),
+        },
+      })),
+    setZoom: (zoom) =>
+      set((state) => ({
+        cameraCommand: {
+          zoom,
+          sequence: nextSequence(state.cameraCommand),
+        },
+      })),
+    setLightMode: (value) => set({ isLightMode: value }),
+    toggleLightMode: () => set((state) => ({ isLightMode: !state.isLightMode })),
+    setPitchToggled: (value) =>
+      set({
+        pitchIsToggled: value,
+        mapPitch: value ? MAP_CAMERA.PITCH_ANGLE : 0,
+      }),
+    toggleMapPitch: () =>
+      set((state) => {
+        const pitchIsToggled = !state.pitchIsToggled;
+        return {
+          pitchIsToggled,
+          mapPitch: pitchIsToggled ? MAP_CAMERA.PITCH_ANGLE : 0,
+        };
+      }),
     resetAll: () => set({ ...initialState }),
   },
 }));
 
-export const useMapZoomLevel = () => useMapControlStore((state) => state.zoomLevel);
-export const useMapTheme = () => useMapControlStore((state) => state.mapTheme);
 export const useIsLightMode = () => useMapControlStore((state) => state.isLightMode);
 export const useIsPitchToggled = () => useMapControlStore((state) => state.pitchIsToggled);
-export const useMapCenter = () => useMapControlStore((state) => state.mapCenter);
 export const useMapPitch = () => useMapControlStore((state) => state.mapPitch);
+export const useCameraCommand = () => useMapControlStore((state) => state.cameraCommand);
 export const useMapActions = () => useMapControlStore((state) => state.actions);
