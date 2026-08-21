@@ -30,7 +30,9 @@ export default function PlaceDetails() {
     <LoadingState isLoading={isLoading} error={error}>
       <View style={styles.container}>
         {place && (
-          <Animated.View style={{ height: '75%' }} entering={FadeIn.duration(500)}>
+          <Animated.View
+            style={{ height: directionCoordinates ? '100%' : '75%' }}
+            entering={FadeIn.duration(500)}>
             <Map coordinates={coordinates} readOnly showControls />
           </Animated.View>
         )}

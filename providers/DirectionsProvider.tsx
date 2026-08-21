@@ -6,7 +6,6 @@ import {
   SetStateAction,
   useCallback,
   useContext,
-  useEffect,
   useState,
 } from 'react';
 
@@ -26,10 +25,10 @@ type DirectionsContextState = {
   routeDistance?: number | undefined;
   mode?: DirectionType;
   error?: string | undefined;
-  setSelectedPoint?: Dispatch<SetStateAction<SelectedPoint | undefined>>;
-  setDirections?: Dispatch<SetStateAction<MapboxDirections | null | undefined>>;
+  isFetching?: boolean;
   setMode?: Dispatch<SetStateAction<DirectionType>>;
   setError?: Dispatch<SetStateAction<string | undefined>>;
+  requestDirections?: (point: SelectedPoint) => Promise<void>;
   clearDirections?: () => void;
 };
 
@@ -45,51 +44,59 @@ export default function DirectionsProvider({ children }: PropsWithChildren) {
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint>();
   const [mode, setMode] = useState<DirectionType>(DirectionType.Driving);
   const [error, setError] = useState<string>();
+  const [isFetching, setIsFetching] = useState(false);
 
   const clearDirections = useCallback(() => {
     setDirections(null);
     setSelectedPoint(undefined);
     setError(undefined);
     setMode(DirectionType.Driving);
+    setIsFetching(false);
   }, []);
 
-  useEffect(() => {
-    const fetchDirections = async ({ longitude, latitude }: SelectedPoint) => {
-      const { coords } = await getCurrentPositionAsync();
-      const start: Coordinates = { longitude: coords.longitude, latitude: coords.latitude };
-      const end: Coordinates = { longitude, latitude };
-
-      const response = await getDirections(start, end, mode);
-
-      if (isError(response)) {
-        setError(response?.message);
-        return;
-      }
-
-      setDirections(response);
-    };
-
-    if (selectedPoint) {
+  const requestDirections = useCallback(
+    async (point: SelectedPoint) => {
       setError(undefined);
-      fetchDirections({ ...selectedPoint });
-    }
-  }, [selectedPoint, mode]);
+      setIsFetching(true);
+
+      try {
+        const { coords } = await getCurrentPositionAsync();
+        const start: Coordinates = { longitude: coords.longitude, latitude: coords.latitude };
+        const end: Coordinates = { longitude: point.longitude, latitude: point.latitude };
+        const response = await getDirections(start, end, mode);
+
+        if (isError(response)) {
+          throw new Error(response?.message ?? 'Could not fetch directions.');
+        }
+
+        setDirections(response);
+        setSelectedPoint(point);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Could not fetch directions.';
+        setError(message);
+        throw err;
+      } finally {
+        setIsFetching(false);
+      }
+    },
+    [mode]
+  );
 
   return (
     <DirectionsContext.Provider
       value={{
         selectedPoint,
-        setSelectedPoint,
         mode,
         setMode,
-        setDirections,
         setError,
+        requestDirections,
         clearDirections,
         directions,
         directionCoordinates: directions?.routes?.[0]?.geometry?.coordinates,
         routeTime: directions?.routes?.[0]?.duration,
         routeDistance: directions?.routes?.[0]?.distance,
         error,
+        isFetching,
       }}>
       {children}
     </DirectionsContext.Provider>

@@ -30,7 +30,10 @@ export default function DirectionsBottomSheet({
 
               <RNHostView matchContents>
                 <View style={{ width: '100%' }}>
-                  <DirectionsBottomSheetContent coordinates={coordinates} />
+                  <DirectionsBottomSheetContent
+                    coordinates={coordinates}
+                    onDirectionsRequested={onDismiss}
+                  />
                 </View>
               </RNHostView>
             </VStack>

@@ -18,12 +18,10 @@ export default function DirectionButton({
   onDirectionsRequested,
   style,
 }: DirectionButtonProps) {
-  const { setSelectedPoint, error, setError } = useDirections();
+  const { requestDirections, error, setError, isFetching } = useDirections();
 
-  const onGetDirections = () => {
-    if (setSelectedPoint) {
-      setSelectedPoint(coordinates);
-    }
+  const onGetDirections = async () => {
+    await requestDirections?.(coordinates);
     onDirectionsRequested?.();
   };
 
@@ -34,14 +32,15 @@ export default function DirectionButton({
     return () => {
       setError?.(undefined);
     };
-  }, [error]);
+  }, [error, setError]);
 
   return (
     <Button
-      title="Get Directions"
-      icon="directions"
+      title={isFetching ? 'Getting directions...' : 'Get Directions'}
+      icon={isFetching ? undefined : 'directions'}
       color={color}
       onPress={onGetDirections}
+      disabled={isFetching}
       style={style}
     />
   );

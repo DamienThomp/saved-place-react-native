@@ -5,14 +5,21 @@ import { Coordinates } from '~/types/types';
 
 type DirectionsBottomSheetContentProps = {
   coordinates: Coordinates;
+  onDirectionsRequested?: () => void;
 };
 
 export default function DirectionsBottomSheetContent({
   coordinates,
+  onDirectionsRequested,
 }: DirectionsBottomSheetContentProps) {
   return (
     <View style={styles.container}>
-      <DirectionButton coordinates={coordinates} color="white" style={styles.fullWidthButton} />
+      <DirectionButton
+        coordinates={coordinates}
+        color="white"
+        style={styles.fullWidthButton}
+        onDirectionsRequested={onDirectionsRequested}
+      />
     </View>
   );
 }
