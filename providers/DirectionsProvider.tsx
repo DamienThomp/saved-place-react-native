@@ -4,6 +4,7 @@ import {
   Dispatch,
   PropsWithChildren,
   SetStateAction,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -29,6 +30,7 @@ type DirectionsContextState = {
   setDirections?: Dispatch<SetStateAction<MapboxDirections | null | undefined>>;
   setMode?: Dispatch<SetStateAction<DirectionType>>;
   setError?: Dispatch<SetStateAction<string | undefined>>;
+  clearDirections?: () => void;
 };
 
 const DirectionsContext = createContext<DirectionsContextState>({});
@@ -43,6 +45,13 @@ export default function DirectionsProvider({ children }: PropsWithChildren) {
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint>();
   const [mode, setMode] = useState<DirectionType>(DirectionType.Driving);
   const [error, setError] = useState<string>();
+
+  const clearDirections = useCallback(() => {
+    setDirections(null);
+    setSelectedPoint(undefined);
+    setError(undefined);
+    setMode(DirectionType.Driving);
+  }, []);
 
   useEffect(() => {
     const fetchDirections = async ({ longitude, latitude }: SelectedPoint) => {
@@ -75,6 +84,7 @@ export default function DirectionsProvider({ children }: PropsWithChildren) {
         setMode,
         setDirections,
         setError,
+        clearDirections,
         directions,
         directionCoordinates: directions?.routes?.[0]?.geometry?.coordinates,
         routeTime: directions?.routes?.[0]?.duration,

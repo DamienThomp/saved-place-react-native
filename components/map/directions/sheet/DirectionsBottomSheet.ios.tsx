@@ -1,9 +1,5 @@
 import { BottomSheet, Group, Host, RNHostView, Text, VStack } from '@expo/ui/swift-ui';
-import {
-  padding,
-  presentationDetents,
-  presentationDragIndicator,
-} from '@expo/ui/swift-ui/modifiers';
+import { padding, presentationDragIndicator } from '@expo/ui/swift-ui/modifiers';
 import { View } from 'react-native';
 
 import DirectionTypeSelector from '~/components/map/directions/selector/DirectionTypeSelector';
@@ -15,17 +11,8 @@ export default function DirectionsBottomSheet({
   isPresented,
   onDismiss,
   coordinates,
-  title,
 }: DirectionsBottomSheetProps) {
-  const {
-    mode,
-    setMode,
-    directionCoordinates,
-    routeTime,
-    routeDistance,
-    handleNavigate,
-    handlePresentedChange,
-  } = useDirectionsBottomSheet({ coordinates, title, onDismiss });
+  const { mode, setMode, handlePresentedChange } = useDirectionsBottomSheet({ onDismiss });
 
   return (
     <Host style={{ flex: 1 }}>
@@ -43,13 +30,7 @@ export default function DirectionsBottomSheet({
 
               <RNHostView matchContents>
                 <View style={{ width: '100%' }}>
-                  <DirectionsBottomSheetContent
-                    coordinates={coordinates}
-                    directionCoordinates={directionCoordinates}
-                    routeTime={routeTime}
-                    routeDistance={routeDistance}
-                    onNavigate={handleNavigate}
-                  />
+                  <DirectionsBottomSheetContent coordinates={coordinates} />
                 </View>
               </RNHostView>
             </VStack>
