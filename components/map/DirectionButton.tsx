@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Alert } from 'react-native';
+import { Alert, PressableProps } from 'react-native';
 
 import { Button } from '~/components/ui/Button';
 import { useDirections } from '~/providers/DirectionsProvider';
@@ -8,15 +8,21 @@ import { Coordinates } from '~/types/types';
 type DirectionButtonProps = {
   coordinates: Coordinates;
   color?: string;
+  onDirectionsRequested?: () => void;
+  style?: PressableProps['style'];
 };
 
-export default function DirectionButton({ coordinates, color }: DirectionButtonProps) {
-  const { setSelectedPoint, error, setError } = useDirections();
+export default function DirectionButton({
+  coordinates,
+  color,
+  onDirectionsRequested,
+  style,
+}: DirectionButtonProps) {
+  const { requestDirections, error, setError, isFetching } = useDirections();
 
-  const onGetDirections = () => {
-    if (setSelectedPoint) {
-      setSelectedPoint(coordinates);
-    }
+  const onGetDirections = async () => {
+    await requestDirections?.(coordinates);
+    onDirectionsRequested?.();
   };
 
   useEffect(() => {
@@ -26,9 +32,16 @@ export default function DirectionButton({ coordinates, color }: DirectionButtonP
     return () => {
       setError?.(undefined);
     };
-  }, [error]);
+  }, [error, setError]);
 
   return (
-    <Button title="Get Directions" icon="directions" color={color} onPress={onGetDirections} />
+    <Button
+      title={isFetching ? 'Getting directions...' : 'Get Directions'}
+      icon={isFetching ? undefined : 'directions'}
+      color={color}
+      onPress={onGetDirections}
+      disabled={isFetching}
+      style={style}
+    />
   );
 }
