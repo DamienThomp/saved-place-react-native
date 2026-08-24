@@ -51,12 +51,14 @@ export function usePlaceDetailsViewModel() {
     startNavigation({ coordinates, title: place.title });
   };
 
+  const isNavigating = !!directionCoordinates;
+
   return {
     place,
     coordinates,
     isLoading,
     error,
-    directionCoordinates,
+    isNavigating,
     routeTime,
     routeDistance,
     isDirectionsSheetPresented,

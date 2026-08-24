@@ -14,6 +14,7 @@ export default function NavigationScreen() {
       <LoadingState isLoading={isLoading} error={error}>
         {state && (
           <View style={styles.container}>
+            <Text style={styles.label}>{JSON.stringify(state)}</Text>
             <Text style={styles.label}>Destination</Text>
             <Text style={styles.value}>{state.title}</Text>
 
