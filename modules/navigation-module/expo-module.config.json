@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": {
+    "modules": ["NavigationModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.navigationmodule.NavigationModule"]
+  }
+}
