@@ -1,0 +1,55 @@
+// swift-tools-version:5.9
+// Minimal Package.swift for Scipio — production Mapbox Navigation + Maps only.
+// Copied into mapbox-navigation-ios checkout by scripts/build-mapbox-xcframeworks.sh
+
+import PackageDescription
+
+let mapsVersion: Version = "11.27.3"
+let navNativeVersion: Version = "324.27.3"
+
+let package = Package(
+    name: "MapboxNavigation",
+    defaultLocalization: "en",
+    platforms: [.iOS(.v16)],
+    products: [
+        .library(name: "MapboxNavigationUIKit", targets: ["MapboxNavigationUIKit"]),
+        .library(name: "MapboxNavigationCore", targets: ["MapboxNavigationCore"]),
+        .library(name: "MapboxDirections", targets: ["MapboxDirections"]),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/mapbox/mapbox-navigation-native-ios.git", exact: navNativeVersion),
+        .package(url: "https://github.com/mapbox/mapbox-maps-ios.git", exact: mapsVersion),
+        .package(url: "https://github.com/mapbox/turf-swift.git", exact: "4.0.0"),
+    ],
+    targets: [
+        .target(
+            name: "MapboxNavigationUIKit",
+            dependencies: ["MapboxNavigationCore"],
+            exclude: ["Info.plist"],
+            resources: [
+                .copy("Resources/MBXInfo.plist"),
+                .copy("Resources/PrivacyInfo.xcprivacy"),
+            ]
+        ),
+        .target(name: "_MapboxNavigationHelpers"),
+        .target(
+            name: "_MapboxNavigationLocalization",
+            dependencies: ["_MapboxNavigationHelpers"]
+        ),
+        .target(
+            name: "MapboxNavigationCore",
+            dependencies: [
+                "_MapboxNavigationLocalization",
+                "_MapboxNavigationHelpers",
+                .product(name: "MapboxNavigationNative", package: "mapbox-navigation-native-ios"),
+                "MapboxDirections",
+                .product(name: "MapboxMaps", package: "mapbox-maps-ios"),
+            ],
+            resources: [.process("Resources")]
+        ),
+        .target(
+            name: "MapboxDirections",
+            dependencies: [.product(name: "Turf", package: "turf-swift")]
+        ),
+    ]
+)

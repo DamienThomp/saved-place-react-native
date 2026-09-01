@@ -18,6 +18,10 @@ expo-env.d.ts
 ios
 android
 
+# Mapbox vendored binaries (build with npm run mapbox:build-xcframeworks)
+modules/mapbox-vendor/ios/Frameworks/*.xcframework
+.mapbox-vendor-build/
+
 # macOS
 .DS_Store
 

@@ -12,8 +12,9 @@ export default {
     plugins: [
         "expo-router",
         [
-          "@rnmapbox/maps", {}
+          "@rnmapbox/maps", { RNMapboxMapsVersion: "11.27.3" }
         ],
+        "./plugins/withMapboxVendor",
         [
           "expo-location",
           {
