@@ -62,7 +62,8 @@ export default {
         supportsTablet: false,
         bundleIdentifier: "com.anonymous.savedplace",
         infoPlist: {
-          ITSAppUsesNonExemptEncryption: false
+          ITSAppUsesNonExemptEncryption: false,
+          MBXAccessToken: process.env.RNMAPBOX_MAPS_DOWNLOAD_TOKEN,
         }
       },
       android: {

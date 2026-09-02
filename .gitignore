@@ -15,8 +15,9 @@ expo-env.d.ts
 # firebase/supabase/vexo
 .env
 
-ios
-android
+# Expo prebuild output at repo root only (not modules/*/ios or modules/*/android)
+/ios
+/android
 
 # Mapbox vendored binaries (build with npm run mapbox:build-xcframeworks)
 modules/mapbox-vendor/ios/Frameworks/*.xcframework
