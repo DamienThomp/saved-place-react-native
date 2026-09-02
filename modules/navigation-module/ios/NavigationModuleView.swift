@@ -17,11 +17,25 @@ class NavigationModuleView: ExpoView {
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     private let errorLabel = UILabel()
     private weak var embeddedViewController: UIViewController?
+    private var pendingViewController: UIViewController?
 
     required init(appContext: AppContext? = nil) {
         super.init(appContext: appContext)
         backgroundColor = .black
         setUpPlaceholderViews()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard bounds.width > 0, bounds.height > 0 else { return }
+
+        if let pending = pendingViewController {
+            pendingViewController = nil
+            embed(pending)
+            return
+        }
+
+        embeddedViewController?.view.frame = bounds
     }
 
     override func willMove(toWindow newWindow: UIWindow?) {
@@ -61,6 +75,11 @@ class NavigationModuleView: ExpoView {
         guard embeddedViewController !== child else { return }
         removeEmbedded()
 
+        guard bounds.width > 0, bounds.height > 0 else {
+            pendingViewController = child
+            return
+        }
+
         guard let parent = nearestViewController else { return }
         parent.addChild(child)
         child.view.frame = bounds
@@ -71,6 +90,8 @@ class NavigationModuleView: ExpoView {
     }
 
     private func removeEmbedded() {
+        pendingViewController = nil
+
         guard let child = embeddedViewController else { return }
         child.willMove(toParent: nil)
         child.view.removeFromSuperview()

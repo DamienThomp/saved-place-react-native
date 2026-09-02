@@ -101,7 +101,7 @@ final class NavigationPresenter: NSObject, NavigationPresenterProtocol {
         view?.render(.idle)
         currentRequest = nil
 
-        Task { await service.resetNavigationSession() }
+        service.resetNavigationSession()
     }
 }
 

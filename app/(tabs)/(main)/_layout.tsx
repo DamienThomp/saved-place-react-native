@@ -61,7 +61,11 @@ export default function MainLayout() {
             <Stack.Screen name="[id]" options={{ headerShown: false }} />
             <Stack.Screen
               name="navigation"
-              options={{ title: 'Navigation', headerShown: true }}
+              options={{
+                title: 'Navigation',
+                headerShown: true,
+                headerBackButtonDisplayMode: 'minimal',
+              }}
             />
           </Stack>
         </MapSearchProvider>

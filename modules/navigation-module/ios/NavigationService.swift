@@ -31,14 +31,12 @@ final class NavigationService: NavigationServiceProtocol {
     private var provider: MapboxNavigationProvider?
     private var isSimulating = false
 
-    init() {
-        provider = makeProvider()
-    }
-
     func resetNavigationSession() {
         guard let provider else { return }
         provider.tripSession().setToIdle()
         provider.routeVoiceController.speechSynthesizer.stopSpeaking()
+        self.provider = nil
+        isSimulating = false
     }
 
     func prepareNavigationSession(
@@ -48,16 +46,7 @@ final class NavigationService: NavigationServiceProtocol {
         simulateRoute: Bool = false
     ) async throws -> PreparedNavigationSession {
 
-        guard let provider else {
-            throw NavigationServiceErrorType.noProvider
-        }
-
-        if simulateRoute != isSimulating {
-            let locationSource: LocationSource = simulateRoute ? .simulation() : .live
-
-            provider.apply(coreConfig: .init(locationSource: locationSource))
-            isSimulating = simulateRoute
-        }
+        let provider = ensureProvider(simulateRoute: simulateRoute)
 
         let routes = try await calculateRoute(
             from: origin,
@@ -69,8 +58,21 @@ final class NavigationService: NavigationServiceProtocol {
         return .init(routes: routes, provider: provider)
     }
 
-    private func makeProvider() -> MapboxNavigationProvider {
-        .init(coreConfig: .init(locationSource: .live))
+    private func ensureProvider(simulateRoute: Bool) -> MapboxNavigationProvider {
+        let locationSource: LocationSource = simulateRoute ? .simulation() : .live
+
+        if let provider {
+            if simulateRoute != isSimulating {
+                provider.apply(coreConfig: .init(locationSource: locationSource))
+                isSimulating = simulateRoute
+            }
+            return provider
+        }
+
+        let provider = MapboxNavigationProvider(coreConfig: .init(locationSource: locationSource))
+        self.provider = provider
+        isSimulating = simulateRoute
+        return provider
     }
 
     private func calculateRoute(
