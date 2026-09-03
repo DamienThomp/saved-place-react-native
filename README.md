@@ -33,6 +33,9 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 - [x] ~~add map controls to details screen (change theme, ~~pitch~~, ~~toggle to user location~~)~~
 - [x] ~~add camera support for image picker~~
 - [x] ~~add pagination for list view~~ currently loads five at a time on scroll before reaching end of list.
+- [x] ~~add turn by turn navigation for Mapbox directions for iOS~~
+- [ ] add turn by turn navigation for Mapbox directions for Android
+- [ ] update screen shots & add screen recording
 
 ## Screen Shots
 
