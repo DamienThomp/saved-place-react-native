@@ -1,6 +1,8 @@
 import { useTheme } from 'expo-router/react-navigation';
 import { TextInput, StyleSheet, KeyboardTypeOptions } from 'react-native';
 
+import { tokens } from '~/constants/theme';
+
 type TextInputFieldProps = {
   value?: string;
   onChangeText: (text: string) => void;
@@ -40,8 +42,8 @@ export default function TextInputField({
 const styles = StyleSheet.create({
   textInput: {
     borderWidth: 1,
-    borderRadius: 8,
-    padding: 16,
-    fontSize: 20,
+    borderRadius: tokens.borderRadius.md,
+    padding: tokens.spacing.lg,
+    ...tokens.typography.body,
   },
 });

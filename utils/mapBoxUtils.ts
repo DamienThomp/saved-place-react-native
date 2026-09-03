@@ -1,6 +1,49 @@
 import MapboxGL from '@rnmapbox/maps';
 
+import { tokens } from '~/constants/theme';
+
 export const MAPBOX_STANDARD_STYLE = 'mapbox://styles/mapbox/standard';
+
+export const MAP_LAYER_STYLES = {
+  route: {
+    lineColor: tokens.colors.route,
+    lineCap: 'round',
+    lineJoin: 'round',
+    lineWidth: 10,
+  },
+  clustersCount: {
+    textField: ['get', 'point_count'],
+    textSize: 18,
+    textColor: tokens.colors.white,
+    textPitchAlignment: 'viewport' as const,
+  },
+  clusters: {
+    circlePitchAlignment: 'viewport' as const,
+    circleColor: tokens.colors.destructive,
+    circleRadius: 20,
+    circleOpacity: 1,
+    circleStrokeWidth: 2,
+    circleStrokeColor: tokens.colors.white,
+  },
+  placeIcons: {
+    iconImage: 'pin',
+    iconSize: 0.05,
+    iconAllowOverlap: true,
+    iconAnchor: 'center' as const,
+    iconKeepUpright: true,
+  },
+  callout: (isLightMode: boolean) => ({
+    iconTextFit: 'both' as const,
+    iconTextFitPadding: [5, 5, 5, 5],
+    textSize: 16,
+    iconAllowOverlap: true,
+    textAllowOverlap: true,
+    textColor: isLightMode ? tokens.colors.black : tokens.colors.white,
+    textFont: ['Open Sans SemiBold'],
+    textOffset: [0, 1.8],
+    textField: '{title}',
+  }),
+} as const;
 
 export const MAP_CAMERA = {
   DEFAULT_ZOOM: 14,

@@ -7,6 +7,7 @@ import ContentUnavailable from '../common/ContentUnavailable';
 import Loading from '../common/Loading';
 
 import { getAddress } from '~/api/geocode';
+import { tokens } from '~/constants/theme';
 import { useLocation } from '~/providers/LocationProvider';
 import useMapSelectionStore from '~/stores/mapSelectionStore';
 import { takeSnapshot } from '~/utils/mapBoxUtils';
@@ -153,12 +154,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: tokens.borderRadius.md,
   },
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: 8,
+    borderRadius: tokens.borderRadius.md,
     resizeMode: 'cover',
   },
 });

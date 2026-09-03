@@ -19,6 +19,7 @@ import {
   useMapActions,
   useMapPitch,
 } from '~/stores/mapControlsStore';
+import { tokens } from '~/constants/theme';
 import { Place } from '~/types/types';
 import { MAPBOX_STANDARD_STYLE, MAP_CAMERA } from '~/utils/mapBoxUtils';
 
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   touchableText: {
-    color: 'white',
+    color: tokens.colors.white,
     fontWeight: 'bold',
   },
   controlsContainer: {
@@ -190,8 +191,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     justifyContent: 'center',
     alignItems: 'flex-end',
-    gap: 4,
-    padding: 8,
+    gap: tokens.spacing.xs,
+    padding: tokens.spacing.sm,
     right: 0,
   },
 });

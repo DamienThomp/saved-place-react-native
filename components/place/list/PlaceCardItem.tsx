@@ -5,6 +5,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 import RemoteImage from '../../common/RemoteImage';
 import IconButton from '../../ui/IconButton';
 
+import { tokens } from '~/constants/theme';
 import useEditMoreStore from '~/stores/editModeStore';
 import { Place } from '~/types/types';
 
@@ -41,7 +42,7 @@ const PlaceCardItem = ({ place, onSelect, onDelete, onEdit }: PlaceCardItemProps
       onPress={handlePress}>
       <RemoteImage style={styles.image} path={place.image} />
       <LinearGradient
-        colors={['transparent', 'rgba(37, 37, 37, 0.6)']}
+        colors={['transparent', tokens.colors.overlay.gradientEnd]}
         style={styles.titleBackground}
       />
       {isEditMode && (
@@ -49,7 +50,7 @@ const PlaceCardItem = ({ place, onSelect, onDelete, onEdit }: PlaceCardItemProps
           <Animated.View style={[styles.editContainer, styles.deleteItem]} entering={FadeInDown}>
             <IconButton
               icon="trash-bin"
-              color="white"
+              color={tokens.colors.white}
               size={28}
               accessibilityLabel={`Delete ${place.title}`}
               onPress={handleDelete}
@@ -58,7 +59,7 @@ const PlaceCardItem = ({ place, onSelect, onDelete, onEdit }: PlaceCardItemProps
           <Animated.View style={[styles.editContainer, styles.editItem]} entering={FadeInDown}>
             <IconButton
               icon="pencil"
-              color="white"
+              color={tokens.colors.white}
               size={28}
               accessibilityLabel={`Edit ${place.title}`}
               onPress={handleOnEdit}
@@ -78,9 +79,9 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     aspectRatio: 1 / 1,
-    borderRadius: 22,
+    borderRadius: tokens.borderRadius.pill,
     overflow: 'hidden',
-    marginVertical: 8,
+    marginVertical: tokens.spacing.sm,
     position: 'relative',
   },
   titleBackground: {
@@ -93,11 +94,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     position: 'absolute',
-    bottom: 8,
-    padding: 12,
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
+    bottom: tokens.spacing.sm,
+    padding: tokens.spacing.md,
+    ...tokens.typography.title,
+    color: tokens.colors.white,
   },
   image: {
     aspectRatio: 1 / 1,
@@ -105,18 +105,18 @@ const styles = StyleSheet.create({
   editContainer: {
     justifyContent: 'center',
     position: 'absolute',
-    top: 8,
-    margin: 12,
-    padding: 4,
-    borderRadius: 8,
-    elevation: 2,
+    top: tokens.spacing.sm,
+    margin: tokens.spacing.md,
+    padding: tokens.spacing.xs,
+    borderRadius: tokens.borderRadius.md,
+    ...tokens.shadows.card,
   },
   editItem: {
-    backgroundColor: 'green',
-    left: 8,
+    backgroundColor: tokens.colors.success,
+    left: tokens.spacing.sm,
   },
   deleteItem: {
-    backgroundColor: 'red',
-    right: 8,
+    backgroundColor: tokens.colors.destructive,
+    right: tokens.spacing.sm,
   },
 });

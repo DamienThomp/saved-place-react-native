@@ -11,7 +11,7 @@ export default function MainLayout() {
   const router = useRouter();
 
   const redirectToForm = () => {
-    router.push('/form');
+    router.push('/place-form');
   };
 
   if (!session) {
@@ -43,7 +43,7 @@ export default function MainLayout() {
               }}
             />
             <Stack.Screen
-              name="form"
+              name="place-form"
               options={{
                 headerShown: true,
                 headerLargeTitle: true,

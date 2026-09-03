@@ -6,7 +6,9 @@ import Animated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated
 
 import RemoteImage from '../../common/RemoteImage';
 
+import { tokens } from '~/constants/theme';
 import { Place } from '~/types/types';
+
 interface PlaceItemProps {
   item: Place;
   onSelect: (id: number) => void;
@@ -39,13 +41,13 @@ export default function PlaceListItem({ item, onSelect, onDelete }: PlaceItemPro
       };
     });
     return (
-      <Animated.View style={[{ padding: 8 }, styleAnimation]}>
+      <Animated.View style={[{ padding: tokens.spacing.sm }, styleAnimation]}>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="delete place"
           onPress={() => handleDelete(swipeable)}
           style={styles.iconContainer}>
-          <Ionicons name="trash-bin" size={40} color="white" />
+          <Ionicons name="trash-bin" size={40} color={tokens.colors.white} />
         </Pressable>
       </Animated.View>
     );
@@ -81,35 +83,34 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'flex-start',
-    borderRadius: 8,
+    borderRadius: tokens.borderRadius.md,
     borderWidth: 1,
     marginVertical: 6,
-    padding: 18,
-    elevation: 2,
+    padding: tokens.spacing.xl,
+    ...tokens.shadows.card,
   },
   pressed: {
-    opacity: 0.8,
+    opacity: tokens.opacity.pressed,
   },
   image: {
     flex: 1,
-    borderRadius: 6,
-    marginRight: 12,
+    borderRadius: tokens.borderRadius.sm,
+    marginRight: tokens.spacing.md,
     aspectRatio: 3 / 2,
     resizeMode: 'cover',
     alignSelf: 'center',
   },
   info: {
     flex: 2,
-    padding: 12,
+    padding: tokens.spacing.md,
     gap: 6,
   },
   title: {
-    fontWeight: 'bold',
-    fontSize: 22,
+    ...tokens.typography.subtitle,
   },
   address: {
-    fontSize: 12,
-    opacity: 0.7,
+    ...tokens.typography.caption,
+    opacity: tokens.opacity.textSecondary,
   },
   iconContainer: {
     flex: 1,
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 90,
     height: '100%',
-    backgroundColor: 'red',
-    borderRadius: 8,
+    backgroundColor: tokens.colors.destructive,
+    borderRadius: tokens.borderRadius.md,
   },
 });

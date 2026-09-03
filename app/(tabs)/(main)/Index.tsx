@@ -6,6 +6,7 @@ import { ColorValue, Pressable, Text, TextInputChangeEvent } from 'react-native'
 import LoadingState from '~/components/common/LoadingState';
 import PlacesList from '~/components/place/list/PlacesList';
 import IconButton from '~/components/ui/IconButton';
+import { tokens } from '~/constants/theme';
 import { useEditModeNavigation } from '~/hooks/useEditModeNavigation';
 import useFilteredPlaces from '~/hooks/useFilteredPlaces';
 import useEditModeStore from '~/stores/editModeStore';
@@ -51,7 +52,7 @@ export default function MainView() {
             accessibilityRole="togglebutton"
             accessibilityLabel="Toggle edit buttons off"
             onPress={toggleEdit}>
-            <Text style={{ color: tintColor, fontSize: 18 }}>Done</Text>
+            <Text style={{ color: tintColor, ...tokens.typography.label }}>Done</Text>
           </Pressable>
         ) : (
           <IconButton

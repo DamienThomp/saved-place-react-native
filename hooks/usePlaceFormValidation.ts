@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { PlaceForm } from '~/app/(tabs)/(main)/form';
+import { PlaceForm } from '~/app/(tabs)/(main)/place-form';
 import isEmptyString from '~/utils/isEmptyString';
 
 export default function usePlaceFormValidation(formData: PlaceForm) {

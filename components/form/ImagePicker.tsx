@@ -14,6 +14,7 @@ import { ActionSheetIOS, Alert, Image, Platform, Pressable, StyleSheet } from 'r
 import RemoteImage from '../common/RemoteImage';
 
 import ContentUnavailable from '~/components/common/ContentUnavailable';
+import { tokens } from '~/constants/theme';
 interface ImagePickerProps {
   onSelectImage: (image: string | null) => void;
   editPreviewImage?: string;
@@ -170,18 +171,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: tokens.borderRadius.md,
   },
   image: {
     width: '100%',
     height: '100%',
-    borderRadius: 8,
+    borderRadius: tokens.borderRadius.md,
     resizeMode: 'cover',
   },
   editImage: {
     width: '100%',
     height: '100%',
-    borderRadius: 8,
+    borderRadius: tokens.borderRadius.md,
   },
 });
 

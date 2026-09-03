@@ -1,11 +1,11 @@
 import { CircleLayer, Images, ShapeSource, SymbolLayer } from '@rnmapbox/maps';
-import { OnPressEvent } from '@rnmapbox/maps/lib/typescript/src/types/OnPressEvent';
 import { featureCollection, point } from '@turf/helpers';
 import { useMemo } from 'react';
 
 import pin from '~/assets/map-pin.png';
 import { useIsLightMode } from '~/stores/mapControlsStore';
 import { Place } from '~/types/types';
+import { MAP_LAYER_STYLES } from '~/utils/mapBoxUtils';
 
 type MapMarkersProps = {
   data: Place[];
@@ -18,63 +18,28 @@ export default function MapMarkers({ data }: MapMarkersProps) {
     [data]
   );
 
-  const onPress = async (event: OnPressEvent) => {
+  const onPress = async () => {
     //TODO: add point selection logic
-    console.log(JSON.stringify(event.features, null, '\t'));
   };
 
   return (
     <ShapeSource id="places" cluster shape={featureCollection(points)} onPress={onPress}>
-      <SymbolLayer
-        id="clusters-count"
-        style={{
-          textField: ['get', 'point_count'],
-          textSize: 18,
-          textColor: '#ffffff',
-          textPitchAlignment: 'viewport',
-        }}
-      />
+      <SymbolLayer id="clusters-count" style={MAP_LAYER_STYLES.clustersCount} />
 
       <CircleLayer
         id="clusters"
         belowLayerID="clusters-count"
         filter={['has', 'point_count']}
-        style={{
-          circlePitchAlignment: 'viewport',
-          circleColor: 'red',
-          circleRadius: 20,
-          circleOpacity: 1,
-          circleStrokeWidth: 2,
-          circleStrokeColor: 'white',
-        }}
+        style={MAP_LAYER_STYLES.clusters}
       />
 
       <SymbolLayer
         id="place-icons"
         filter={['!', ['has', 'point_count']]}
-        style={{
-          iconImage: 'pin',
-          iconSize: 0.05,
-          iconAllowOverlap: true,
-          iconAnchor: 'center',
-          iconKeepUpright: true,
-        }}
+        style={MAP_LAYER_STYLES.placeIcons}
       />
 
-      <SymbolLayer
-        id="callout"
-        style={{
-          iconTextFit: 'both',
-          iconTextFitPadding: [5, 5, 5, 5],
-          textSize: 16,
-          iconAllowOverlap: true,
-          textAllowOverlap: true,
-          textColor: isLightMode ? 'black' : 'white',
-          textFont: ['Open Sans SemiBold'],
-          textOffset: [0, 1.8],
-          textField: '{title}',
-        }}
-      />
+      <SymbolLayer id="callout" style={MAP_LAYER_STYLES.callout(isLightMode)} />
 
       <Images images={{ pin }} />
     </ShapeSource>

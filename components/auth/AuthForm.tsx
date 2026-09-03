@@ -6,6 +6,7 @@ import FormInputContainer from '../form/FormInputContainer';
 import TextInputField from '../form/TextInputField';
 
 import { Button } from '~/components/ui/Button';
+import { tokens } from '~/constants/theme';
 
 type AuthFormProps = {
   actionLabel: string;
@@ -88,13 +89,13 @@ export default function AuthForm({
 
 const styles = StyleSheet.create({
   content: {
-    padding: 18,
-    gap: 18,
+    padding: tokens.spacing.xl,
+    gap: tokens.spacing.xl,
   },
   secondaryAction: {
     alignSelf: 'center',
+    ...tokens.typography.label,
     fontWeight: 'bold',
-    fontSize: 18,
-    padding: 8,
+    padding: tokens.spacing.sm,
   },
 });

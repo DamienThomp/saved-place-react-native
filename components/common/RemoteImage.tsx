@@ -7,6 +7,7 @@ import ContentUnavailable from './ContentUnavailable';
 import Loading from './Loading';
 
 import { useImage } from '~/api/places';
+import { tokens } from '~/constants/theme';
 
 type RemoteImageProps = {
   path?: string | null;
@@ -44,7 +45,7 @@ export default function RemoteImage({ path, height, width, ...imageProps }: Remo
       <Animated.View
         style={baseStyle}
         exiting={FadeOut}>
-        <ContentUnavailable icon="image-outline" color="white">
+        <ContentUnavailable icon="image-outline" color={tokens.colors.white}>
           No Image
         </ContentUnavailable>
       </Animated.View>
