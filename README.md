@@ -1,7 +1,7 @@
 # Saved Place
 
 Saved Place is a React Native demo application that allows users to save and view places with associated titles, addresses, photos, and locations on a map.
-Users can see these places in a list, view details about them, and interact with them through an interactive map interface powered by [MapBox](https://www.mapbox.com/).
+Users can see these places in a list, view details about them, and interact with them through an interactive map interface powered by [MapBox](https://www.mapbox.com/). Users can also use turn by turn directions to navigate to a saved place using [MapBox Navigation](https://www.mapbox.com/navigation).
 The main purpose of this demo project was to experiment with MapBox and Supabase integration in a React Native application.
 
 ## Features
