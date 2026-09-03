@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import LoadingState from '~/components/common/LoadingState';
 import { useNavigationViewModel } from '~/hooks/useNavigationViewModel';
+import NavigationModuleView from '~/modules/navigation-module/src/NavigationModuleView';
 
 export default function NavigationScreen() {
   const { status, state } = useNavigationViewModel();
@@ -13,27 +14,12 @@ export default function NavigationScreen() {
       <Stack.Screen options={{ title: state?.title ?? 'Navigation', headerShown: true }} />
       <LoadingState isLoading={isLoading} error={error}>
         {state && (
-          <View style={styles.container}>
-            <Text style={styles.label}>Destination</Text>
-            <Text style={styles.value}>{state.title}</Text>
-
-            <Text style={styles.label}>Mode</Text>
-            <Text style={styles.value}>{state.mode}</Text>
-
-            <Text style={styles.label}>Origin</Text>
-            <Text style={styles.value}>
-              {state.origin.latitude.toFixed(5)}, {state.origin.longitude.toFixed(5)}
-            </Text>
-
-            <Text style={styles.label}>Destination coordinates</Text>
-            <Text style={styles.value}>
-              {state.destination.latitude.toFixed(5)}, {state.destination.longitude.toFixed(5)}
-            </Text>
-
-            <Text style={styles.placeholder}>
-              Turn-by-turn navigation will be powered by the Mapbox Navigation SDK.
-            </Text>
-          </View>
+          <NavigationModuleView
+            style={{ flex: 1 }}
+            mode={state.mode}
+            origin={state.origin}
+            destination={state.destination}
+          />
         )}
       </LoadingState>
     </>

@@ -2,8 +2,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Alert, Pressable, StyleSheet, Text } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
-import RemoteImage from '../common/RemoteImage';
-import IconButton from '../ui/IconButton';
+import RemoteImage from '../../common/RemoteImage';
+import IconButton from '../../ui/IconButton';
 
 import useEditMoreStore from '~/stores/editModeStore';
 import { Place } from '~/types/types';

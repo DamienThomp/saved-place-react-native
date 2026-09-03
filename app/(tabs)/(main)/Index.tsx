@@ -4,7 +4,7 @@ import { useLayoutEffect, useState } from 'react';
 import { ColorValue, Pressable, Text, TextInputChangeEvent } from 'react-native';
 
 import LoadingState from '~/components/common/LoadingState';
-import PlacesList from '~/components/place/PlacesList';
+import PlacesList from '~/components/place/list/PlacesList';
 import IconButton from '~/components/ui/IconButton';
 import { useEditModeNavigation } from '~/hooks/useEditModeNavigation';
 import useFilteredPlaces from '~/hooks/useFilteredPlaces';

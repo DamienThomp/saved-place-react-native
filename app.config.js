@@ -12,8 +12,9 @@ export default {
     plugins: [
         "expo-router",
         [
-          "@rnmapbox/maps", {}
+          "@rnmapbox/maps", { RNMapboxMapsVersion: "11.27.3" }
         ],
+        "./plugins/withMapboxVendor",
         [
           "expo-location",
           {
@@ -61,7 +62,8 @@ export default {
         supportsTablet: false,
         bundleIdentifier: "com.anonymous.savedplace",
         infoPlist: {
-          ITSAppUsesNonExemptEncryption: false
+          ITSAppUsesNonExemptEncryption: false,
+          MBXAccessToken: process.env.RNMAPBOX_MAPS_DOWNLOAD_TOKEN,
         }
       },
       android: {
