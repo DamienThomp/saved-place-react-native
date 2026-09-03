@@ -37,26 +37,3 @@ export default function NavigationScreen() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-    gap: 8,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#666',
-    marginTop: 12,
-  },
-  value: {
-    fontSize: 16,
-  },
-  placeholder: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 24,
-    fontStyle: 'italic',
-  },
-});
