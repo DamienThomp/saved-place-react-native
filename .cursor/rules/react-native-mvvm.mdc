@@ -1,6 +1,6 @@
 ---
 description: MVVM architecture for React Native screens — hooks as view models
-globs: app/**/*.tsx
+globs: screens/**/*.tsx
 alwaysApply: false
 ---
 
@@ -14,8 +14,8 @@ Prefer MVVM for screens. Screen components are the **View**; custom hooks are th
 - Keep navigation setup (`useLayoutEffect`, header options) minimal; move reusable logic into the view model hook when it grows
 
 ## ViewModel (custom hook)
-- One hook per screen, named `use<ScreenName>ViewModel` (e.g. `useSignUpViewModel` for `sign-up.tsx`)
-- Colocate in `hooks/` (e.g. `hooks/useSignUpViewModel.ts`)
+- One hook per screen, named `use<ScreenName>ViewModel` (e.g. `useSignUpViewModel` for `screens/sign-up/`)
+- Colocate in `screens/<name>/use<Name>ViewModel.ts` (or `.tsx` when the hook returns JSX for header options)
 - Own state, derived data, mutations/queries, validation, and side effects
 - Return a plain object: `{ state, actions, status }` (or similar) for the view to consume
 
@@ -24,10 +24,14 @@ Prefer MVVM for screens. Screen components are the **View**; custom hooks are th
 - API/data access lives in `api/` (React Query hooks, Supabase calls, etc.)
 - ViewModels compose model-layer hooks; views do not call `api/` directly
 
+## Route files
+- Files in `app/` are thin re-exports only: `export { default } from '~/screens/<name>';`
+- Layout files (`_layout.tsx`) stay in `app/`
+
 ## Example
 
 ```tsx
-// hooks/useSignUpViewModel.ts
+// screens/sign-up/useSignUpViewModel.ts
 export function useSignUpViewModel() {
   const router = useRouter();
   const { mutate: signUp, isPending } = useSignUp();
@@ -35,16 +39,19 @@ export function useSignUpViewModel() {
   const signUpUser = (email: string, password: string) => { /* ... */ };
   const goToSignIn = () => router.back();
 
-  return { isPending, signUpUser, goToSignIn };
+  return { status: { isPending }, actions: { signUpUser, goToSignIn } };
 }
 
-// app/(auth)/sign-up.tsx — View only
+// screens/sign-up/index.tsx — View only
 export default function SignUpScreen() {
-  const { isPending, signUpUser, goToSignIn } = useSignUpViewModel();
+  const { status, actions } = useSignUpViewModel();
   // render only
 }
+
+// app/(auth)/sign-up.tsx — Route re-export
+export { default } from '~/screens/sign-up';
 ```
 
 ## Existing patterns to follow
-- `useFilteredPlaces` is a good view-model-style hook — extend this pattern to auth and profile screens
-- Screens like `sign-up.tsx` and `sign-in.tsx` should extract inline logic into dedicated view model hooks
+- `useFilteredPlaces` is a good composable hook — view models compose hooks like this; views do not import them directly
+- Redirect-only screens (e.g. `screens/home/`) may omit a view model when logic is trivial

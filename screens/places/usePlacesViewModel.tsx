@@ -3,15 +3,13 @@ import { useTheme } from 'expo-router/react-navigation';
 import { useLayoutEffect, useState } from 'react';
 import { ColorValue, Pressable, Text, TextInputChangeEvent } from 'react-native';
 
-import LoadingState from '~/components/common/LoadingState';
-import PlacesList from '~/components/place/list/PlacesList';
 import IconButton from '~/components/ui/IconButton';
 import { tokens } from '~/constants/theme';
 import { useEditModeNavigation } from '~/hooks/useEditModeNavigation';
 import useFilteredPlaces from '~/hooks/useFilteredPlaces';
 import useEditModeStore from '~/stores/editModeStore';
 
-export default function MainView() {
+export function usePlacesViewModel() {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const navigation = useNavigation();
@@ -75,19 +73,19 @@ export default function MainView() {
         onChangeText: onTextChanged,
       },
     });
-  }, [navigation, filteredList, isEditMode]);
+  }, [navigation, filteredList, isEditMode, theme.colors.text, theme.colors.border]);
 
-  return (
-    <LoadingState isLoading={isLoading} error={error}>
-      <PlacesList
-        items={filteredList}
-        onRefresh={refetch}
-        isLoadingInitial={isLoading}
-        isRefreshing={isRefreshing}
-        isFetchingNextPage={isFetchingNextPage}
-        onEndReached={loadMore}
-        emptyMessage={emptyMessage}
-      />
-    </LoadingState>
-  );
+  return {
+    status: { isLoading, error },
+    state: {
+      filteredList,
+      isRefreshing,
+      isFetchingNextPage,
+      emptyMessage,
+    },
+    actions: {
+      refetch,
+      loadMore,
+    },
+  };
 }

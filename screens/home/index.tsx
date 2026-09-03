@@ -1,0 +1,19 @@
+import { Redirect } from 'expo-router';
+
+import Loading from '~/components/common/Loading';
+import { useAuthentication } from '~/providers/AuthProvider';
+
+//TODO: Replace auth flow with Stack.Protected
+export default function Home() {
+  const { session, loading } = useAuthentication();
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (!session) {
+    return <Redirect href="/(auth)/sign-in" />;
+  }
+
+  return <Redirect href="/(main)" />;
+}
