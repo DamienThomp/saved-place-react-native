@@ -1,5 +1,7 @@
 import { LineLayer, ShapeSource } from '@rnmapbox/maps';
-import { Position } from '@rnmapbox/maps/lib/typescript/src/types/Position';
+import type { Position } from 'geojson';
+
+import { MAP_LAYER_STYLES } from '~/utils/mapBoxUtils';
 
 type LineRouteProps = { coordinates: Position[] };
 
@@ -16,15 +18,7 @@ export default function LineRoute({ coordinates }: LineRouteProps) {
           coordinates,
         },
       }}>
-      <LineLayer
-        id="lineLayer"
-        style={{
-          lineColor: '#FF69B4',
-          lineCap: 'round',
-          lineJoin: 'round',
-          lineWidth: 10,
-        }}
-      />
+      <LineLayer id="lineLayer" style={MAP_LAYER_STYLES.route} />
     </ShapeSource>
   );
 }

@@ -7,6 +7,7 @@ import { useSignOut } from '~/api/auth';
 import { Container } from '~/components/common/Container';
 import Loading from '~/components/common/Loading';
 import { Button } from '~/components/ui/Button';
+import { tokens } from '~/constants/theme';
 import { useAuthentication } from '~/providers/AuthProvider';
 
 export default function ProfileScreen() {
@@ -49,11 +50,10 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   email: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    ...tokens.typography.title,
   },
   innerContainer: {
     alignItems: 'center',
-    gap: 18,
+    gap: tokens.spacing.xl,
   },
 });

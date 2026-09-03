@@ -9,6 +9,7 @@ import Map from '~/components/map/Map';
 import PlaceDetailsInfo from '~/components/place/details/PlaceDetailsInfo';
 import PlaceDetailsNavigateSection from '~/components/place/details/PlaceDetailsNavigateSection';
 import IconButton from '~/components/ui/IconButton';
+import { tokens } from '~/constants/theme';
 import { usePlaceDetailsViewModel } from '~/hooks/usePlaceDetailsViewModel';
 
 export default function PlaceDetails() {
@@ -40,7 +41,7 @@ export default function PlaceDetails() {
             accessibilityLabel="Go back"
             icon="chevron-back"
             size={24}
-            color="white"
+            color={tokens.colors.white}
             onPress={actions.handleBackButton}
           />
         </View>
@@ -88,10 +89,10 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    left: 8,
-    backgroundColor: 'rgba(36, 36, 36, 0.8)',
-    borderRadius: 22,
-    marginTop: 4,
+    left: tokens.spacing.sm,
+    backgroundColor: tokens.colors.overlay.darkGlass,
+    borderRadius: tokens.borderRadius.pill,
+    marginTop: tokens.spacing.xs,
   },
   overlay: {
     position: 'absolute',
@@ -102,8 +103,8 @@ const styles = StyleSheet.create({
   overlayContent: {
     flex: 1,
     justifyContent: 'space-evenly',
-    backgroundColor: 'rgba(36, 36, 36, 0.8)',
-    borderRadius: 12,
+    backgroundColor: tokens.colors.overlay.darkGlass,
+    borderRadius: tokens.borderRadius.lg,
   },
   image: {
     width: '100%',

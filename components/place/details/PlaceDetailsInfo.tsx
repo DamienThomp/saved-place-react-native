@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '~/components/ui/Button';
+import { tokens } from '~/constants/theme';
 import { Place } from '~/types/types';
 
 type PlaceDetailsInfoProps = {
@@ -24,7 +25,7 @@ export default function PlaceDetailsInfo({
           style={styles.titleContainer}
           onPress={onCenterMap}>
           <Text style={styles.title}>{place.title}</Text>
-          <Ionicons name="location-sharp" color="red" size={18} />
+          <Ionicons name="location-sharp" color={tokens.colors.destructive} size={18} />
         </Pressable>
       </View>
       <View style={styles.addressContainer}>
@@ -33,7 +34,7 @@ export default function PlaceDetailsInfo({
           accessibilityLabel="Get directions"
           icon="directions"
           size={22}
-          color="white"
+          color={tokens.colors.white}
           onPress={onOpenDirections}
         />
       </View>
@@ -43,30 +44,29 @@ export default function PlaceDetailsInfo({
 
 const styles = StyleSheet.create({
   info: {
-    padding: 18,
-    marginTop: 12,
-    gap: 12,
+    padding: tokens.spacing.xl,
+    marginTop: tokens.spacing.md,
+    gap: tokens.spacing.md,
   },
   titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 8,
+    gap: tokens.spacing.sm,
   },
   titleContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: tokens.spacing.sm,
   },
   title: {
-    fontWeight: 'bold',
-    fontSize: 24,
-    color: 'white',
+    ...tokens.typography.title,
+    color: tokens.colors.white,
   },
   address: {
-    fontSize: 18,
-    color: 'white',
+    ...tokens.typography.label,
+    color: tokens.colors.white,
     flexWrap: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -76,6 +76,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 8,
+    gap: tokens.spacing.sm,
   },
 });

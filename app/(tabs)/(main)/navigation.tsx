@@ -1,5 +1,5 @@
 import { Stack, useRouter } from 'expo-router';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert } from 'react-native';
 
 import LoadingState from '~/components/common/LoadingState';
 import { useNavigationViewModel } from '~/hooks/useNavigationViewModel';

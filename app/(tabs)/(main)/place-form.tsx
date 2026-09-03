@@ -12,6 +12,7 @@ import ImagePicker from '~/components/form/ImagePicker';
 import LocationPicker from '~/components/form/LocationPicker';
 import TextInputField from '~/components/form/TextInputField';
 import IconButton from '~/components/ui/IconButton';
+import { tokens } from '~/constants/theme';
 import { useEditImagePreview } from '~/hooks/useEditImagePreview';
 import useEditLocation from '~/hooks/useEditLocation';
 import { useLocationDetails } from '~/hooks/useLocationDetails';
@@ -144,7 +145,14 @@ export default function PlaceFormScreen() {
             accessibilityLabel="Save Place"
             onPress={onSubmit}
             disabled={isSaving}>
-            <Text style={{ color: tintColor, fontSize: 18, paddingHorizontal: 8 }}>Save Place</Text>
+            <Text
+              style={{
+                color: tintColor,
+                ...tokens.typography.label,
+                paddingHorizontal: tokens.spacing.sm,
+              }}>
+              Save Place
+            </Text>
           </Pressable>
         ) : null;
       },
@@ -201,8 +209,8 @@ export default function PlaceFormScreen() {
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    padding: 18,
-    gap: 18,
+    padding: tokens.spacing.xl,
+    gap: tokens.spacing.xl,
     justifyContent: 'center',
   },
   loadingOverLay: {

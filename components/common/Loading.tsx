@@ -2,6 +2,8 @@ import { useTheme } from 'expo-router/react-navigation';
 import { ActivityIndicator, Text, StyleSheet } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
+import { tokens } from '~/constants/theme';
+
 type LoadingParams = {
   title?: string;
 };
@@ -17,10 +19,10 @@ export default function Loading({ title }: LoadingParams) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', gap: 12 },
+  container: { flex: 1, justifyContent: 'center', gap: tokens.spacing.md },
   title: {
-    fontSize: 22,
+    ...tokens.typography.subtitle,
     textAlign: 'center',
-    padding: 8,
+    padding: tokens.spacing.sm,
   },
 });

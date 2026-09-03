@@ -9,6 +9,7 @@ import { SearchBarCommands } from 'react-native-screens';
 import Map, { SelectedPoint } from '~/components/map/Map';
 import MapSearchListItem from '~/components/map/MapSearchListItem';
 import IconButton from '~/components/ui/IconButton';
+import { tokens } from '~/constants/theme';
 import { useMapSearch } from '~/providers/MapSearchProvider';
 import useMapSelectionStore from '~/stores/mapSelectionStore';
 
@@ -70,7 +71,7 @@ export default function MapModal() {
           headerRight: () => (
             <IconButton
               icon="checkmark-circle-outline"
-              color="green"
+              color={tokens.colors.success}
               size={24}
               accessibilityLabel="Submit selected location"
               onPress={onSubmit}
@@ -79,7 +80,7 @@ export default function MapModal() {
           headerLeft: () => (
             <IconButton
               icon="close-circle-outline"
-              color="red"
+              color={tokens.colors.destructive}
               size={24}
               accessibilityLabel="Cancel"
               onPress={() => router.back()}
@@ -144,10 +145,10 @@ const styles = StyleSheet.create({
     right: 0,
     left: 0,
     flex: 1,
-    marginLeft: 8,
-    marginRight: 8,
-    marginTop: 8,
-    borderRadius: 12,
+    marginLeft: tokens.spacing.sm,
+    marginRight: tokens.spacing.sm,
+    marginTop: tokens.spacing.sm,
+    borderRadius: tokens.borderRadius.lg,
     borderWidth: 1,
   },
 });

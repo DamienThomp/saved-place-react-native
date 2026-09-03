@@ -8,6 +8,7 @@ import PlaceCardItem from './PlaceCardItem';
 
 import { useDeletePlace, useDeletImage } from '~/api/places';
 import ContentUnavailable from '~/components/common/ContentUnavailable';
+import { tokens } from '~/constants/theme';
 import { Place } from '~/types/types';
 
 interface PlacesListProps {
@@ -42,7 +43,7 @@ export default function PlacesList({
   };
 
   const handleOnEdit = (id: number) => {
-    router.push(`/form?id=${id}`);
+    router.push(`/place-form?id=${id}`);
   };
 
   const handleOnDelete = useCallback(
@@ -107,15 +108,15 @@ export default function PlacesList({
 
 const styles = StyleSheet.create({
   list: {
-    marginHorizontal: 12,
+    marginHorizontal: tokens.spacing.md,
   },
   content: {
-    paddingBottom: 48,
+    paddingBottom: tokens.spacing.listBottom,
   },
   emptyContent: {
     flexGrow: 1,
   },
   footer: {
-    padding: 16,
+    padding: tokens.spacing.lg,
   },
 });

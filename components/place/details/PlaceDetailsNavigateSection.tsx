@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '~/components/ui/Button';
+import { tokens } from '~/constants/theme';
 import { formatRouteDistance, formatRouteDuration } from '~/utils/formatRoute';
 
 type PlaceDetailsNavigateSectionProps = {
@@ -22,7 +23,7 @@ export default function PlaceDetailsNavigateSection({
       <Button
         title="Navigate to place"
         icon="directions"
-        color="white"
+        color={tokens.colors.white}
         onPress={onNavigate}
         style={styles.navigateButton}
       />
@@ -32,13 +33,13 @@ export default function PlaceDetailsNavigateSection({
 
 const styles = StyleSheet.create({
   navigateSection: {
-    paddingHorizontal: 18,
-    paddingVertical: 16,
-    gap: 12,
+    paddingHorizontal: tokens.spacing.xl,
+    paddingVertical: tokens.spacing.lg,
+    gap: tokens.spacing.md,
   },
   routeSummary: {
-    fontSize: 16,
-    color: 'white',
+    ...tokens.typography.button,
+    color: tokens.colors.white,
   },
   navigateButton: {
     alignSelf: 'stretch',

@@ -2,6 +2,8 @@ import { View, StyleSheet, Text } from 'react-native';
 
 import IconButton from '../ui/IconButton';
 
+import { tokens } from '~/constants/theme';
+
 type AnnotationContentProps = {
   title?: string;
   onPressed?: () => void;
@@ -14,7 +16,7 @@ export default function AnnotationContent({ title, onPressed }: AnnotationConten
         <IconButton
           icon="location-sharp"
           size={40}
-          color="red"
+          color={tokens.colors.destructive}
           accessibilityLabel="Location"
           onPress={() => {
             onPressed?.();
@@ -28,7 +30,7 @@ export default function AnnotationContent({ title, onPressed }: AnnotationConten
 
 const styles = StyleSheet.create({
   touchableContainer: {
-    borderRadius: 60,
+    borderRadius: tokens.borderRadius.round,
     alignItems: 'center',
     justifyContent: 'center',
   },

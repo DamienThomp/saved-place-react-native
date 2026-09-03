@@ -3,6 +3,7 @@ import IconButton from '../ui/IconButton';
 
 import { useLocation } from '~/providers/LocationProvider';
 import { useMapActions } from '~/stores/mapControlsStore';
+import { tokens } from '~/constants/theme';
 
 export default function MapUserLocationButton() {
   const { flyTo } = useMapActions();
@@ -18,7 +19,7 @@ export default function MapUserLocationButton() {
     <MapControlContainer>
       <IconButton
         icon="navigate-circle-sharp"
-        color="white"
+        color={tokens.colors.white}
         size={28}
         accessibilityLabel="Toggle to current location"
         onPress={onToggleToUserLocation}

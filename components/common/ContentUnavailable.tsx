@@ -2,6 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { PropsWithChildren } from 'react';
 import { ColorValue, StyleSheet, Text, View } from 'react-native';
 
+import { tokens } from '~/constants/theme';
+
 interface ContentUnavailableProps {
   color?: ColorValue;
   icon: keyof typeof Ionicons.glyphMap;
@@ -27,7 +29,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: 18,
-    marginTop: 16,
+    ...tokens.typography.label,
+    marginTop: tokens.spacing.lg,
   },
 });

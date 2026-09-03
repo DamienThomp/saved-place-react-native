@@ -1,6 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { ColorValue, Pressable, StyleSheet, ViewStyle } from 'react-native';
 
+import { tokens } from '~/constants/theme';
+
 type IconButtonProps = {
   icon: keyof typeof Ionicons.glyphMap;
   size?: number;
@@ -31,11 +33,11 @@ export default function IconButton({
 
 const styles = StyleSheet.create({
   button: {
-    padding: 8,
+    padding: tokens.spacing.sm,
     justifyContent: 'center',
     alignItems: 'center',
   },
   pressed: {
-    opacity: 0.7,
+    opacity: tokens.opacity.pressedStrong,
   },
 });

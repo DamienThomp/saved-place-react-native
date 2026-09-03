@@ -2,6 +2,8 @@ import { useTheme } from 'expo-router/react-navigation';
 import { PropsWithChildren } from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 
+import { tokens } from '~/constants/theme';
+
 type FormInputContainerProps = {
   title: string;
   style?: ViewStyle;
@@ -22,6 +24,6 @@ export default function FormInputContainer({
 }
 
 const styles = StyleSheet.create({
-  container: { gap: 8 },
-  label: { color: '#4a4a4a', fontWeight: '500', fontSize: 18 },
+  container: { gap: tokens.spacing.sm },
+  label: { ...tokens.typography.label },
 });
