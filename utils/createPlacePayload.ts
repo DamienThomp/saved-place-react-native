@@ -1,4 +1,4 @@
-import { PlaceForm } from '~/app/(tabs)/(main)/place-form';
+import { PlaceForm } from '~/types/placeForm';
 import { CreatePayload, Place, UpdatePayload } from '~/types/types';
 
 export const createPlacePayload = (
