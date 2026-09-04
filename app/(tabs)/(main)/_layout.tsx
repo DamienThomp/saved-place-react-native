@@ -19,57 +19,55 @@ export default function MainLayout() {
   }
 
   return (
-    <LocationProvider>
-      <DirectionsProvider>
-        <MapSearchProvider>
-          <Stack screenOptions={{ animation: 'default' }}>
-            <Stack.Screen
-              name="index"
-              options={{
-                title: 'All Places',
-                headerLargeTitle: true,
-                headerTitleAlign: 'center',
-                headerBlurEffect: 'regular',
-                headerStyle: { backgroundColor: 'transparent' },
-                headerRight: ({ tintColor }) => (
-                  <IconButton
-                    icon="add-circle-outline"
-                    color={tintColor}
-                    size={26}
-                    accessibilityLabel="Add new place"
-                    onPress={redirectToForm}
-                  />
-                ),
-              }}
-            />
-            <Stack.Screen
-              name="place-form"
-              options={{
-                headerShown: true,
-                headerLargeTitle: true,
-                presentation: 'formSheet',
-              }}
-            />
-            <Stack.Screen
-              name="map-modal"
-              options={{
-                title: 'Select a Location',
-                presentation: 'modal',
-                headerShown: true,
-              }}
-            />
-            <Stack.Screen name="[id]" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="navigation"
-              options={{
-                title: 'Navigation',
-                headerShown: true,
-                headerBackButtonDisplayMode: 'minimal',
-              }}
-            />
-          </Stack>
-        </MapSearchProvider>
-      </DirectionsProvider>
-    </LocationProvider>
+    <DirectionsProvider>
+      <MapSearchProvider>
+        <Stack screenOptions={{ animation: 'default' }}>
+          <Stack.Screen
+            name="index"
+            options={{
+              title: 'All Places',
+              headerLargeTitle: true,
+              headerTitleAlign: 'center',
+              headerBlurEffect: 'regular',
+              headerStyle: { backgroundColor: 'transparent' },
+              headerRight: ({ tintColor }) => (
+                <IconButton
+                  icon="add-circle-outline"
+                  color={tintColor}
+                  size={26}
+                  accessibilityLabel="Add new place"
+                  onPress={redirectToForm}
+                />
+              ),
+            }}
+          />
+          <Stack.Screen
+            name="place-form"
+            options={{
+              headerShown: true,
+              headerLargeTitle: true,
+              presentation: 'formSheet',
+            }}
+          />
+          <Stack.Screen
+            name="map-modal"
+            options={{
+              title: 'Select a Location',
+              presentation: 'modal',
+              headerShown: true,
+            }}
+          />
+          <Stack.Screen name="[id]" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="navigation"
+            options={{
+              title: 'Navigation',
+              headerShown: true,
+              headerBackButtonDisplayMode: 'minimal',
+            }}
+          />
+        </Stack>
+      </MapSearchProvider>
+    </DirectionsProvider>
   );
 }

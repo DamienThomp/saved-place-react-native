@@ -23,7 +23,7 @@ import { tokens } from '~/constants/theme';
 import { Place } from '~/types/types';
 import { MAPBOX_STANDARD_STYLE, MAP_CAMERA } from '~/utils/mapBoxUtils';
 
-Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
+Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN ?? '');
 
 type Coordinates = {
   longitude: number;

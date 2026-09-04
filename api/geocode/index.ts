@@ -1,4 +1,4 @@
-const ACCESS_TOKEN = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '';
+const ACCESS_TOKEN = process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN ?? '';
 const BASE_URL = 'https://api.mapbox.com/search/geocode/v6/reverse';
 
 export async function getAddress(centerCoordinate: number[]): Promise<string> {

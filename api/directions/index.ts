@@ -8,7 +8,7 @@ export enum DirectionType {
 }
 
 const BASE_URL = 'https://api.mapbox.com/directions/v5/mapbox';
-const ACCESS_TOKEN = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '';
+const ACCESS_TOKEN = process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN ?? '';
 
 export async function getDirections(
   start: Coordinates,

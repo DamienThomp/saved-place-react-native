@@ -1,7 +1,7 @@
 import { SearchBoxCore, SearchBoxSuggestionResponse, SessionToken } from '@mapbox/search-js-core';
 import { useQuery } from '@tanstack/react-query';
 
-const ACCESS_TOKEN = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '';
+const ACCESS_TOKEN = process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN ?? '';
 const search = new SearchBoxCore({ accessToken: ACCESS_TOKEN });
 
 let sessionToken: SessionToken;

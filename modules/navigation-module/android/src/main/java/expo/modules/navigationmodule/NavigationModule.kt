@@ -4,7 +4,6 @@ import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
-import expo.modules.kotlin.types.Enumerable
 
 class CoordinatesRecord : Record {
   @Field
@@ -12,13 +11,6 @@ class CoordinatesRecord : Record {
 
   @Field
   val longitude: Double = 0.0
-}
-
-enum class NavigationMode(val value: String) : Enumerable {
-  driving("driving"),
-  walking("walking"),
-  cycling("cycling"),
-  drivingTraffic("driving-traffic")
 }
 
 class NavigationModule : Module() {
