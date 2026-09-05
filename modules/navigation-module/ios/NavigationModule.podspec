@@ -1,9 +1,9 @@
 Pod::Spec.new do |s|
   s.name           = 'NavigationModule'
   s.version        = '1.0.0'
-  s.summary        = 'A sample project summary'
-  s.description    = 'A sample project description'
-  s.author         = ''
+  s.summary        = 'Mapbox Navigation Expo module for iOS'
+  s.description    = 'iOS implementation of the NavigationModule Expo module. Wraps Mapbox Navigation SDK (via MapboxVendor) and exposes a native view with origin, destination, and mode props. Requires ExpoModulesCore and MapboxVendor.'
+  s.author         = 'Mapbox'
   s.homepage       = 'https://docs.expo.dev/modules/'
   s.platforms      = {
     :ios => '16.4',
