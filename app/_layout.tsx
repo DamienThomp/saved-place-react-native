@@ -8,7 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AuthProvider from '~/providers/AuthProvider';
 import QueryProvider from '~/providers/QueryProvider';
 
-Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? '');
+Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN ?? '');
 
 export default function Layout() {
   const colorScheme = useColorScheme();

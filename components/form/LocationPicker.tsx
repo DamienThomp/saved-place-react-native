@@ -1,6 +1,6 @@
 import { useTheme } from 'expo-router/react-navigation';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { memo, useEffect, useState } from 'react';
+import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { ActionSheetIOS, Alert, Image, Platform, Pressable, StyleSheet } from 'react-native';
 
 import ContentUnavailable from '../common/ContentUnavailable';
@@ -17,6 +17,7 @@ enum LocationOptions {
   User = 'My Location',
   Map = 'Locate on Map',
 }
+
 interface LocationPickerProps {
   onSelectLocation: (coordinates: number[], address: string) => void;
   editCoordinates?: string | undefined;

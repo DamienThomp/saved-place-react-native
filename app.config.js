@@ -63,7 +63,7 @@ export default {
         bundleIdentifier: "com.anonymous.savedplace",
         infoPlist: {
           ITSAppUsesNonExemptEncryption: false,
-          MBXAccessToken: process.env.RNMAPBOX_MAPS_DOWNLOAD_TOKEN,
+          MBXAccessToken: process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN,
         }
       },
       android: {

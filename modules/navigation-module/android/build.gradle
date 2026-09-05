@@ -16,3 +16,11 @@ android {
     abortOnError false
   }
 }
+
+dependencies {
+  implementation "com.mapbox.navigationcore:android-ndk27:3.27.3"
+  implementation "com.mapbox.navigationcore:ui-components-ndk27:3.27.3"
+  implementation "androidx.constraintlayout:constraintlayout:2.2.1"
+  implementation "androidx.appcompat:appcompat:1.7.0"
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1"
+}
