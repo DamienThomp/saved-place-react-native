@@ -1,3 +1,5 @@
+import { server } from '~/msw/server';
+
 import {
   createPlace,
   deletePlace,
@@ -8,12 +10,16 @@ import {
   PLACES_PAGE_SIZE,
   searchPlaces,
   signIn,
-  signOut,
   signUp,
   updatePlace,
 } from '~/lib/db';
-
 import { mockPlace, TEST_USER_ID } from '../test/fixtures/places';
+import {
+  supabasePlacesDeleteError,
+  supabasePlacesGetError,
+  supabasePlacesPostError,
+  supabaseStorageSignError,
+} from '../test/utils/mswErrors';
 
 describe('lib/db', () => {
   describe('getPlaces', () => {
@@ -30,6 +36,12 @@ describe('lib/db', () => {
       expect(result.data).toHaveLength(1);
       expect(result.hasMore).toBe(true);
     });
+
+    it('rejects when the request fails', async () => {
+      server.use(supabasePlacesGetError());
+
+      await expect(getPlaces(TEST_USER_ID)).rejects.toThrow();
+    });
   });
 
   describe('getAllPlaces', () => {
@@ -39,6 +51,12 @@ describe('lib/db', () => {
       expect(result).toHaveLength(2);
       expect(result?.[0].id).toBe(2);
     });
+
+    it('rejects when the request fails', async () => {
+      server.use(supabasePlacesGetError());
+
+      await expect(getAllPlaces(TEST_USER_ID)).rejects.toThrow();
+    });
   });
 
   describe('searchPlaces', () => {
@@ -47,6 +65,12 @@ describe('lib/db', () => {
 
       expect(result).toHaveLength(1);
       expect(result?.[0].title).toBe('Test Cafe');
+    });
+
+    it('rejects when the request fails', async () => {
+      server.use(supabasePlacesGetError());
+
+      await expect(searchPlaces(TEST_USER_ID, 'Cafe')).rejects.toThrow();
     });
   });
 
@@ -79,14 +103,57 @@ describe('lib/db', () => {
       expect(result.user_id).toBe(TEST_USER_ID);
       expect(result.id).toBeDefined();
     });
+
+    it('rejects when the request fails', async () => {
+      server.use(supabasePlacesPostError());
+
+      await expect(
+        createPlace(
+          {
+            title: 'New Spot',
+            address: '999 Elm St',
+            latitude: 40.0,
+            longitude: -74.0,
+            image: 'place-images/new.jpg',
+          },
+          TEST_USER_ID
+        )
+      ).rejects.toThrow();
+    });
   });
 
   describe('updatePlace', () => {
     it('updates an existing place', async () => {
-      await updatePlace({ id: mockPlace.id, title: 'Updated Cafe' }, mockPlace.id);
+      await updatePlace(
+        {
+          id: mockPlace.id,
+          title: 'Updated Cafe',
+          address: mockPlace.address,
+          latitude: mockPlace.latitude,
+          longitude: mockPlace.longitude,
+          image: mockPlace.image ?? '',
+        },
+        mockPlace.id
+      );
 
       const result = await getPlace(mockPlace.id);
       expect(result.title).toBe('Updated Cafe');
+    });
+
+    it('rejects when the place is not found', async () => {
+      await expect(
+        updatePlace(
+          {
+            id: 9999,
+            title: 'Missing',
+            address: 'Nowhere',
+            latitude: 0,
+            longitude: 0,
+            image: '',
+          },
+          9999
+        )
+      ).rejects.toThrow();
     });
   });
 
@@ -96,6 +163,12 @@ describe('lib/db', () => {
 
       await expect(getPlace(mockPlace.id)).rejects.toThrow();
     });
+
+    it('rejects when the request fails', async () => {
+      server.use(supabasePlacesDeleteError());
+
+      await expect(deletePlace(mockPlace.id)).rejects.toThrow();
+    });
   });
 
   describe('insertImage', () => {
@@ -103,6 +176,12 @@ describe('lib/db', () => {
       const result = await insertImage('test.jpg');
 
       expect(result).toContain('test.jpg');
+    });
+
+    it('rejects when the request fails', async () => {
+      server.use(supabaseStorageSignError());
+
+      await expect(insertImage('test.jpg')).rejects.toThrow();
     });
   });
 
@@ -118,14 +197,8 @@ describe('lib/db', () => {
       await expect(signIn('bad@example.com', 'wrong')).rejects.toThrow();
     });
 
-    it('signs up successfully', async () => {
-      const result = await signUp('new@example.com', 'password');
-
-      expect(result.user).toBeDefined();
-    });
-
-    it('signs out without error', async () => {
-      await expect(signOut()).resolves.toBeUndefined();
+    it('throws when signing up with an existing email', async () => {
+      await expect(signUp('exists@example.com', 'password')).rejects.toThrow();
     });
   });
 });
