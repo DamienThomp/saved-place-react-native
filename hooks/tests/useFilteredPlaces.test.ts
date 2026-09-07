@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react-native';
+import { Alert } from 'react-native';
 
 import useFilteredPlaces from '~/hooks/useFilteredPlaces';
 import { mockPlace, mockPlace2 } from '~/test/fixtures/places';
@@ -17,16 +18,13 @@ const placesListState = {
   refetch: mockRefetch,
 };
 
-const searchState = {
-  data: [mockPlace],
-  error: null,
-};
+let searchError: Error | null = null;
 
 vi.mock('~/api/places', () => ({
   usePlacesList: () => placesListState,
   useSearchPlace: (query: string) => ({
-    ...searchState,
-    data: query ? searchState.data : null,
+    data: query ? [mockPlace] : null,
+    error: query ? searchError : null,
   }),
 }));
 
@@ -34,6 +32,12 @@ describe('useFilteredPlaces', () => {
   beforeEach(() => {
     mockFetchNextPage.mockClear();
     mockRefetch.mockClear();
+    searchError = null;
+    vi.spyOn(Alert, 'alert').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('returns paginated list when not searching', async () => {
@@ -66,5 +70,13 @@ describe('useFilteredPlaces', () => {
     result.current.loadMore();
 
     expect(mockFetchNextPage).not.toHaveBeenCalled();
+  });
+
+  it('shows an alert when search fails', async () => {
+    searchError = new Error('Search failed');
+
+    await renderHook(() => useFilteredPlaces('Cafe'));
+
+    expect(Alert.alert).toHaveBeenCalledWith('Something Went Wrong!', 'Search failed');
   });
 });

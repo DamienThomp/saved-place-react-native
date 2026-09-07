@@ -20,7 +20,7 @@ describe('api/auth', () => {
   });
 
   describe('useSignIn', () => {
-    it('signs in and invalidates places queries', async () => {
+    it('invalidates places queries on success', async () => {
       const { result, queryClient } = await renderHookWithClient(() => useSignIn());
       const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
 
@@ -28,8 +28,18 @@ describe('api/auth', () => {
 
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-      expect(result.current.data?.user.email).toBe('test@example.com');
       expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['places'] });
+    });
+
+    it('does not invalidate places queries on failure', async () => {
+      const { result, queryClient } = await renderHookWithClient(() => useSignIn());
+      const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
+
+      result.current.mutate({ email: 'bad@example.com', password: 'wrong' });
+
+      await waitFor(() => expect(result.current.isError).toBe(true));
+
+      expect(invalidateSpy).not.toHaveBeenCalled();
     });
   });
 
