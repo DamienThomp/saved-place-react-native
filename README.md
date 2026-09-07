@@ -34,8 +34,11 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 - [x] ~~add camera support for image picker~~
 - [x] ~~add pagination for list view~~ currently loads five at a time on scroll before reaching end of list.
 - [x] ~~add turn by turn navigation for Mapbox directions for iOS~~
-- [ ] add turn by turn navigation for Mapbox directions for Android
-- [ ] update screen shots & add screen recording
+- [ ] add turn by turn navigation for Mapbox directions for Android.
+- [ ] update screen shots & add screen recording.
+- [ ] improve authentication flow
+- [ ] make global map markers clickable to show place details
+- [x] ~~add api, util and db unit tests~~
 
 ## Screen Shots
 
