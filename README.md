@@ -6,18 +6,19 @@ The main purpose of this demo project was to experiment with MapBox and Supabase
 
 ## Features
 
-- **Save Places:** Users can save places by providing a title, location, and photo.
-- **List View:** View saved places in a list format with basic information.
-- **Details View:** View detailed information for a selected place with:
-  - A map view showing the location pin drop.
-  - An overlay card displaying the photo, title, and address of the place.
-- **Map Integration:** Uses [MapBox](https://www.mapbox.com/) for rendering maps and placing location pins.
-- **Database Integration:** Uses [Supabase](https://supabase.io/) for storing and retrieving saved places data.
+- **Authentication:** Email/password sign-in and sign-up with secure session persistence.
+- **Save Places:** Title, photo (camera or library), and location (GPS, map tap, or Mapbox search).
+- **List View:** Card layout with title search, pull-to-refresh, pagination, and edit/delete in edit mode.
+- **Details View:** Mapbox map with pin, overlay card (photo, title, address), map controls, directions, and turn-by-turn navigation (iOS).
+- **Global Map:** All saved places displayed on a clustered map.
+- **Map Integration:** [MapBox](https://www.mapbox.com/) for maps, search, geocoding, directions, and navigation.
+- **Database Integration:** [Supabase](https://supabase.io/) Auth, PostgreSQL (`places` table), and Storage for images, scoped per user with offline-friendly caching.
+- **Profile:** View signed-in user email and sign out.
 
 ## Technologies Used
 
 - **React Native:** Framework for building cross-platform mobile applications.
-- **MapBox:** Provides interactive maps and geolocation functionality.
+- **MapBox:** Provides interactive maps, turn by turn navigation directions and geolocation functionality.
 - **Supabase:** Open-source Firebase alternative for managing databases and authentication.
 - **Expo:** This app uses Expo and Expo-Router.
 
