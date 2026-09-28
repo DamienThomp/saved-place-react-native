@@ -21,7 +21,7 @@ Built with Expo SDK 56, Expo Router, and an MVVM screen architecture. Targets iO
 ### Place details
 
 - **Interactive map** — Mapbox map with pin, overlay card (photo, title, address), and camera fly-to
-- **Map controls** — Theme toggle, pitch toggle, and recenter on user location
+- **Map controls** — Map style toggle (Standard / Outdoors / Satellite), pitch toggle, and recenter on user location
 - **Directions** — Route preview on the map with travel mode selector and bottom sheet (time/distance)
 - **Turn-by-turn navigation (iOS)** — Full-screen native navigation via the local `NavigationModule` Expo module
 
