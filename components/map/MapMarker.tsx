@@ -3,16 +3,16 @@ import { featureCollection, point } from '@turf/helpers';
 import { useMemo } from 'react';
 
 import pin from '~/assets/map-pin.png';
-import { useIsLightMode } from '~/stores/mapControlsStore';
+import { useMapStyle } from '~/stores/mapControlsStore';
 import { Place } from '~/types/types';
-import { MAP_LAYER_STYLES } from '~/utils/mapBoxUtils';
+import { calloutUsesLightText, MAP_LAYER_STYLES } from '~/utils/mapBoxUtils';
 
 type MapMarkersProps = {
   data: Place[];
 };
 
 export default function MapMarkers({ data }: MapMarkersProps) {
-  const isLightMode = useIsLightMode();
+  const mapStyle = useMapStyle();
   const points = useMemo(
     () => data.map((place) => point([place.longitude, place.latitude], { title: place.title })),
     [data]
@@ -39,7 +39,10 @@ export default function MapMarkers({ data }: MapMarkersProps) {
         style={MAP_LAYER_STYLES.placeIcons}
       />
 
-      <SymbolLayer id="callout" style={MAP_LAYER_STYLES.callout(isLightMode)} />
+      <SymbolLayer
+        id="callout"
+        style={MAP_LAYER_STYLES.callout(!calloutUsesLightText(mapStyle))}
+      />
 
       <Images images={{ pin }} />
     </ShapeSource>

@@ -6,16 +6,15 @@ import { useMapActions } from '~/stores/mapControlsStore';
 import { MAP_CAMERA } from '~/utils/mapBoxUtils';
 
 export function useGlobalViewModel() {
-  const { setZoom, setLightMode } = useMapActions();
+  const { setZoom } = useMapActions();
   const { data, error, isLoading, refetch } = useAllPlaces();
   const isFocused = useIsFocused();
 
   useFocusEffect(
     useCallback(() => {
       setZoom(MAP_CAMERA.GLOBAL_ZOOM);
-      setLightMode(false);
       refetch();
-    }, [setZoom, setLightMode, refetch])
+    }, [setZoom, refetch])
   );
 
   return {

@@ -2,7 +2,33 @@ import MapboxGL from '@rnmapbox/maps';
 
 import { tokens } from '~/constants/theme';
 
-export const MAPBOX_STANDARD_STYLE = 'mapbox://styles/mapbox/standard';
+export enum MapStyle {
+  Standard = 'standard',
+  Outdoors = 'outdoors',
+  StandardSatellite = 'standardSatellite',
+}
+
+export const MAP_STYLE_URLS: Record<MapStyle, string> = {
+  [MapStyle.Standard]: 'mapbox://styles/mapbox/standard',
+  [MapStyle.Outdoors]: 'mapbox://styles/mapbox/outdoors-v12',
+  [MapStyle.StandardSatellite]: 'mapbox://styles/mapbox/standard-satellite',
+};
+
+export const MAP_STYLE_ORDER: MapStyle[] = [
+  MapStyle.Standard,
+  MapStyle.Outdoors,
+  MapStyle.StandardSatellite,
+];
+
+export const MAPBOX_STANDARD_STYLE = MAP_STYLE_URLS[MapStyle.Standard];
+
+export function getMapStyleURL(style: MapStyle): string {
+  return MAP_STYLE_URLS[style];
+}
+
+export function calloutUsesLightText(style: MapStyle): boolean {
+  return style === MapStyle.StandardSatellite;
+}
 
 export const MAP_LAYER_STYLES = {
   route: {
@@ -32,13 +58,13 @@ export const MAP_LAYER_STYLES = {
     iconAnchor: 'center' as const,
     iconKeepUpright: true,
   },
-  callout: (isLightMode: boolean) => ({
+  callout: (useDarkText: boolean) => ({
     iconTextFit: 'both' as const,
     iconTextFitPadding: [5, 5, 5, 5],
     textSize: 16,
     iconAllowOverlap: true,
     textAllowOverlap: true,
-    textColor: isLightMode ? tokens.colors.black : tokens.colors.white,
+    textColor: useDarkText ? tokens.colors.black : tokens.colors.white,
     textFont: ['Open Sans SemiBold'],
     textOffset: [0, 1.8],
     textField: '{title}',

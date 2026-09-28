@@ -8,20 +8,20 @@ import AnnotationContent from './AnnotationContent';
 import LineRoute from './LineRoute';
 import MapMarkers from './MapMarker';
 import MapPitchToggleButton from './MapPitchToggleButton';
-import MapThemeToggleButton from './MapThemeToggleButton';
+import MapStyleToggleButton from './MapStyleToggleButton';
 import MapUserLocationButton from './MapUserLocationButton';
 
 import { useDirections } from '~/providers/DirectionsProvider';
 import { useLocation } from '~/providers/LocationProvider';
 import {
   useCameraCommand,
-  useIsLightMode,
   useMapActions,
   useMapPitch,
+  useMapStyle,
 } from '~/stores/mapControlsStore';
 import { tokens } from '~/constants/theme';
 import { Place } from '~/types/types';
-import { MAPBOX_STANDARD_STYLE, MAP_CAMERA } from '~/utils/mapBoxUtils';
+import { getMapStyleURL, MAP_CAMERA, MapStyle } from '~/utils/mapBoxUtils';
 
 Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN ?? '');
 
@@ -52,7 +52,7 @@ export default function Map({ coordinates, readOnly, showControls, places, onPre
   const cameraRef = useRef<Camera>(null);
   const [selectedPoint, setSelectedPoint] = useState<SelectedPoint | null>(null);
   const [isLayoutReady, setIsLayoutReady] = useState(false);
-  const isLightMode = useIsLightMode();
+  const mapStyle = useMapStyle();
   const mapPitch = useMapPitch();
   const cameraCommand = useCameraCommand();
   const insets = useSafeAreaInsets();
@@ -89,13 +89,6 @@ export default function Map({ coordinates, readOnly, showControls, places, onPre
     setSelectedPoint(point);
     onPress?.(point);
   };
-
-  const standardStyleConfig = useMemo(
-    () => ({
-      lightPreset: isLightMode ? ('day' as const) : ('night' as const),
-    }),
-    [isLightMode]
-  );
 
   useEffect(() => {
     if (!cameraCommand?.sequence) return;
@@ -134,10 +127,12 @@ export default function Map({ coordinates, readOnly, showControls, places, onPre
       ) : isLayoutReady ? (
         <MapView
           style={styles.map}
-          styleURL={MAPBOX_STANDARD_STYLE}
+          styleURL={getMapStyleURL(mapStyle)}
           scaleBarEnabled={false}
           onPress={onMapSelection}>
-          <StyleImport id="basemap" existing={true} config={standardStyleConfig} />
+          {mapStyle === MapStyle.Standard && (
+            <StyleImport id="basemap" existing={true} config={{ lightPreset: 'day' }} />
+          )}
           <Camera
             ref={cameraRef}
             defaultSettings={{
@@ -168,7 +163,7 @@ export default function Map({ coordinates, readOnly, showControls, places, onPre
         <View style={[styles.controlsContainer, { top: insets.top }]}>
           <MapUserLocationButton />
           <MapPitchToggleButton />
-          <MapThemeToggleButton />
+          <MapStyleToggleButton />
         </View>
       )}
     </View>

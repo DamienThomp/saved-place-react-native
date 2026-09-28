@@ -1,7 +1,7 @@
 import type { Position } from 'geojson';
 import { create } from 'zustand';
 
-import { MAP_CAMERA } from '~/utils/mapBoxUtils';
+import { MAP_CAMERA, MAP_STYLE_ORDER, MapStyle } from '~/utils/mapBoxUtils';
 
 type CameraCommand = {
   center?: Position;
@@ -12,15 +12,15 @@ type CameraCommand = {
 type MapControlActions = {
   flyTo: (center: Position, zoom?: number) => void;
   setZoom: (zoom: number) => void;
-  setLightMode: (value: boolean) => void;
-  toggleLightMode: () => void;
+  setMapStyle: (style: MapStyle) => void;
+  cycleMapStyle: () => void;
   setPitchToggled: (value: boolean) => void;
   toggleMapPitch: () => void;
   resetAll: () => void;
 };
 
 type MapControlsStore = {
-  isLightMode: boolean;
+  mapStyle: MapStyle;
   pitchIsToggled: boolean;
   mapPitch: number;
   cameraCommand: CameraCommand | null;
@@ -28,7 +28,7 @@ type MapControlsStore = {
 };
 
 const initialState: Omit<MapControlsStore, 'actions'> = {
-  isLightMode: true,
+  mapStyle: MapStyle.Standard,
   pitchIsToggled: false,
   mapPitch: 0,
   cameraCommand: null,
@@ -54,8 +54,13 @@ const useMapControlStore = create<MapControlsStore>()((set) => ({
           sequence: nextSequence(state.cameraCommand),
         },
       })),
-    setLightMode: (value) => set({ isLightMode: value }),
-    toggleLightMode: () => set((state) => ({ isLightMode: !state.isLightMode })),
+    setMapStyle: (style) => set({ mapStyle: style }),
+    cycleMapStyle: () =>
+      set((state) => {
+        const index = MAP_STYLE_ORDER.indexOf(state.mapStyle);
+        const next = MAP_STYLE_ORDER[(index + 1) % MAP_STYLE_ORDER.length];
+        return { mapStyle: next };
+      }),
     setPitchToggled: (value) =>
       set({
         pitchIsToggled: value,
@@ -73,7 +78,7 @@ const useMapControlStore = create<MapControlsStore>()((set) => ({
   },
 }));
 
-export const useIsLightMode = () => useMapControlStore((state) => state.isLightMode);
+export const useMapStyle = () => useMapControlStore((state) => state.mapStyle);
 export const useIsPitchToggled = () => useMapControlStore((state) => state.pitchIsToggled);
 export const useMapPitch = () => useMapControlStore((state) => state.mapPitch);
 export const useCameraCommand = () => useMapControlStore((state) => state.cameraCommand);
