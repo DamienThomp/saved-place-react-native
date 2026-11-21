@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ColorValue, Pressable, StyleSheet, ViewStyle } from 'react-native';
 
 import { tokens } from '~/constants/theme';
+import { iconColor } from '~/utils/iconColor';
 
 type IconButtonProps = {
   icon: keyof typeof Ionicons.glyphMap;
@@ -26,7 +27,7 @@ export default function IconButton({
       accessibilityLabel={accessibilityLabel}
       style={({ pressed }) => [styles.button, pressed && styles.pressed, style]}
       onPress={onPress}>
-      <Ionicons name={icon} size={size} color={color} />
+      <Ionicons name={icon} size={size} color={iconColor(color)} />
     </Pressable>
   );
 }

@@ -1,10 +1,10 @@
 import { CircleLayer, Images, ShapeSource, SymbolLayer } from '@rnmapbox/maps';
-import { featureCollection, point } from '@turf/helpers';
 import { useMemo } from 'react';
 
 import pin from '~/assets/map-pin.png';
 import { useMapStyle } from '~/stores/mapControlsStore';
 import { Place } from '~/types/types';
+import { featureCollection, placePoint } from '~/utils/geojson';
 import { calloutUsesLightText, MAP_LAYER_STYLES } from '~/utils/mapBoxUtils';
 
 type MapMarkersProps = {
@@ -14,7 +14,10 @@ type MapMarkersProps = {
 export default function MapMarkers({ data }: MapMarkersProps) {
   const mapStyle = useMapStyle();
   const points = useMemo(
-    () => data.map((place) => point([place.longitude, place.latitude], { title: place.title })),
+    () =>
+      data.map((place) =>
+        placePoint(place.longitude, place.latitude, { title: place.title }),
+      ),
     [data]
   );
 
