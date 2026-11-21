@@ -1,6 +1,6 @@
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { useTheme } from 'expo-router/react-navigation';
-import { Pressable, PressableProps, StyleSheet, Text, View } from 'react-native';
+import { Pressable, PressableInstance, PressableProps, StyleSheet, Text } from 'react-native';
 
 import { tokens } from '~/constants/theme';
 
@@ -9,7 +9,7 @@ type ButtonProps = {
   icon?: keyof typeof FontAwesome5.glyphMap;
   color?: string;
   size?: number;
-  ref?: React.Ref<View>;
+  ref?: React.Ref<PressableInstance>;
 } & PressableProps;
 
 export function Button({ title, icon, color, size, ref, ...props }: ButtonProps) {

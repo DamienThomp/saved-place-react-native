@@ -7,6 +7,7 @@ import { Container } from '~/components/common/Container';
 import Loading from '~/components/common/Loading';
 import { Button } from '~/components/ui/Button';
 import { tokens } from '~/constants/theme';
+import { iconColor } from '~/utils/iconColor';
 
 import { useProfileViewModel } from './useProfileViewModel';
 
@@ -25,7 +26,7 @@ export default function ProfileScreen() {
   return (
     <Container>
       <View style={styles.innerContainer}>
-        <Ionicons name="person-circle" size={80} color={theme.colors.primary} />
+        <Ionicons name="person-circle" size={80} color={iconColor(theme.colors.primary)} />
         {state.session?.user.email && (
           <Text style={[styles.email, { color: theme.colors.text }]}>
             {state.session.user.email}

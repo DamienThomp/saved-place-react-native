@@ -3,6 +3,7 @@ import { PropsWithChildren } from 'react';
 import { ColorValue, StyleSheet, Text, View } from 'react-native';
 
 import { tokens } from '~/constants/theme';
+import { iconColor } from '~/utils/iconColor';
 
 interface ContentUnavailableProps {
   color?: ColorValue;
@@ -16,7 +17,7 @@ export default function ContentUnavailable({
 }: PropsWithChildren<ContentUnavailableProps>) {
   return (
     <View style={styles.container}>
-      <Ionicons name={icon} size={40} color={color} />
+      <Ionicons name={icon} size={40} color={iconColor(color)} />
       <Text style={[styles.text, { color }]}>{children}</Text>
     </View>
   );

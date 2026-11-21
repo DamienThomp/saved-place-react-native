@@ -88,10 +88,10 @@ export default function PlacesList({
                 {emptyMessage ?? 'No Places Added.'}
               </ContentUnavailable>
             )
-          : null
+          : undefined
       }
       ListFooterComponent={
-        isFetchingNextPage ? () => <ActivityIndicator style={styles.footer} /> : null
+        isFetchingNextPage ? () => <ActivityIndicator style={styles.footer} /> : undefined
       }
       renderItem={({ item }) => (
         <PlaceCardItem
