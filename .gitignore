@@ -33,3 +33,5 @@ modules/mapbox-vendor/ios/Frameworks/*.xcframework
 modules/*/android/build/
 modules/*/android/.gradle/
 modules/*/ios/build/
+
+.cursor/plans
