@@ -31,6 +31,7 @@ Aligned with `app.config.js`:
 
 - Mapbox Maps **11.27.3** (iOS via vendored XCFrameworks; Android via `@rnmapbox/maps` + Navigation SDK Maven artifact)
 - Mapbox Navigation **3.27.3** (iOS vendored; Android `com.mapbox.navigationcore:android-ndk27:3.27.3` in `navigation-module`)
+- **`@rnmapbox/maps` pinned to 10.3.11** — 10.3.12+ targets Maps **11.33** and fails against vendored 11.27.3; bump Maps + xcframeworks before upgrading rnmapbox
 
 ## Expected frameworks
 
